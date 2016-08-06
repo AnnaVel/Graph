@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph", "Graph\Graph.csproj", "{D1083C1E-62C8-463B-9B01-5A02064CC3C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphCore", "Graph\GraphCore.csproj", "{D1083C1E-62C8-463B-9B01-5A02064CC3C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

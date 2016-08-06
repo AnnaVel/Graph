@@ -1,12 +1,13 @@
-﻿using System;
+﻿using GraphCore.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Graph
+namespace GraphCore.StructureDescription
 {
-    public class ArrowDescriptor
+    public class ArrowDescriptor : StructureDescriptor
     {
         private readonly string predecessorName;
         private readonly string successorName;
@@ -38,6 +39,9 @@ namespace Graph
 
         public ArrowDescriptor(string predecessorName, string successorName, double? weight)
         {
+            Guard.ThrowExceptionIfNullOrEmpty(predecessorName, "predecessorName");
+            Guard.ThrowExceptionIfNullOrEmpty(successorName, "successorName");
+
             this.predecessorName = predecessorName;
             this.successorName = successorName;
             this.weight = weight;
@@ -46,6 +50,14 @@ namespace Graph
         public ArrowDescriptor(string predecessorName, string successorName)
             :this(predecessorName, successorName, null)
         {
+        }
+
+        internal override IEnumerable<AdjacencyDescriptor> TranslateToAdjacencyDescriptors()
+        {
+            return new List<AdjacencyDescriptor>()
+            {
+                new AdjacencyDescriptor(this.predecessorName, this.successorName, this.weight)
+            };
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using GraphCore.StructureDescription;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Graph
+namespace GraphCore
 {
     public class Vertex
     {
@@ -25,40 +26,8 @@ namespace Graph
             this.successorToArrowWeight = new Dictionary<Vertex, double?>();
         }
 
-        public static IEnumerable<Vertex> CreateVerticesStructure(IEnumerable<ArrowDescriptor> structureDescription)
-        {
-            Dictionary<string, Vertex> allNamesToVertices = new Dictionary<string, Vertex>();
-
-            foreach(var arrow in structureDescription)
-            {
-                Vertex predecessor = RetrieveVertexOrCreateNew(ref allNamesToVertices, arrow.PredecessorName);
-                Vertex successor = RetrieveVertexOrCreateNew(ref allNamesToVertices, arrow.SuccessorName);
-
-                predecessor.successorToArrowWeight.Add(successor, arrow.Weight);
-            }
-
-            return allNamesToVertices.Values;
-        }
-
-        private static Vertex RetrieveVertexOrCreateNew(ref Dictionary<string, Vertex> allNamesToVertices, string name)
-        {
-            Vertex resultVertex;
-
-            if (!allNamesToVertices.ContainsKey(name))
-            {
-                resultVertex = new Vertex(name);
-            }
-            else
-            {
-                resultVertex = allNamesToVertices[name];
-            }
-
-            return resultVertex;
-        }
-
         public IEnumerable<Vertex> GetSuccessors()
         {
-            //TODO: check if this is not too slow.
             foreach (var key in this.successorToArrowWeight.Keys)
             {
                 yield return key;
@@ -78,6 +47,46 @@ namespace Graph
         public override string ToString()
         {
             return this.name;
+        }
+
+        internal static IEnumerable<Vertex> CreateVerticesStructure(IEnumerable<StructureDescriptor> structureDescription)
+        {
+            Dictionary<string, Vertex> allNamesToVertices = new Dictionary<string, Vertex>();
+
+            foreach (var structureDescriptor in structureDescription)
+            {
+                IEnumerable<AdjacencyDescriptor> adjacencyDescriptors = structureDescriptor.TranslateToAdjacencyDescriptors();
+
+                foreach (AdjacencyDescriptor adjacencyDescriptor in adjacencyDescriptors)
+                {
+                    Vertex vertex = RetrieveVertexOrCreateNew(ref allNamesToVertices, adjacencyDescriptor.VertexName);
+
+                    if (adjacencyDescriptor.SuccessorVertexName != null)
+                    {
+                        Vertex vertexSuccessor = RetrieveVertexOrCreateNew(ref allNamesToVertices, adjacencyDescriptor.SuccessorVertexName);
+                        vertex.successorToArrowWeight.Add(vertexSuccessor, adjacencyDescriptor.Weight);
+                    }
+                }
+            }
+
+            return allNamesToVertices.Values;
+        }
+
+        private static Vertex RetrieveVertexOrCreateNew(ref Dictionary<string, Vertex> allNamesToVertices, string name)
+        {
+            Vertex resultVertex;
+
+            if (!allNamesToVertices.ContainsKey(name))
+            {
+                resultVertex = new Vertex(name);
+                allNamesToVertices.Add(name, resultVertex);
+            }
+            else
+            {
+                resultVertex = allNamesToVertices[name];
+            }
+
+            return resultVertex;
         }
     }
 }

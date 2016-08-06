@@ -1,16 +1,25 @@
-﻿using System;
+﻿using GraphCore.StructureDescription;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Graph
+namespace GraphCore
 {
     public class Graph
     {
-        private IEnumerable<Vertex> vertices;
+        private readonly IEnumerable<Vertex> vertices;
 
-        public Graph(params ArrowDescriptor[] structureDescription)
+        public IEnumerable<Vertex> Vertices
+        {
+            get
+            {
+                return this.vertices;
+            }
+        }
+
+        public Graph(params StructureDescriptor[] structureDescription)
         {
             this.vertices = Vertex.CreateVerticesStructure(structureDescription);
         }

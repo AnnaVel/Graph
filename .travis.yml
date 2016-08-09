@@ -6,5 +6,5 @@ install:
   - nuget restore GraphApplication.sln
   
 script:
-  - xbuild GraphApplication.sln
+  - xbuild /p:Configuration="NoUnitTests" GraphApplication.sln
   - nunit-console GraphTests\bin\Debug\GraphTests.dll

@@ -2,9 +2,9 @@ language: csharp
 solution: GraphApplication.sln
 
 install:
-  - sudo apt-get install nunit-console
   - nuget restore GraphApplication.sln
+  - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
   
 script:
-  - xbuild /p:Configuration="NoUnitTests" GraphApplication.sln
-  - nunit-console ./GraphTests/bin/Debug/GraphTests.dll
+  - xbuild /p:Configuration="Release" GraphApplication.sln
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./GraphTests/bin/Release/GraphTests.dll

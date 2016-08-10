@@ -1,6 +1,6 @@
 ﻿using GraphCore;
 using GraphCore.StructureDescription;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace GraphTests
 {
-    [TestClass]
+    [TestFixture]
     public class GraphCreationTests
     {
-        [TestMethod]
+        [Test]
         public void CreateTwoVertextWeightedDirectedGraph()
         {
             ArrowDescriptor arrow = new ArrowDescriptor("x", "y", 1);
@@ -30,7 +30,7 @@ namespace GraphTests
             graph.Vertices.ToArray());
         }
 
-        [TestMethod]
+        [Test]
         public void CreateTwoVertextWeightedUndirectedGraph()
         {
             EdgeDescriptor singleEdge = new EdgeDescriptor("x", "y", 1);
@@ -51,7 +51,7 @@ namespace GraphTests
             graph.Vertices.ToArray());
         }
 
-        [TestMethod]
+        [Test]
         public void CreateTwoVertextUnweightedDirectedGraph()
         {
             ArrowDescriptor arrow = new ArrowDescriptor("x", "y");
@@ -69,7 +69,7 @@ namespace GraphTests
             graph.Vertices.ToArray());
         }
 
-        [TestMethod]
+        [Test]
         public void CreateTwoVertextUnweightedUndirectedGraph()
         {
             EdgeDescriptor singleEdge = new EdgeDescriptor("x", "y");
@@ -90,7 +90,7 @@ namespace GraphTests
             graph.Vertices.ToArray());
         }
 
-        [TestMethod]
+        [Test]
         public void CreateCircularGraph()
         {
             ArrowDescriptor firstArrow = new ArrowDescriptor("x", "y");
@@ -117,7 +117,7 @@ namespace GraphTests
             graph.Vertices.ToArray());
         }
 
-        [TestMethod]
+        [Test]
         public void CreateDisconnectedGraph()
         {
             ArrowDescriptor firstArrow = new ArrowDescriptor("x", "y");
@@ -141,7 +141,7 @@ namespace GraphTests
             graph.Vertices.ToArray());
         }
 
-        [TestMethod]
+        [Test]
         public void CreateSingleVertexGraph()
         {
             VertexDescriptor singleVertex = new VertexDescriptor("x");
@@ -155,7 +155,7 @@ namespace GraphTests
             graph.Vertices.ToArray());
         }
 
-        [TestMethod]
+        [Test]
         public void CreateEmptyGraph()
         {
             Graph graph = new Graph();
@@ -163,7 +163,7 @@ namespace GraphTests
             this.AssertExpectedVertices(new ExpectedVertexDescriptor[0], graph.Vertices.ToArray());
         }
 
-        [TestMethod]
+        [Test]
         public void CreateMixedUnweightedGraph()
         {
             ArrowDescriptor arrow = new ArrowDescriptor("x", "y");
@@ -189,7 +189,7 @@ namespace GraphTests
             graph.Vertices.ToArray());
         }
 
-        [TestMethod]
+        [Test]
         public void CreateGraphWithContradictingDescriptors()
         {
             ArrowDescriptor arrow = new ArrowDescriptor("x", "y");

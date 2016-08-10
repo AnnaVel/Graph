@@ -21,7 +21,7 @@ namespace GraphCore.StructureDescription
 
         public VertexDescriptor(string name)
         {
-           // Guard.ThrowExceptionIfNullOrEmpty(name, "name");
+            Guard.ThrowExceptionIfNullOrEmpty(name, "name");
 
             this.name = name;
         }

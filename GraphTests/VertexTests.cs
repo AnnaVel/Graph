@@ -1,6 +1,6 @@
 ﻿using GraphCore;
 using GraphCore.StructureDescription;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace GraphTests
 {
-    [TestClass]
+    [TestFixture]
     public class VertexTests
     {
-        [TestMethod]
+        [Test]
         public void GetSuccessorsCorrectnessTest()
         {
             string[] expectedSuccessorNames = new string[]
@@ -43,7 +43,7 @@ namespace GraphTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void GetSuccessorsUnnecessaryIterationTest()
         {
             TimeSpan expectedSpeed = TimeSpan.FromMilliseconds(3);
@@ -72,7 +72,7 @@ namespace GraphTests
             Assert.IsTrue(sw.Elapsed < expectedSpeed);
         }
 
-        [TestMethod]
+        [Test]
         public void GetArrowWeightCorrectnessTest()
         {
             double? expectedArrowWeight = 0.5;
@@ -86,7 +86,7 @@ namespace GraphTests
             Assert.AreEqual(expectedArrowWeight, resultArrowWeight);
         }
 
-        [TestMethod]
+        [Test]
         public void GetArrowWeightSpeedTest()
         {
             TimeSpan expectedSpeed = TimeSpan.FromMilliseconds(3);
@@ -103,17 +103,16 @@ namespace GraphTests
             Assert.IsTrue(sw.Elapsed < expectedSpeed);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void GetArrowWeightNonexistantSuccessorTest()
         {
             ArrowDescriptor arrowDescriptor = new ArrowDescriptor("x", "y");
             Vertex x = this.CreateGraphAndGetSpecificVertex("x", arrowDescriptor);
-            
+
             VertexDescriptor vertexDescriptor = new VertexDescriptor("y");
             Vertex otherGraphY = this.CreateGraphAndGetSpecificVertex("y", vertexDescriptor);
 
-            x.GetArrowWeight(otherGraphY);
+            Assert.Throws<ArgumentException>(() => x.GetArrowWeight(otherGraphY));
         }
 
         private Vertex CreateGraphAndGetSpecificVertex(string vertexName, params StructureDescriptor[] structureDescriptors)

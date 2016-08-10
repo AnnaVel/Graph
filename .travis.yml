@@ -1,2 +1,10 @@
 language: csharp
 solution: GraphApplication.sln
+
+install:
+  - sudo apt-get install nunit-console
+  - nuget restore GraphApplication.sln
+  
+script:
+  - xbuild /p:Configuration="Release" GraphApplication.sln
+  - nunit-console ./GraphTests/bin/Release/GraphTests.dll

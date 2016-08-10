@@ -1,13 +1,13 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using GraphCore.StructureDescription;
 
 namespace GraphTests
 {
-    [TestClass]
+    [TestFixture]
     public class StructureDescriptorsTests
     {
-        [TestMethod]
+        [Test]
         public void CreateArrowDescriptorWithWeight()
         {
             string predecessorVertexName = "x";
@@ -21,7 +21,7 @@ namespace GraphTests
             Assert.AreEqual(weight, arrowDescriptor.Weight);
         }
 
-        [TestMethod]
+        [Test]
         public void CreateArrowDescriptorWithoutWeight()
         {
             string predecessorVertexName = "x";
@@ -34,47 +34,43 @@ namespace GraphTests
             Assert.IsNull(arrowDescriptor.Weight);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void CreateArrowDescriptorWithEmptyPredecessorName()
         {
             string predecessorVertexName = string.Empty;
             string successorVertexName = "y";
 
-            ArrowDescriptor arrowDescriptor = new ArrowDescriptor(predecessorVertexName, successorVertexName);
+            Assert.Throws<ArgumentException>(() => new ArrowDescriptor(predecessorVertexName, successorVertexName));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void CreateArrowDescriptorWithEmptySuccessorName()
         {
             string predecessorVertexName = "x";
             string successorVertexName = string.Empty;
 
-            ArrowDescriptor arrowDescriptor = new ArrowDescriptor(predecessorVertexName, successorVertexName);
+            Assert.Throws<ArgumentException>(() => new ArrowDescriptor(predecessorVertexName, successorVertexName));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void CreateArrowDescriptorWithNullPredecessorName()
         {
             string predecessorVertexName = null;
             string successorVertexName = "y";
 
-            ArrowDescriptor arrowDescriptor = new ArrowDescriptor(predecessorVertexName, successorVertexName);
+            Assert.Throws<ArgumentException>(() => new ArrowDescriptor(predecessorVertexName, successorVertexName));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void CreateArrowDescriptorWithNullSuccessorName()
         {
             string predecessorVertexName = "x";
             string successorVertexName = null;
 
-            ArrowDescriptor arrowDescriptor = new ArrowDescriptor(predecessorVertexName, successorVertexName);
+            Assert.Throws<ArgumentException>(() => new ArrowDescriptor(predecessorVertexName, successorVertexName));
         }
 
-        [TestMethod]
+        [Test]
         public void CreateEdgeDescriptorWithWeight()
         {
             string firstVertexName = "x";
@@ -88,7 +84,7 @@ namespace GraphTests
             Assert.AreEqual(weight, edgeDescriptor.Weight);
         }
 
-        [TestMethod]
+        [Test]
         public void CreateEdgeDescriptorWithoutWeight()
         {
             string firstVertexName = "x";
@@ -101,47 +97,43 @@ namespace GraphTests
             Assert.IsNull(edgeDescriptor.Weight);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void CreateEdgeDescriptorWithEmptyFirstVertexName()
         {
             string firstVertexName = string.Empty;
             string secondVertexName = "y";
 
-            EdgeDescriptor edgeDescriptor = new EdgeDescriptor(firstVertexName, secondVertexName);
+            Assert.Throws<ArgumentException>(() => new EdgeDescriptor(firstVertexName, secondVertexName));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void CreateEdgeDescriptorWithEmptySecondVertexName()
         {
             string firstVertexName = "x";
             string secondVertexName = string.Empty;
 
-            EdgeDescriptor edgeDescriptor = new EdgeDescriptor(firstVertexName, secondVertexName);
+            Assert.Throws<ArgumentException>(() => new EdgeDescriptor(firstVertexName, secondVertexName));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void CreateEdgeDescriptorWithNullFirstVertexName()
         {
             string firstVertexName = null;
             string secondVertexName = "y";
 
-            EdgeDescriptor edgeDescriptor = new EdgeDescriptor(firstVertexName, secondVertexName);
+            Assert.Throws<ArgumentException>(() => new EdgeDescriptor(firstVertexName, secondVertexName));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void CreateEdgeDescriptorWithNullSecondVertexName()
         {
             string firstVertexName = "x";
             string secondVertexName = null;
 
-            EdgeDescriptor edgeDescriptor = new EdgeDescriptor(firstVertexName, secondVertexName);
+            Assert.Throws<ArgumentException>(() => new EdgeDescriptor(firstVertexName, secondVertexName));
         }
 
-        [TestMethod]
+        [Test]
         public void CreateVertexDescriptor()
         {
             string name = "x";
@@ -151,22 +143,20 @@ namespace GraphTests
             Assert.AreEqual(name, vertexDescriptor.Name);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void CreateVertexDescriptorWithEmptyName()
         {
             string name = string.Empty;
 
-            VertexDescriptor vertexDescriptor = new VertexDescriptor(name);
+            Assert.Throws<ArgumentException>(() => new VertexDescriptor(name));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void CreateVertexDescriptorWithNullName()
         {
             string name = null;
 
-            VertexDescriptor vertexDescriptor = new VertexDescriptor(name);
+            Assert.Throws<ArgumentException>(() => new VertexDescriptor(name));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GraphCore.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,11 @@ namespace GraphCore.Vertices
 {
     internal class VertexStructure
     {
-        private readonly Dictionary<object, Vertex> valueToVertexIndex;
         private VertexFactory vertexFactory;
+
+        private readonly Dictionary<object, Vertex> valueToVertexIndex;
+        private readonly AdjacencyList successorAdjacencyList;
+        private readonly AdjacencyList predecessorAdjacencyList;
 
         public VertexFactory VertexFactory
         {
@@ -23,23 +27,47 @@ namespace GraphCore.Vertices
             }
         }
 
-        public VertexStructure()
+        public IEnumerable<Vertex> Vertices
         {
-            this.valueToVertexIndex = new Dictionary<object, Vertex>();
-            this.vertexFactory = new VertexFactory();
+            get
+            {
+                return this.valueToVertexIndex.Values;
+            }
         }
 
-        public void AddVertex(object value)
+        public VertexStructure()
         {
+            this.vertexFactory = new VertexFactory();
+
+            this.valueToVertexIndex = new Dictionary<object, Vertex>();
+            this.successorAdjacencyList = new AdjacencyList();
+            this.predecessorAdjacencyList = new AdjacencyList();
+        }
+
+        public Vertex AddVertex(object value)
+        {
+            Guard.ThrowExceptionIfNull(value, "value");
+
             Vertex newVertex = this.vertexFactory.CreateVertex(value);
+
+            this.RegisterVertex(newVertex);
+
+            return newVertex;
         }
 
         public bool RemoveVertex(Vertex vertex)
         {
+            Guard.ThrowExceptionIfNull(vertex, "vertex");
+
+            return this.UnregisterVertex(vertex);
+        }
+
+        public void AddArrow(Vertex firstVertex, Vertex secondVertex)
+        {
             throw new NotImplementedException();
         }
 
-        public bool RemoveEdge(Vertex firstVertex, Vertex secondVertex)
+        public bool RemoveArrows(Vertex firstVertex, Vertex secondVertex)
         {
             throw new NotImplementedException();
         }
@@ -49,14 +77,44 @@ namespace GraphCore.Vertices
             throw new NotImplementedException();
         }
 
-        private void RegisterVertex(Vertex vertex)
+        public IEnumerable<double?> GetArrowWeights(Vertex vertex, Vertex successor)
         {
             throw new NotImplementedException();
         }
 
-        private void UnregisterVertex(Vertex vertex)
+        private void RegisterVertex(Vertex vertex)
         {
-            throw new NotImplementedException();
+            if (this.valueToVertexIndex.ContainsKey(vertex.ValueAsObject))
+            {
+                throw new InvalidOperationException("There is already a vertex containing this value.");
+            }
+
+            this.valueToVertexIndex.Add(vertex.ValueAsObject, vertex);
+            vertex.RegisterVertexToAStructure(this);
+        }
+
+        private bool UnregisterVertex(Vertex vertex)
+        {
+            if (!this.valueToVertexIndex.ContainsKey(vertex.ValueAsObject) ||
+                this.valueToVertexIndex[vertex.ValueAsObject] != vertex)
+            {
+                return false;
+            }
+
+            IEnumerable<Vertex> predecessors = this.predecessorAdjacencyList.GetAdjacentVertices(vertex);
+
+            foreach (Vertex predecessor in predecessors)
+            {
+                this.successorAdjacencyList.RemoveAdjacentVertexFromVertex(predecessor, vertex);
+            }
+
+            this.predecessorAdjacencyList.RemoveAdjacencyListItem(vertex);
+            this.successorAdjacencyList.RemoveAdjacencyListItem(vertex);
+            this.valueToVertexIndex.Remove(vertex.ValueAsObject);
+
+            vertex.UnregisterVertexFromAnyStructure();
+
+            return true;
         }
     }
 }

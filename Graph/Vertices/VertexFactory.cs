@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GraphCore.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace GraphCore.Vertices
     {
         private readonly Dictionary<Predicate<object>, Func<object, Vertex>> vertexConstructorFunctions;
 
-        public Dictionary<Predicate<object>, Func<object, Vertex>> VertexConstructorFunctions
+        protected Dictionary<Predicate<object>, Func<object, Vertex>> VertexConstructorFunctions
         {
             get
             {
@@ -21,9 +22,10 @@ namespace GraphCore.Vertices
         public VertexFactory()
         {
             this.vertexConstructorFunctions = new Dictionary<Predicate<object>, Func<object, Vertex>>();
+            this.RegisterConstructorFunctions();
         }
 
-        protected void RegisterConstructorFunctions()
+        protected virtual void RegisterConstructorFunctions()
         {
             this.vertexConstructorFunctions.Add(
                 (o) => { return o is string; },
@@ -37,6 +39,8 @@ namespace GraphCore.Vertices
 
         public Vertex CreateVertex(object value)
         {
+            Guard.ThrowExceptionIfNull(value, "value");
+
             foreach (var pair in this.vertexConstructorFunctions)
             {
                 var predicate = pair.Key;

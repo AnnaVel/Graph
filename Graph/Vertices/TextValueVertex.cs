@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GraphCore.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace GraphCore.Vertices
         public TextValueVertex(string value)
             :base(value)
         {
+            Guard.ThrowExceptionIfNullOrEmpty(value, "value");
         }
     }
 }

@@ -12,23 +12,43 @@ namespace GraphCore
     {
         private VertexStructure vertexStructure;
 
+        public IEnumerable<Vertex> Vertices
+        {
+            get
+            {
+                return this.vertexStructure.Vertices;
+            }
+        }
+
+        public VertexFactory VertexFactory
+        {
+            get
+            {
+                return this.vertexStructure.VertexFactory;
+            }
+            set
+            {
+                this.vertexStructure.VertexFactory = value;
+            }
+        }
+
         public Graph()
         {
             this.vertexStructure = new VertexStructure();
         }
 
-        public void AddVertex(object value)
+        public Vertex AddVertex(object value)
         {
             Guard.ThrowExceptionIfNull(value, "value");
 
-            throw new NotImplementedException();
+            return this.vertexStructure.AddVertex(value);
         }
 
         public bool RemoveVertex(Vertex vertex)
         {
             Guard.ThrowExceptionIfNull(vertex, "vertex");
 
-            throw new NotImplementedException();
+            return this.vertexStructure.RemoveVertex(vertex);
         }
 
         public void AddLine(Vertex firstVertex, Vertex secondVertex)
@@ -52,7 +72,7 @@ namespace GraphCore
             Guard.ThrowExceptionIfNull(firstVertex, "firstVertex");
             Guard.ThrowExceptionIfNull(secondVertex, "secondVertex");
 
-            throw new NotImplementedException();
+            this.vertexStructure.AddArrow(firstVertex, secondVertex);
         }
 
         public bool RemoveAllEdges(Vertex firstVertex, Vertex secondVertex)
@@ -60,7 +80,10 @@ namespace GraphCore
             Guard.ThrowExceptionIfNull(firstVertex, "firstVertex");
             Guard.ThrowExceptionIfNull(secondVertex, "secondVertex");
 
-            throw new NotImplementedException();
+            bool firstToSecondArrowsRemoved = this.vertexStructure.RemoveArrows(firstVertex, secondVertex);
+            bool secondToFirstArrowsRemoved = this.vertexStructure.RemoveArrows(secondVertex, firstVertex);
+
+            return firstToSecondArrowsRemoved || secondToFirstArrowsRemoved;
         }
     }
 }

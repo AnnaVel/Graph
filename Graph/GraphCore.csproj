@@ -51,6 +51,7 @@
     <Compile Include="Graph.cs" />
     <Compile Include="Utilities\Guard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vertices\AdjacencyList.cs" />
     <Compile Include="Vertices\DoubleValueVertex.cs" />
     <Compile Include="Vertices\ObjectValueVertex.cs" />
     <Compile Include="Vertices\TextValueVertex.cs" />

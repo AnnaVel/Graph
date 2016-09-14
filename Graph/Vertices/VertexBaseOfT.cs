@@ -9,7 +9,6 @@ namespace GraphCore.Vertices
 {
     public class VertexBase<T> : Vertex
     {
-        private VertexStructure vertexStructure;
         private T value;
 
         public T Value
@@ -34,15 +33,5 @@ namespace GraphCore.Vertices
 
             this.value = value;
         }
-
-        public override IEnumerable<Vertex> GetSuccessors()
-        {
-            if (this.vertexStructure == null)
-            {
-                throw new InvalidOperationException("The vertex is not registered in a graph.");
-            }
-
-            return this.vertexStructure.GetVertexSuccessors(this);
-        } 
     }
 }

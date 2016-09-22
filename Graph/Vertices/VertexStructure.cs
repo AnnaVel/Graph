@@ -62,24 +62,66 @@ namespace GraphCore.Vertices
             return this.UnregisterVertex(vertex);
         }
 
-        public void AddArrow(Vertex firstVertex, Vertex secondVertex)
+        public void AddArrow(Vertex firstVertex, Vertex secondVertex, double? weight)
         {
-            throw new NotImplementedException();
+            Guard.ThrowExceptionIfNull(firstVertex, "firstVertex");
+            Guard.ThrowExceptionIfNull(secondVertex, "secondVertex");
+
+            if (!this.VertexBelongsToThisStructure(firstVertex) ||
+                !this.VertexBelongsToThisStructure(secondVertex))
+            {
+                throw new ArgumentException("One of the vertices does not belong to this structure.");
+            }
+
+            this.successorAdjacencyList.AddAdjacentVertexToVertex(firstVertex, secondVertex, weight);
+            this.predecessorAdjacencyList.AddAdjacentVertexToVertex(secondVertex, firstVertex, weight);
         }
 
         public bool RemoveArrows(Vertex firstVertex, Vertex secondVertex)
         {
-            throw new NotImplementedException();
+            Guard.ThrowExceptionIfNull(firstVertex, "firstVertex");
+            Guard.ThrowExceptionIfNull(secondVertex, "secondVertex");
+
+            if (!this.VertexBelongsToThisStructure(firstVertex) ||
+                !this.VertexBelongsToThisStructure(secondVertex))
+            {
+                throw new ArgumentException("One of the vertices does not belong to this structure.");
+            }
+
+            bool result = this.successorAdjacencyList.RemoveAdjacentVertexFromVertex(firstVertex, secondVertex);
+
+            if (result)
+            {
+                this.predecessorAdjacencyList.RemoveAdjacentVertexFromVertex(secondVertex, firstVertex);
+            }
+
+            return result;
         }
 
         public IEnumerable<Vertex> GetVertexSuccessors(Vertex vertex)
         {
-            throw new NotImplementedException();
+            Guard.ThrowExceptionIfNull(vertex, "vertex");
+
+            if (!this.VertexBelongsToThisStructure(vertex))
+            {
+                throw new ArgumentException("The vertex does not belong to this structure.");
+            }
+
+            return this.successorAdjacencyList.GetAdjacentVertices(vertex);
         }
 
         public IEnumerable<double?> GetArrowWeights(Vertex vertex, Vertex successor)
         {
-            throw new NotImplementedException();
+            Guard.ThrowExceptionIfNull(vertex, "vertex");
+            Guard.ThrowExceptionIfNull(successor, "successor");
+
+            if (!this.VertexBelongsToThisStructure(vertex) ||
+                !this.VertexBelongsToThisStructure(successor))
+            {
+                throw new ArgumentException("One of the vertices does not belong to this structure.");
+            }
+
+            return this.successorAdjacencyList.GetWeights(vertex, successor);
         }
 
         private void RegisterVertex(Vertex vertex)
@@ -95,8 +137,7 @@ namespace GraphCore.Vertices
 
         private bool UnregisterVertex(Vertex vertex)
         {
-            if (!this.valueToVertexIndex.ContainsKey(vertex.ValueAsObject) ||
-                this.valueToVertexIndex[vertex.ValueAsObject] != vertex)
+            if (!this.VertexBelongsToThisStructure(vertex))
             {
                 return false;
             }
@@ -115,6 +156,12 @@ namespace GraphCore.Vertices
             vertex.UnregisterVertexFromAnyStructure();
 
             return true;
+        }
+
+        private bool VertexBelongsToThisStructure(Vertex vertex)
+        {
+            return this.valueToVertexIndex.ContainsKey(vertex.ValueAsObject) &&
+                this.valueToVertexIndex[vertex.ValueAsObject] == vertex;
         }
     }
 }

@@ -62,7 +62,9 @@ namespace GraphTests
             graph.RemoveVertex(yVertex);
 
             Assert.AreEqual(0, xVertex.GetSuccessors().Count());
-            Assert.AreEqual(0, yVertex.GetSuccessors().Count());
+            Assert.Throws<InvalidOperationException>(() => yVertex.GetSuccessors());
+            Assert.Throws<ArgumentException>(() => xVertex.GetArrowWeights(yVertex));
+            Assert.Throws<InvalidOperationException>(() => yVertex.GetArrowWeights(xVertex));
         }
 
         [Test]

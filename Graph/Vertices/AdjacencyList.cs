@@ -8,21 +8,28 @@ namespace GraphCore.Vertices
 {
     internal class AdjacencyList
     {
-        private readonly Dictionary<Vertex, Dictionary<Vertex, double?>> internalList;
+        private readonly Dictionary<Vertex, Dictionary<Vertex, List<double?>>> internalList;
 
         public AdjacencyList()
         {
-            this.internalList = new Dictionary<Vertex, Dictionary<Vertex, double?>>();
+            this.internalList = new Dictionary<Vertex, Dictionary<Vertex, List<double?>>>();
         }
 
         public void AddAdjacentVertexToVertex(Vertex vertex, Vertex adjacentVertex, double? weight)
         {
             if (!this.internalList.ContainsKey(vertex))
             {
-                this.internalList.Add(vertex, new Dictionary<Vertex,double?>());
+                this.internalList.Add(vertex, new Dictionary<Vertex,List<double?>>());
             }
 
-            this.internalList[vertex].Add(adjacentVertex, weight);
+            Dictionary<Vertex, List<double?>> adjacentVertices = this.internalList[vertex];
+
+            if(!adjacentVertices.ContainsKey(adjacentVertex))
+            {
+                adjacentVertices.Add(adjacentVertex, new List<double?>());
+            }
+
+            adjacentVertices[adjacentVertex].Add(weight);
         }
 
         public bool RemoveAdjacentVertexFromVertex(Vertex vertex, Vertex adjacentVertex)
@@ -55,6 +62,21 @@ namespace GraphCore.Vertices
             }
 
             return this.internalList[vertex].Keys;
+        }
+
+        public IEnumerable<double?> GetWeights(Vertex vertex, Vertex adjacentVertex)
+        {
+            if (!this.internalList.ContainsKey(vertex))
+            {
+                return Enumerable.Empty<double?>();
+            }
+
+            if (!this.internalList[vertex].ContainsKey(adjacentVertex))
+            {
+                return Enumerable.Empty<double?>();
+            }
+
+            return this.internalList[vertex][adjacentVertex];
         }
     }
 }

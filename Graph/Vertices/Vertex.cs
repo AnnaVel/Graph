@@ -25,12 +25,30 @@ namespace GraphCore.Vertices
 
         public IEnumerable<double?> GetArrowWeights(Vertex successor)
         {
-            return this.owner.GetArrowWeights(this, successor);
+            Guard.ThrowExceptionIfNull(successor, "successor");
+
+            if (this.owner == null)
+            {
+                throw new InvalidOperationException("The vertex is not registered in a graph structure.");
+            }
+
+            IEnumerable<double?> arrowWeights = this.owner.GetArrowWeights(this, successor);
+            return arrowWeights;
         }
 
         public double? GetMinArrowWeight(Vertex successor)
         {
-            return this.GetArrowWeights(successor).Min();
+            Guard.ThrowExceptionIfNull(successor, "successor");
+
+            IEnumerable<double?> allArrowWeightsToSuccessor = this.GetArrowWeights(successor);
+
+            if (allArrowWeightsToSuccessor.Count() == 0)
+            {
+                throw new ArgumentException("The vertex passed is not a successor of this vertex.");
+            }
+
+            double? minimalWeight = allArrowWeightsToSuccessor.Min();
+            return minimalWeight;
         }
 
         internal void RegisterVertexToAStructure(VertexStructure vertexStructure)

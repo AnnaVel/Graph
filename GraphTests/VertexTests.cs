@@ -30,14 +30,15 @@ namespace GraphTests
                 graph.AddArrow(mainVertex, successor);
             }
 
-            TextValueVertex[] resultSuccessors = (mainVertex.GetSuccessors() as IEnumerable<TextValueVertex>).ToArray();
+            IEnumerable<Vertex> resultSuccessorsEnumerable = mainVertex.GetSuccessors();
+            Vertex[] resultSuccessors = resultSuccessorsEnumerable.ToArray();
 
             Assert.AreEqual(expectedSuccessorValues.Length, resultSuccessors.Length);
 
             for (int i = 0; i < expectedSuccessorValues.Length; i++)
             {
                 string expectedSuccessorValue = expectedSuccessorValues[i];
-                string resultSuccessorValue = resultSuccessors[i].Value;
+                string resultSuccessorValue = (resultSuccessors[i] as TextValueVertex).Value;
 
                 Assert.AreEqual(expectedSuccessorValue, resultSuccessorValue);
             }
@@ -70,6 +71,12 @@ namespace GraphTests
             sw.Stop();
 
             Assert.IsTrue(sw.Elapsed < expectedSpeed);
+        }
+
+        [Test]
+        public void RemovedVertexGetSuccessors()
+        {
+            Assert.Fail();
         }
 
         [Test]
@@ -108,7 +115,64 @@ namespace GraphTests
         }
 
         [Test]
-        public void GetArrowWeightNonexistantSuccessorTest()
+        public void RemovedVertexGetArrowWeights()
+        {
+            Assert.Fail();
+        }
+
+        [Test]
+        public void GetMinArrowWeightWeightedGraphTest()
+        {
+            double minWeight = 0.5;
+            double maxWeight = 0.6;
+
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y, minWeight);
+            graph.AddArrow(x, y, maxWeight);
+
+            Assert.AreEqual(minWeight, x.GetMinArrowWeight(y));
+        }
+
+        [Test]
+        public void GetMinArrowWeightUnweightedGraphTest()
+        {
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y);
+            graph.AddArrow(x, y);
+
+            Assert.AreEqual(null, x.GetMinArrowWeight(y));
+        }
+
+        [Test]
+        public void GetMinArrowWeightMixedGraphTest()
+        {
+            double? minWeight = 0.5;
+
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y, minWeight);
+            graph.AddArrow(x, y);
+
+            Assert.AreEqual(minWeight, x.GetMinArrowWeight(y));
+        }
+
+        [Test]
+        public void GetMinArrowWeightNonSuccessorTest()
+        {
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+
+            Assert.Throws<ArgumentException>(() => x.GetMinArrowWeight(y));
+        }
+
+        [Test]
+        public void GetMinArrowWeightOtherGraphVertexTest()
         {
             Graph graph = new Graph();
             Vertex x = graph.AddVertex("x");
@@ -119,6 +183,12 @@ namespace GraphTests
             Vertex otherGraphY = otherGraph.AddVertex("y");
 
             Assert.Throws<ArgumentException>(() => x.GetMinArrowWeight(otherGraphY));
+        }
+
+        [Test]
+        public void RemovedVertexGetMinArrowWeight()
+        {
+            Assert.Fail();
         }
     }
 }

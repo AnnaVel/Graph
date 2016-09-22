@@ -72,7 +72,7 @@ namespace GraphCore
             Guard.ThrowExceptionIfNull(firstVertex, "firstVertex");
             Guard.ThrowExceptionIfNull(secondVertex, "secondVertex");
 
-            this.vertexStructure.AddArrow(firstVertex, secondVertex);
+            this.vertexStructure.AddArrow(firstVertex, secondVertex, weight);
         }
 
         public bool RemoveAllEdges(Vertex firstVertex, Vertex secondVertex)

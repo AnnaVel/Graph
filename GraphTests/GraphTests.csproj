@@ -62,6 +62,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AdjacencyListTests.cs" />
     <Compile Include="CustomValueVertex.cs" />
     <Compile Include="CustomVertexFactory.cs" />
     <Compile Include="ExpectedVertexDescriptor.cs" />

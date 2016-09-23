@@ -83,7 +83,12 @@ namespace GraphTests
         [Test]
         public void AddArrowRemovedVerticesTest()
         {
-            Assert.Fail();
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.RemoveVertex(x);
+
+            Assert.Throws<ArgumentException>(() => graph.AddArrow(x, y));
         }
 
         [Test]
@@ -144,7 +149,13 @@ namespace GraphTests
         [Test]
         public void AddLineRemovedVerticesTest()
         {
-            Assert.Fail();
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.RemoveVertex(x);
+            graph.RemoveVertex(y);
+
+            Assert.Throws<ArgumentException>(() => graph.AddArrow(x, y));
         }
 
         [Test]
@@ -207,7 +218,14 @@ namespace GraphTests
         [Test]
         public void RemoveEdgesRemovedVerticesTest()
         {
-            Assert.Fail();
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y);
+            graph.RemoveVertex(x);
+            graph.RemoveVertex(y);
+
+            Assert.Throws<ArgumentException>(() => graph.RemoveAllEdges(x, y));
         }
 
         [Test]

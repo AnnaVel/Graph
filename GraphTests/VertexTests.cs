@@ -76,7 +76,13 @@ namespace GraphTests
         [Test]
         public void RemovedVertexGetSuccessors()
         {
-            Assert.Fail();
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y);
+            graph.RemoveVertex(x);
+
+            Assert.Throws<InvalidOperationException>(() => x.GetSuccessors());
         }
 
         [Test]
@@ -108,7 +114,7 @@ namespace GraphTests
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            double? resultArrowWeight = x.GetMinArrowWeight(y);
+            IEnumerable<double?> resultArrowWeight = x.GetArrowWeights(y);
             sw.Stop();
 
             Assert.IsTrue(sw.Elapsed < expectedSpeed);
@@ -117,7 +123,13 @@ namespace GraphTests
         [Test]
         public void RemovedVertexGetArrowWeights()
         {
-            Assert.Fail();
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y);
+            graph.RemoveVertex(x);
+            
+            Assert.Throws<InvalidOperationException>(() => x.GetArrowWeights(y));
         }
 
         [Test]
@@ -188,7 +200,13 @@ namespace GraphTests
         [Test]
         public void RemovedVertexGetMinArrowWeight()
         {
-            Assert.Fail();
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y);
+            graph.RemoveVertex(x);
+
+            Assert.Throws<InvalidOperationException>(() => x.GetMinArrowWeight(y));
         }
     }
 }

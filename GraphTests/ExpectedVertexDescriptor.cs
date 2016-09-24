@@ -8,11 +8,11 @@ namespace GraphTests
 {
     public class ExpectedVertexDescriptor
     {
-        private Dictionary<string, double?> successorNameToWeight;
+        private Dictionary<object, double?> successorNameToWeight;
 
-        public string Name { get; set; }
+        public object Value { get; set; }
 
-        public Dictionary<string, double?> SuccessorNameToWeight
+        public Dictionary<object, double?> SuccessorNameToWeight
         {
             get 
             {
@@ -20,10 +20,10 @@ namespace GraphTests
             }
         }
 
-        public ExpectedVertexDescriptor(string name, Dictionary<string, double?> successorNameToWeight)
+        public ExpectedVertexDescriptor(object value, Dictionary<object, double?> successorNameToWeight)
         {
-            this.Name = name;
-            this.successorNameToWeight = new Dictionary<string, double?>(successorNameToWeight);
+            this.Value = value;
+            this.successorNameToWeight = new Dictionary<object, double?>(successorNameToWeight);
         }
     }
 }

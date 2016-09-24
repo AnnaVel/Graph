@@ -1,5 +1,5 @@
 ﻿using GraphCore;
-using GraphCore.StructureDescription;
+using GraphCore.Vertices;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -16,30 +16,31 @@ namespace GraphTests
         [Test]
         public void GetSuccessorsCorrectnessTest()
         {
-            string[] expectedSuccessorNames = new string[]
+            string[] expectedSuccessorValues = new string[]
             {
                 "a", "b", "c", "d", "e"
             };
 
-            List<ArrowDescriptor> arrowDescriptors = new List<ArrowDescriptor>();
+            Graph graph = new Graph();
+            Vertex mainVertex = graph.AddVertex("x");
 
-            foreach (string expectedSuccessorName in expectedSuccessorNames)
+            foreach (string expectedSuccessorValue in expectedSuccessorValues)
             {
-                arrowDescriptors.Add(new ArrowDescriptor("x", expectedSuccessorName));
+                Vertex successor = graph.AddVertex(expectedSuccessorValue);
+                graph.AddArrow(mainVertex, successor);
             }
 
-            Vertex x = this.CreateGraphAndGetSpecificVertex("x", arrowDescriptors.ToArray());
+            IEnumerable<Vertex> resultSuccessorsEnumerable = mainVertex.GetSuccessors();
+            Vertex[] resultSuccessors = resultSuccessorsEnumerable.ToArray();
 
-            Vertex[] resultSuccessors = x.GetSuccessors().ToArray();
+            Assert.AreEqual(expectedSuccessorValues.Length, resultSuccessors.Length);
 
-            Assert.AreEqual(expectedSuccessorNames.Length, resultSuccessors.Length);
-
-            for (int i = 0; i < expectedSuccessorNames.Length; i++)
+            for (int i = 0; i < expectedSuccessorValues.Length; i++)
             {
-                string expectedSuccessorName = expectedSuccessorNames[i];
-                string resultSuccessorName = resultSuccessors[i].Name;
+                string expectedSuccessorValue = expectedSuccessorValues[i];
+                string resultSuccessorValue = (resultSuccessors[i] as TextValueVertex).Value;
 
-                Assert.AreEqual(expectedSuccessorName, resultSuccessorName);
+                Assert.AreEqual(expectedSuccessorValue, resultSuccessorValue);
             }
         }
 
@@ -48,40 +49,55 @@ namespace GraphTests
         {
             TimeSpan expectedSpeed = TimeSpan.FromMilliseconds(3);
 
-            string[] expectedSuccessorNames = new string[1000000];
+            string[] expectedSuccessorValues = new string[1000000];
 
-            for (int i = 0; i < expectedSuccessorNames.Length; i++)
+            for (int i = 0; i < expectedSuccessorValues.Length; i++)
             {
-                expectedSuccessorNames[i] = i.ToString();
+                expectedSuccessorValues[i] = i.ToString();
             }
 
-            List<ArrowDescriptor> arrowDescriptors = new List<ArrowDescriptor>();
+            Graph graph = new Graph();
+            Vertex mainVertex = graph.AddVertex("x");
 
-            foreach (string expectedSuccessorName in expectedSuccessorNames)
+            foreach (string expectedSuccessorValue in expectedSuccessorValues)
             {
-                arrowDescriptors.Add(new ArrowDescriptor("x", expectedSuccessorName));
+                Vertex successor = graph.AddVertex(expectedSuccessorValue);
+                graph.AddArrow(mainVertex, successor);
             }
-
-            Vertex x = this.CreateGraphAndGetSpecificVertex("x", arrowDescriptors.ToArray());
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            Vertex firstVertex = x.GetSuccessors().First();
+            Vertex firstVertex = mainVertex.GetSuccessors().First();
             sw.Stop();
 
             Assert.IsTrue(sw.Elapsed < expectedSpeed);
         }
 
         [Test]
+        public void RemovedVertexGetSuccessors()
+        {
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y);
+            graph.RemoveVertex(x);
+
+            Assert.Throws<InvalidOperationException>(() => x.GetSuccessors());
+        }
+
+        [Test]
         public void GetArrowWeightCorrectnessTest()
         {
             double? expectedArrowWeight = 0.5;
-            ArrowDescriptor arrowDescriptor = new ArrowDescriptor("x", "y", expectedArrowWeight);
 
-            Vertex x = this.CreateGraphAndGetSpecificVertex("x", arrowDescriptor);
-            Vertex y = x.GetSuccessors().First((v) => { return v.Name == "y"; });
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y, expectedArrowWeight);
 
-            double? resultArrowWeight = x.GetArrowWeight(y);
+            Vertex resultY = x.GetSuccessors().First((v) => { return v.ValueAsObject == "y"; });
+
+            double? resultArrowWeight = x.GetMinArrowWeight(resultY);
 
             Assert.AreEqual(expectedArrowWeight, resultArrowWeight);
         }
@@ -90,38 +106,107 @@ namespace GraphTests
         public void GetArrowWeightSpeedTest()
         {
             TimeSpan expectedSpeed = TimeSpan.FromMilliseconds(3);
-            ArrowDescriptor arrowDescriptor = new ArrowDescriptor("x", "y");
 
-            Vertex x = this.CreateGraphAndGetSpecificVertex("x", arrowDescriptor);
-            Vertex y = x.GetSuccessors().First((v) => { return v.Name == "y"; });
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y);
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            double? resultArrowWeight = x.GetArrowWeight(y);
+            IEnumerable<double?> resultArrowWeight = x.GetArrowWeights(y);
             sw.Stop();
 
             Assert.IsTrue(sw.Elapsed < expectedSpeed);
         }
 
         [Test]
-        public void GetArrowWeightNonexistantSuccessorTest()
+        public void RemovedVertexGetArrowWeights()
         {
-            ArrowDescriptor arrowDescriptor = new ArrowDescriptor("x", "y");
-            Vertex x = this.CreateGraphAndGetSpecificVertex("x", arrowDescriptor);
-
-            VertexDescriptor vertexDescriptor = new VertexDescriptor("y");
-            Vertex otherGraphY = this.CreateGraphAndGetSpecificVertex("y", vertexDescriptor);
-
-            Assert.Throws<ArgumentException>(() => x.GetArrowWeight(otherGraphY));
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y);
+            graph.RemoveVertex(x);
+            
+            Assert.Throws<InvalidOperationException>(() => x.GetArrowWeights(y));
         }
 
-        private Vertex CreateGraphAndGetSpecificVertex(string vertexName, params StructureDescriptor[] structureDescriptors)
+        [Test]
+        public void GetMinArrowWeightWeightedGraphTest()
         {
-            Graph graph = new Graph(structureDescriptors);
+            double minWeight = 0.5;
+            double maxWeight = 0.6;
 
-            Vertex result = graph.Vertices.First((v) => { return v.Name == vertexName; });
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y, minWeight);
+            graph.AddArrow(x, y, maxWeight);
 
-            return result;
+            Assert.AreEqual(minWeight, x.GetMinArrowWeight(y));
+        }
+
+        [Test]
+        public void GetMinArrowWeightUnweightedGraphTest()
+        {
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y);
+            graph.AddArrow(x, y);
+
+            Assert.AreEqual(null, x.GetMinArrowWeight(y));
+        }
+
+        [Test]
+        public void GetMinArrowWeightMixedGraphTest()
+        {
+            double? minWeight = 0.5;
+
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y, minWeight);
+            graph.AddArrow(x, y);
+
+            Assert.AreEqual(minWeight, x.GetMinArrowWeight(y));
+        }
+
+        [Test]
+        public void GetMinArrowWeightNonSuccessorTest()
+        {
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+
+            Assert.Throws<ArgumentException>(() => x.GetMinArrowWeight(y));
+        }
+
+        [Test]
+        public void GetMinArrowWeightOtherGraphVertexTest()
+        {
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y);
+
+            Graph otherGraph = new Graph();
+            Vertex otherGraphY = otherGraph.AddVertex("y");
+
+            Assert.Throws<ArgumentException>(() => x.GetMinArrowWeight(otherGraphY));
+        }
+
+        [Test]
+        public void RemovedVertexGetMinArrowWeight()
+        {
+            Graph graph = new Graph();
+            Vertex x = graph.AddVertex("x");
+            Vertex y = graph.AddVertex("y");
+            graph.AddArrow(x, y);
+            graph.RemoveVertex(x);
+
+            Assert.Throws<InvalidOperationException>(() => x.GetMinArrowWeight(y));
         }
     }
 }

@@ -18,10 +18,12 @@ namespace GraphCore.Utilities
 
         public static void ThrowExceptionIfNullOrEmpty(string parameter, string parameterName)
         {
-            if (string.IsNullOrEmpty(parameter))
+            if (parameter == string.Empty)
             {
-                throw new ArgumentException(parameterName, string.Format("{0} cannot be null or empty.", parameterName));
+                throw new ArgumentException(parameterName, string.Format("{0} cannot be empty.", parameterName));
             }
+
+            Guard.ThrowExceptionIfNull(parameter, parameterName);
         }
     }
 }

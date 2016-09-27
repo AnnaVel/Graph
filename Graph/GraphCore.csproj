@@ -51,6 +51,15 @@
     <Compile Include="Graph.cs" />
     <Compile Include="Utilities\Guard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VertexProperties\BooleanVertexProperty.cs" />
+    <Compile Include="VertexProperties\DoubleVertexProperty.cs" />
+    <Compile Include="VertexProperties\IntegerVertexProperty.cs" />
+    <Compile Include="VertexProperties\IVertexProperty.cs" />
+    <Compile Include="VertexProperties\ObjectVertexProperty.cs" />
+    <Compile Include="VertexProperties\StringVertexProperty.cs" />
+    <Compile Include="VertexProperties\VertexPropertyBaseOfT.cs" />
+    <Compile Include="VertexProperties\VertexPropertyFactory.cs" />
+    <Compile Include="VertexProperties\VertexPropertyList.cs" />
     <Compile Include="Vertices\AdjacencyList.cs" />
     <Compile Include="Vertices\DoubleValueVertex.cs" />
     <Compile Include="Vertices\ObjectValueVertex.cs" />

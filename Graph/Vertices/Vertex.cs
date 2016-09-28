@@ -14,7 +14,10 @@ namespace GraphCore.Vertices
 
         private VertexStructure owner;
 
-        public abstract object ValueAsObject { get; }
+        public abstract object ValueAsObject 
+        {
+            get; 
+        }
 
         internal VertexStructure Owner
         {

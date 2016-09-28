@@ -32,7 +32,7 @@ namespace GraphCore.VertexProperties
                 throw new InvalidOperationException("The vertex is not part of a structure and a property cannot be added.");
             }
 
-            IVertexProperty newProperty = this.owner.Owner.VertexPropertyFactory.CreateVertexProperty(name, value);
+            IVertexProperty newProperty = owningStructure.VertexPropertyFactory.CreateVertexProperty(name, value);
 
             this.innerList[name] = newProperty;
         }

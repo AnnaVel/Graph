@@ -63,11 +63,11 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AdjacencyListTests.cs" />
-    <Compile Include="CustomValueVertex.cs" />
-    <Compile Include="CustomVertexFactory.cs" />
-    <Compile Include="CustomVertexProperty.cs" />
-    <Compile Include="CustomVertexPropertyFactory.cs" />
-    <Compile Include="ExpectedVertexDescriptor.cs" />
+    <Compile Include="HelperClasses\CustomValueVertex.cs" />
+    <Compile Include="HelperClasses\CustomVertexFactory.cs" />
+    <Compile Include="HelperClasses\CustomVertexProperty.cs" />
+    <Compile Include="HelperClasses\CustomVertexPropertyFactory.cs" />
+    <Compile Include="HelperClasses\ExpectedVertexDescriptor.cs" />
     <Compile Include="GraphAddRemoveEdgesTests.cs" />
     <Compile Include="GraphAddRemoveVerticesTests.cs" />
     <Compile Include="GraphCreationTests.cs" />

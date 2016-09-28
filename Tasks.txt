@@ -1,9 +1,0 @@
-To Do:
-
-Up next: test the memory taken by this version and the previous one.
-
-1. Consider making the VertexStructure class public because at the moment the Graph class has API which only refers to teh VertexStructure class.
-
-2. Come up with a way to represent edges. This will be necessary when making the UI.
-
-3. Devise a way to remove only certain edge, not all edges between two vertices.

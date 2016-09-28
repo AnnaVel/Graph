@@ -1,4 +1,5 @@
 ﻿using GraphCore.Utilities;
+using GraphCore.VertexProperties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,27 @@ namespace GraphCore.Vertices
 {
     public abstract class Vertex
     {
+        private readonly VertexPropertyList propertyList;
+
         private VertexStructure owner;
 
-        public abstract object ValueAsObject { get; }
+        public abstract object ValueAsObject 
+        {
+            get; 
+        }
+
+        internal VertexStructure Owner
+        {
+            get
+            {
+                return this.owner;
+            }
+        }
+
+        public Vertex()
+        {
+            this.propertyList = new VertexPropertyList(this);
+        }
 
         public IEnumerable<Vertex> GetSuccessors()
         {
@@ -49,6 +68,21 @@ namespace GraphCore.Vertices
 
             double? minimalWeight = allArrowWeightsToSuccessor.Min();
             return minimalWeight;
+        }
+
+        public IVertexProperty GetProperty(string name)
+        {
+            return this.propertyList.GetProperty(name);
+        }
+
+        public void SetProperty(string name, object value)
+        {
+            this.propertyList.SetProperty(name, value);
+        }
+
+        public bool RemoveProperty(string name)
+        {
+            return this.propertyList.RemoveProperty(name);
         }
 
         internal void RegisterVertexToAStructure(VertexStructure vertexStructure)

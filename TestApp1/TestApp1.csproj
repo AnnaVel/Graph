@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D1083C1E-62C8-463B-9B01-5A02064CC3C0}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{669D089C-069F-4947-89C8-40846EE3C98E}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GraphCore</RootNamespace>
-    <AssemblyName>GraphCore</AssemblyName>
+    <RootNamespace>TestApp1</RootNamespace>
+    <AssemblyName>TestApp1</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,21 +23,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NoUnitTests|AnyCPU'">
-    <OutputPath>bin\NoUnitTests\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -48,28 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Graph.cs" />
-    <Compile Include="Utilities\Guard.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VertexProperties\BooleanVertexProperty.cs" />
-    <Compile Include="VertexProperties\DoubleVertexProperty.cs" />
-    <Compile Include="VertexProperties\IntegerVertexProperty.cs" />
-    <Compile Include="VertexProperties\IVertexProperty.cs" />
-    <Compile Include="VertexProperties\ObjectVertexProperty.cs" />
-    <Compile Include="VertexProperties\StringVertexProperty.cs" />
-    <Compile Include="VertexProperties\VertexPropertyBaseOfT.cs" />
-    <Compile Include="VertexProperties\VertexPropertyFactory.cs" />
-    <Compile Include="VertexProperties\VertexPropertyList.cs" />
-    <Compile Include="Vertices\AdjacencyList.cs" />
-    <Compile Include="Vertices\DoubleValueVertex.cs" />
-    <Compile Include="Vertices\ObjectValueVertex.cs" />
-    <Compile Include="Vertices\TextValueVertex.cs" />
-    <Compile Include="Vertices\Vertex.cs" />
-    <Compile Include="Vertices\VertexBaseOfT.cs" />
-    <Compile Include="Vertices\VertexFactory.cs" />
-    <Compile Include="Vertices\VertexStructure.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Graph\GraphCore.csproj">
+      <Project>{d1083c1e-62c8-463b-9b01-5a02064cc3c0}</Project>
+      <Name>GraphCore</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

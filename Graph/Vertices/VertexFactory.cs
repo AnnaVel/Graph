@@ -46,7 +46,8 @@ namespace GraphCore.Vertices
                 var predicate = pair.Key;
                 if (predicate(value))
                 {
-                    return pair.Value(value);
+                    var constructor = pair.Value;
+                    return constructor(value);
                 }
             }
 

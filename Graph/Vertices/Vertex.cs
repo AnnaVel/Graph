@@ -16,9 +16,17 @@ namespace GraphCore.Vertices
 
         public abstract object ValueAsObject { get; }
 
+        internal VertexStructure Owner
+        {
+            get
+            {
+                return this.owner;
+            }
+        }
+
         public Vertex()
         {
-            this.propertyList = new VertexPropertyList();
+            this.propertyList = new VertexPropertyList(this);
         }
 
         public IEnumerable<Vertex> GetSuccessors()

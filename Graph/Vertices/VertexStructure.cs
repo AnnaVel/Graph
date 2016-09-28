@@ -1,4 +1,5 @@
 ﻿using GraphCore.Utilities;
+using GraphCore.VertexProperties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace GraphCore.Vertices
     internal class VertexStructure
     {
         private VertexFactory vertexFactory;
+        private VertexPropertyFactory vertexPropertyFactory;
 
         private readonly Dictionary<object, Vertex> valueToVertexIndex;
         private readonly AdjacencyList successorAdjacencyList;
@@ -23,7 +25,19 @@ namespace GraphCore.Vertices
             }
             set
             {
-                vertexFactory = value;
+                this.vertexFactory = value;
+            }
+        }
+
+        public VertexPropertyFactory VertexPropertyFactory
+        {
+            get
+            {
+                return this.vertexPropertyFactory;
+            }
+            set
+            {
+                this.vertexPropertyFactory = value;
             }
         }
 
@@ -38,6 +52,7 @@ namespace GraphCore.Vertices
         public VertexStructure()
         {
             this.vertexFactory = new VertexFactory();
+            this.vertexPropertyFactory = new VertexPropertyFactory();
 
             this.valueToVertexIndex = new Dictionary<object, Vertex>();
             this.successorAdjacencyList = new AdjacencyList();

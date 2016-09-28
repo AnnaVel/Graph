@@ -6,9 +6,17 @@ using System.Threading.Tasks;
 
 namespace GraphCore.VertexProperties
 {
-    internal class VertexPropertyFactory
+    public class VertexPropertyFactory
     {
         private readonly Dictionary<Predicate<object>, Func<string, object, IVertexProperty>> vertexPropertyConstructorFunctions;
+
+        protected Dictionary<Predicate<object>, Func<string, object, IVertexProperty>> VertexPropertyConstructorFunctions
+        {
+            get
+            {
+                return this.vertexPropertyConstructorFunctions;
+            }
+        }
 
         public VertexPropertyFactory()
         {
@@ -33,7 +41,7 @@ namespace GraphCore.VertexProperties
             return new ObjectVertexProperty(name, value);
         }
 
-        private void RegisterConstructorFunctions()
+        protected virtual void RegisterConstructorFunctions()
         {
             this.vertexPropertyConstructorFunctions.Add(
                 (value) =>

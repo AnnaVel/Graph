@@ -1,4 +1,5 @@
 ﻿using GraphCore.Utilities;
+using GraphCore.VertexProperties;
 using GraphCore.Vertices;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,18 @@ namespace GraphCore
             set
             {
                 this.vertexStructure.VertexFactory = value;
+            }
+        }
+
+        public VertexPropertyFactory VertexPropertyFactory
+        {
+            get
+            {
+                return this.vertexStructure.VertexPropertyFactory;
+            }
+            set
+            {
+                this.vertexStructure.VertexPropertyFactory = value;
             }
         }
 

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GraphCore.Utilities;
+using GraphCore.Vertices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,18 +10,29 @@ namespace GraphCore.VertexProperties
 {
     internal class VertexPropertyList
     {
-        private readonly Dictionary<string, IVertexProperty> innerList;
-        private readonly VertexPropertyFactory factory;
+        private readonly Vertex owner;
 
-        public VertexPropertyList()
+        private readonly Dictionary<string, IVertexProperty> innerList;
+
+        public VertexPropertyList(Vertex owner)
         {
+            Guard.ThrowExceptionIfNull(owner, "owner");
+
+            this.owner = owner;
+
             this.innerList = new Dictionary<string, IVertexProperty>();
-            this.factory = new VertexPropertyFactory();
         }
 
         public void SetProperty(string name, object value)
         {
-            IVertexProperty newProperty = this.factory.CreateVertexProperty(name, value);
+            VertexStructure owningStructure = this.owner.Owner;
+
+            if (owningStructure == null)
+            {
+                throw new InvalidOperationException("The vertex is not part of a structure and a property cannot be added.");
+            }
+
+            IVertexProperty newProperty = owningStructure.VertexPropertyFactory.CreateVertexProperty(name, value);
 
             this.innerList[name] = newProperty;
         }

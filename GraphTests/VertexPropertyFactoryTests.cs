@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace GraphTests
 {
     [TestFixture]
-    public class VertexPropertyCreationTests
+    public class VertexPropertyFactoryTests
     {
         [Test]
         public void CreateBoolProperty()
@@ -41,6 +41,20 @@ namespace GraphTests
         public void CreateObjectProperty()
         {
             this.TestCreationOfPropertyOfType(new Graph(), typeof(ObjectVertexProperty));
+        }
+
+        [Test]
+        public void CreateCustomProperty()
+        {
+            string propertyName = "name";
+            Graph graph = new Graph();
+            graph.VertexPropertyFactory = new CustomVertexPropertyFactory();
+            Vertex vertex = graph.AddVertex("x");
+
+            vertex.SetProperty(propertyName, "test");
+
+            IVertexProperty property = vertex.GetProperty(propertyName);
+            Assert.AreEqual(typeof(CustomVertexProperty), property.GetType());
         }
 
         private void TestCreationOfPropertyOfType(object propertyValue, Type expectedVertexPropertyType)

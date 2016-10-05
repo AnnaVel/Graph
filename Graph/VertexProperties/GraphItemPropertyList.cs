@@ -8,38 +8,38 @@ using System.Threading.Tasks;
 
 namespace GraphCore.VertexProperties
 {
-    internal class VertexPropertyList
+    internal class GraphItemPropertyList
     {
-        private readonly Vertex owner;
+        private readonly GraphStructureItem owner;
 
-        private readonly Dictionary<string, IVertexProperty> innerList;
+        private readonly Dictionary<string, IGraphItemProperty> innerList;
 
-        public VertexPropertyList(Vertex owner)
+        public GraphItemPropertyList(GraphStructureItem owner)
         {
             Guard.ThrowExceptionIfNull(owner, "owner");
 
             this.owner = owner;
 
-            this.innerList = new Dictionary<string, IVertexProperty>();
+            this.innerList = new Dictionary<string, IGraphItemProperty>();
         }
 
         public void SetProperty(string name, object value)
         {
-            VertexStructure owningStructure = this.owner.Owner;
+            GraphStructure owningStructure = this.owner.Owner;
 
             if (owningStructure == null)
             {
-                throw new InvalidOperationException("The vertex is not part of a structure and a property cannot be added.");
+                throw new InvalidOperationException("The item is not part of a structure and a property cannot be added.");
             }
 
-            IVertexProperty newProperty = owningStructure.VertexPropertyFactory.CreateVertexProperty(name, value);
+            IGraphItemProperty newProperty = owningStructure.GraphItemPropertyFactory.CreateVertexProperty(name, value);
 
             this.innerList[name] = newProperty;
         }
 
-        public IVertexProperty GetProperty(string name)
+        public IGraphItemProperty GetProperty(string name)
         {
-            IVertexProperty result = null;
+            IGraphItemProperty result = null;
             this.innerList.TryGetValue(name, out result);
 
             return result;

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace GraphCore.VertexProperties
 {
-    public class ObjectVertexProperty : VertexPropertyBase<object>
+    public class IntegerGraphItemProperty : VertexPropertyBase<int>
     {
-        public ObjectVertexProperty(string name, object value)
+        public IntegerGraphItemProperty(string name, int value)
             :base(name, value)
         {
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GraphTests
 {
-    public class CustomVertexProperty : IVertexProperty
+    public class CustomVertexProperty : IGraphItemProperty
     {
         public string Name
         {

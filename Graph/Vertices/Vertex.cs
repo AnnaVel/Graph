@@ -8,50 +8,28 @@ using System.Threading.Tasks;
 
 namespace GraphCore.Vertices
 {
-    public abstract class Vertex
+    public abstract class Vertex : GraphStructureItem
     {
-        private readonly VertexPropertyList propertyList;
-
-        private VertexStructure owner;
-
-        public abstract object ValueAsObject 
-        {
-            get; 
-        }
-
-        internal VertexStructure Owner
-        {
-            get
-            {
-                return this.owner;
-            }
-        }
-
-        public Vertex()
-        {
-            this.propertyList = new VertexPropertyList(this);
-        }
-
         public IEnumerable<Vertex> GetSuccessors()
         {
-            if (this.owner == null)
+            if (this.Owner == null)
             {
                 throw new InvalidOperationException("The vertex is not registered in a graph structure.");
             }
 
-            return this.owner.GetVertexSuccessors(this);
+            return this.Owner.GetVertexSuccessors(this);
         }
 
         public IEnumerable<double?> GetArrowWeights(Vertex successor)
         {
             Guard.ThrowExceptionIfNull(successor, "successor");
 
-            if (this.owner == null)
+            if (this.Owner == null)
             {
                 throw new InvalidOperationException("The vertex is not registered in a graph structure.");
             }
 
-            IEnumerable<double?> arrowWeights = this.owner.GetArrowWeights(this, successor);
+            IEnumerable<double?> arrowWeights = this.Owner.GetArrowWeights(this, successor);
             return arrowWeights;
         }
 
@@ -68,38 +46,6 @@ namespace GraphCore.Vertices
 
             double? minimalWeight = allArrowWeightsToSuccessor.Min();
             return minimalWeight;
-        }
-
-        public IVertexProperty GetProperty(string name)
-        {
-            return this.propertyList.GetProperty(name);
-        }
-
-        public void SetProperty(string name, object value)
-        {
-            this.propertyList.SetProperty(name, value);
-        }
-
-        public bool RemoveProperty(string name)
-        {
-            return this.propertyList.RemoveProperty(name);
-        }
-
-        internal void RegisterVertexToAStructure(VertexStructure vertexStructure)
-        {
-            Guard.ThrowExceptionIfNull(vertexStructure, "vertexStructure");
-
-            if (this.owner != null)
-            {
-                throw new InvalidOperationException("This vertex is already part of a structure.");
-            }
-
-            this.owner = vertexStructure;
-        }
-
-        internal void UnregisterVertexFromAnyStructure()
-        {
-            this.owner = null;
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GraphCore.VertexProperties
 {
-    public abstract class VertexPropertyBase<T> : IVertexProperty
+    public abstract class VertexPropertyBase<T> : IGraphItemProperty
     {
         private string name;
         private T value;

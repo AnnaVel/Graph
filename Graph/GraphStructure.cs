@@ -1,17 +1,18 @@
 ﻿using GraphCore.Utilities;
 using GraphCore.VertexProperties;
+using GraphCore.Vertices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphCore.Vertices
+namespace GraphCore
 {
-    internal class VertexStructure
+    internal class GraphStructure
     {
         private VertexFactory vertexFactory;
-        private VertexPropertyFactory vertexPropertyFactory;
+        private GraphItemPropertyFactory graphItemPropertyFactory;
 
         private readonly Dictionary<object, Vertex> valueToVertexIndex;
         private readonly AdjacencyList successorAdjacencyList;
@@ -29,15 +30,15 @@ namespace GraphCore.Vertices
             }
         }
 
-        public VertexPropertyFactory VertexPropertyFactory
+        public GraphItemPropertyFactory GraphItemPropertyFactory
         {
             get
             {
-                return this.vertexPropertyFactory;
+                return this.graphItemPropertyFactory;
             }
             set
             {
-                this.vertexPropertyFactory = value;
+                this.graphItemPropertyFactory = value;
             }
         }
 
@@ -49,10 +50,10 @@ namespace GraphCore.Vertices
             }
         }
 
-        public VertexStructure()
+        public GraphStructure()
         {
             this.vertexFactory = new VertexFactory();
-            this.vertexPropertyFactory = new VertexPropertyFactory();
+            this.graphItemPropertyFactory = new GraphItemPropertyFactory();
 
             this.valueToVertexIndex = new Dictionary<object, Vertex>();
             this.successorAdjacencyList = new AdjacencyList();
@@ -147,7 +148,7 @@ namespace GraphCore.Vertices
             }
 
             this.valueToVertexIndex.Add(vertex.ValueAsObject, vertex);
-            vertex.RegisterVertexToAStructure(this);
+            vertex.RegisterItemToAStructure(this);
         }
 
         private bool UnregisterVertex(Vertex vertex)
@@ -168,7 +169,7 @@ namespace GraphCore.Vertices
             this.successorAdjacencyList.RemoveAdjacencyListItem(vertex);
             this.valueToVertexIndex.Remove(vertex.ValueAsObject);
 
-            vertex.UnregisterVertexFromAnyStructure();
+            vertex.UnregisterItemFromAnyStructure();
 
             return true;
         }

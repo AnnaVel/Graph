@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GraphCore.VertexProperties
 {
-    public interface IVertexProperty
+    public interface IGraphItemProperty
     {
         string Name { get; }
         Type ValueType { get; }

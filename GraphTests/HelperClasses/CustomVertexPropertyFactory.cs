@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GraphTests
 {
-    public class CustomVertexPropertyFactory : VertexPropertyFactory
+    public class CustomVertexPropertyFactory : GraphItemPropertyFactory
     {
         protected override void RegisterConstructorFunctions()
         {

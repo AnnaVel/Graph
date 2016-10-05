@@ -16,31 +16,31 @@ namespace GraphTests
         [Test]
         public void CreateBoolProperty()
         {
-            this.TestCreationOfPropertyOfType(true, typeof(BooleanVertexProperty));
+            this.TestCreationOfPropertyOfType(true, typeof(BooleanGraphItemProperty));
         }
 
         [Test]
         public void CreateStringProperty()
         {
-            this.TestCreationOfPropertyOfType("test", typeof(StringVertexProperty));
+            this.TestCreationOfPropertyOfType("test", typeof(StringGraphItemProperty));
         }
 
         [Test]
         public void CreateIntegerProperty()
         {
-            this.TestCreationOfPropertyOfType(1, typeof(IntegerVertexProperty));
+            this.TestCreationOfPropertyOfType(1, typeof(IntegerGraphItemProperty));
         }
 
         [Test]
         public void CreateDoubleProperty()
         {
-            this.TestCreationOfPropertyOfType(1d, typeof(DoubleVertexProperty));
+            this.TestCreationOfPropertyOfType(1d, typeof(DoubleGraphItemProperty));
         }
 
         [Test]
         public void CreateObjectProperty()
         {
-            this.TestCreationOfPropertyOfType(new Graph(), typeof(ObjectVertexProperty));
+            this.TestCreationOfPropertyOfType(new Graph(), typeof(ObjectGraphItemProperty));
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace GraphTests
 
             vertex.SetProperty(propertyName, "test");
 
-            IVertexProperty property = vertex.GetProperty(propertyName);
+            IGraphItemProperty property = vertex.GetProperty(propertyName);
             Assert.AreEqual(typeof(CustomVertexProperty), property.GetType());
         }
 
@@ -65,7 +65,7 @@ namespace GraphTests
 
             vertex.SetProperty(propertyName, propertyValue);
 
-            IVertexProperty property = vertex.GetProperty(propertyName);
+            IGraphItemProperty property = vertex.GetProperty(propertyName);
             Assert.AreEqual(expectedVertexPropertyType, property.GetType());
         }
     }

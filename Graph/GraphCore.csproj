@@ -48,7 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Edges\DoubleValueEdge.cs" />
+    <Compile Include="Edges\Edge.cs" />
+    <Compile Include="Edges\EdgeBaseOfT.cs" />
     <Compile Include="Graph.cs" />
+    <Compile Include="GraphStructureItem.cs" />
     <Compile Include="Utilities\Guard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VertexProperties\BooleanVertexProperty.cs" />
@@ -67,7 +71,7 @@
     <Compile Include="Vertices\Vertex.cs" />
     <Compile Include="Vertices\VertexBaseOfT.cs" />
     <Compile Include="Vertices\VertexFactory.cs" />
-    <Compile Include="Vertices\VertexStructure.cs" />
+    <Compile Include="GraphStructure.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

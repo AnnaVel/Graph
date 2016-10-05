@@ -11,7 +11,7 @@ namespace GraphCore
 {
     public class Graph
     {
-        private VertexStructure vertexStructure;
+        private GraphStructure vertexStructure;
 
         public IEnumerable<Vertex> Vertices
         {
@@ -33,21 +33,21 @@ namespace GraphCore
             }
         }
 
-        public VertexPropertyFactory VertexPropertyFactory
+        public GraphItemPropertyFactory VertexPropertyFactory
         {
             get
             {
-                return this.vertexStructure.VertexPropertyFactory;
+                return this.vertexStructure.GraphItemPropertyFactory;
             }
             set
             {
-                this.vertexStructure.VertexPropertyFactory = value;
+                this.vertexStructure.GraphItemPropertyFactory = value;
             }
         }
 
         public Graph()
         {
-            this.vertexStructure = new VertexStructure();
+            this.vertexStructure = new GraphStructure();
         }
 
         public Vertex AddVertex(object value)

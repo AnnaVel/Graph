@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace GraphCore.VertexProperties
 {
-    public class BooleanVertexProperty : VertexPropertyBase<bool>
+    public class BooleanGraphItemProperty : VertexPropertyBase<bool>
     {
-        public BooleanVertexProperty(string name, bool value)
+        public BooleanGraphItemProperty(string name, bool value)
             :base(name, value)
         {
 

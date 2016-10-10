@@ -1,4 +1,5 @@
 ﻿using GraphCore;
+using GraphCore.Edges;
 using GraphCore.VertexProperties;
 using GraphCore.Vertices;
 using NUnit.Framework;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace GraphTests
 {
     [TestFixture]
-    public class VertexPropertyFactoryTests
+    public class GraphItemPropertyFactoryTests
     {
         [Test]
         public void CreateBoolProperty()
@@ -44,24 +45,40 @@ namespace GraphTests
         }
 
         [Test]
-        public void CreateCustomProperty()
+        public void CreateCustomVertexProperty()
         {
             string propertyName = "name";
             Graph graph = new Graph();
-            graph.VertexPropertyFactory = new CustomVertexPropertyFactory();
-            Vertex vertex = graph.AddVertex("x");
+            graph.GraphStructure.VertexPropertyFactory = new CustomPropertyFactory();
+            Vertex vertex = graph.GraphStructure.AddVertex("x");
 
             vertex.SetProperty(propertyName, "test");
 
             IGraphItemProperty property = vertex.GetProperty(propertyName);
-            Assert.AreEqual(typeof(CustomVertexProperty), property.GetType());
+            Assert.AreEqual(typeof(CustomProperty), property.GetType());
+        }
+
+        [Test]
+        public void CreateCustomEdgeProperty()
+        {
+            string propertyName = "name";
+            Graph graph = new Graph();
+            graph.GraphStructure.EdgePropertyFactory = new CustomPropertyFactory();
+            Vertex x = graph.GraphStructure.AddVertex("x");
+            Vertex y = graph.GraphStructure.AddVertex("y");
+            Edge line = graph.GraphStructure.AddLine(x, y);
+
+            line.SetProperty(propertyName, "test");
+
+            IGraphItemProperty property = line.GetProperty(propertyName);
+            Assert.AreEqual(typeof(CustomProperty), property.GetType());
         }
 
         private void TestCreationOfPropertyOfType(object propertyValue, Type expectedVertexPropertyType)
         {
             string propertyName = "name";
             Graph graph = new Graph();
-            Vertex vertex = graph.AddVertex("x");
+            Vertex vertex = graph.GraphStructure.AddVertex("x");
 
             vertex.SetProperty(propertyName, propertyValue);
 

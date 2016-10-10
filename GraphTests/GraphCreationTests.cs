@@ -1,4 +1,5 @@
 ﻿using GraphCore;
+using GraphCore.Edges;
 using GraphCore.Vertices;
 using NUnit.Framework;
 using System;
@@ -16,151 +17,146 @@ namespace GraphTests
         public void CreateTwoVertextWeightedDirectedGraph()
         {
             Graph graph = new Graph();
-            Vertex x = graph.AddVertex("x");
-            Vertex y = graph.AddVertex("y");
-            graph.AddArrow(x, y, 1);
+            Vertex x = graph.GraphStructure.AddVertex("x");
+            Vertex y = graph.GraphStructure.AddVertex("y");
+            graph.GraphStructure.AddArrow(x, y, 1);
 
-            this.AssertExpectedVertices(new ExpectedVertexDescriptor[]
+            this.AssertExpectedGraph(new ExpectedVertexDescriptor[]
             {
-                new ExpectedVertexDescriptor("x", new Dictionary<object,double?>() 
-                {
-                    {"y", 1},
-                }),
-                new ExpectedVertexDescriptor("y", new Dictionary<object,double?>())
+                new ExpectedVertexDescriptor() { Value = "x"},
+                new ExpectedVertexDescriptor() { Value = "y"},
             },
-            graph.Vertices.ToArray());
+            new ExpectedEdgeDescriptor[]
+            {
+                new ExpectedEdgeDescriptor() { FirstVertexValue = "x", SecondVertexValue = "y", IsDirected = true, Value = 1}
+            },
+            graph);
         }
 
         [Test]
         public void CreateTwoVertextWeightedUndirectedGraph()
         {
             Graph graph = new Graph();
-            Vertex x = graph.AddVertex("x");
-            Vertex y = graph.AddVertex("y");
-            graph.AddLine(x, y, 1);
+            Vertex x = graph.GraphStructure.AddVertex("x");
+            Vertex y = graph.GraphStructure.AddVertex("y");
+            graph.GraphStructure.AddLine(x, y, 1);
 
-            this.AssertExpectedVertices(new ExpectedVertexDescriptor[]
+            this.AssertExpectedGraph(new ExpectedVertexDescriptor[]
             {
-                new ExpectedVertexDescriptor("x", new Dictionary<object,double?>() 
-                {
-                    {"y", 1},
-                }),
-                new ExpectedVertexDescriptor("y", new Dictionary<object,double?>()
-                {
-                    {"x", 1},
-                })
+                new ExpectedVertexDescriptor() { Value = "x"},
+                new ExpectedVertexDescriptor() { Value = "y"},
             },
-            graph.Vertices.ToArray());
+            new ExpectedEdgeDescriptor[]
+            {
+                new ExpectedEdgeDescriptor() { FirstVertexValue = "x", SecondVertexValue = "y", IsDirected = false, Value = 1}
+            },
+            graph);
         }
 
         [Test]
         public void CreateTwoVertextUnweightedDirectedGraph()
         {
             Graph graph = new Graph();
-            Vertex x = graph.AddVertex("x");
-            Vertex y = graph.AddVertex("y");
-            graph.AddArrow(x, y);
+            Vertex x = graph.GraphStructure.AddVertex("x");
+            Vertex y = graph.GraphStructure.AddVertex("y");
+            graph.GraphStructure.AddArrow(x, y);
 
-            this.AssertExpectedVertices(new ExpectedVertexDescriptor[]
+            this.AssertExpectedGraph(new ExpectedVertexDescriptor[]
             {
-                new ExpectedVertexDescriptor("x", new Dictionary<object,double?>() 
-                {
-                    {"y", null},
-                }),
-                new ExpectedVertexDescriptor("y", new Dictionary<object,double?>())
+                new ExpectedVertexDescriptor() { Value = "x"},
+                new ExpectedVertexDescriptor() { Value = "y"},
             },
-            graph.Vertices.ToArray());
+            new ExpectedEdgeDescriptor[]
+            {
+                new ExpectedEdgeDescriptor() { FirstVertexValue = "x", SecondVertexValue = "y", IsDirected = true, Value = null}
+            },
+            graph);
         }
 
         [Test]
         public void CreateTwoVertextUnweightedUndirectedGraph()
         {
             Graph graph = new Graph();
-            Vertex x = graph.AddVertex("x");
-            Vertex y = graph.AddVertex("y");
-            graph.AddLine(x, y);
+            Vertex x = graph.GraphStructure.AddVertex("x");
+            Vertex y = graph.GraphStructure.AddVertex("y");
+            graph.GraphStructure.AddLine(x, y);
 
-            this.AssertExpectedVertices(new ExpectedVertexDescriptor[]
+            this.AssertExpectedGraph(new ExpectedVertexDescriptor[]
             {
-                new ExpectedVertexDescriptor("x", new Dictionary<object,double?>() 
-                {
-                    {"y", null},
-                }),
-                new ExpectedVertexDescriptor("y", new Dictionary<object,double?>() 
-                {
-                    {"x", null},
-                })
+                new ExpectedVertexDescriptor() { Value = "x"},
+                new ExpectedVertexDescriptor() { Value = "y"},
             },
-            graph.Vertices.ToArray());
+            new ExpectedEdgeDescriptor[]
+            {
+                new ExpectedEdgeDescriptor() { FirstVertexValue = "x", SecondVertexValue = "y", IsDirected = false, Value = null}
+            },
+            graph);
         }
 
         [Test]
         public void CreateCircularGraph()
         {
             Graph graph = new Graph();
-            Vertex x = graph.AddVertex("x");
-            Vertex y = graph.AddVertex("y");
-            Vertex z = graph.AddVertex("z");
-            graph.AddArrow(x, y);
-            graph.AddArrow(y, z);
-            graph.AddArrow(z, x);
+            Vertex x = graph.GraphStructure.AddVertex("x");
+            Vertex y = graph.GraphStructure.AddVertex("y");
+            Vertex z = graph.GraphStructure.AddVertex("z");
+            graph.GraphStructure.AddArrow(x, y);
+            graph.GraphStructure.AddArrow(y, z);
+            graph.GraphStructure.AddArrow(z, x);
 
-            this.AssertExpectedVertices(new ExpectedVertexDescriptor[]
+            this.AssertExpectedGraph(new ExpectedVertexDescriptor[]
             {
-                new ExpectedVertexDescriptor("x", new Dictionary<object,double?>() 
-                {
-                    {"y", null},
-                }),
-                new ExpectedVertexDescriptor("y", new Dictionary<object,double?>() 
-                {
-                    {"z", null},
-                }),
-                new ExpectedVertexDescriptor("z", new Dictionary<object,double?>() 
-                {
-                    {"x", null},
-                })
+                new ExpectedVertexDescriptor() { Value = "x"},
+                new ExpectedVertexDescriptor() { Value = "y"},
+                new ExpectedVertexDescriptor() { Value = "z"},
             },
-            graph.Vertices.ToArray());
+            new ExpectedEdgeDescriptor[]
+            {
+                new ExpectedEdgeDescriptor() { FirstVertexValue = "x", SecondVertexValue = "y", IsDirected = true, Value = null},
+                new ExpectedEdgeDescriptor() { FirstVertexValue = "y", SecondVertexValue = "z", IsDirected = true, Value = null},
+                new ExpectedEdgeDescriptor() { FirstVertexValue = "z", SecondVertexValue = "x", IsDirected = true, Value = null},
+            },
+            graph);
         }
 
         [Test]
         public void CreateDisconnectedGraph()
         {
             Graph graph = new Graph();
-            Vertex x = graph.AddVertex("x");
-            Vertex y = graph.AddVertex("y");
-            graph.AddArrow(x, y);
-            Vertex z = graph.AddVertex("z");
-            Vertex t = graph.AddVertex("t");
-            graph.AddArrow(z, t);
+            Vertex x = graph.GraphStructure.AddVertex("x");
+            Vertex y = graph.GraphStructure.AddVertex("y");
+            graph.GraphStructure.AddArrow(x, y);
+            Vertex z = graph.GraphStructure.AddVertex("z");
+            Vertex t = graph.GraphStructure.AddVertex("t");
+            graph.GraphStructure.AddArrow(z, t);
 
-            this.AssertExpectedVertices(new ExpectedVertexDescriptor[]
+            this.AssertExpectedGraph(new ExpectedVertexDescriptor[]
             {
-                new ExpectedVertexDescriptor("x", new Dictionary<object,double?>() 
-                {
-                    {"y", null},
-                }),
-                new ExpectedVertexDescriptor("y", new Dictionary<object,double?>()),
-                new ExpectedVertexDescriptor("z", new Dictionary<object,double?>() 
-                {
-                    {"t", null},
-                }),
-                new ExpectedVertexDescriptor("t", new Dictionary<object,double?>()),
+                new ExpectedVertexDescriptor() { Value = "x"},
+                new ExpectedVertexDescriptor() { Value = "y"},
+                new ExpectedVertexDescriptor() { Value = "z"},
+                new ExpectedVertexDescriptor() { Value = "t"},
             },
-            graph.Vertices.ToArray());
+            new ExpectedEdgeDescriptor[]
+            {
+                new ExpectedEdgeDescriptor() { FirstVertexValue = "x", SecondVertexValue = "y", IsDirected = true, Value = null},
+                new ExpectedEdgeDescriptor() { FirstVertexValue = "z", SecondVertexValue = "t", IsDirected = true, Value = null}
+            },
+            graph);
         }
 
         [Test]
         public void CreateSingleVertexGraph()
         {
             Graph graph = new Graph();
-            graph.AddVertex("x");
+            graph.GraphStructure.AddVertex("x");
 
-            this.AssertExpectedVertices(new ExpectedVertexDescriptor[]
+            this.AssertExpectedGraph(new ExpectedVertexDescriptor[]
             {
-                new ExpectedVertexDescriptor("x", new Dictionary<object,double?>())
+                new ExpectedVertexDescriptor() { Value = "x"}
             },
-            graph.Vertices.ToArray());
+            new ExpectedEdgeDescriptor[0],
+            graph);
         }
 
         [Test]
@@ -168,47 +164,54 @@ namespace GraphTests
         {
             Graph graph = new Graph();
 
-            this.AssertExpectedVertices(new ExpectedVertexDescriptor[0], graph.Vertices.ToArray());
+            this.AssertExpectedGraph(new ExpectedVertexDescriptor[0], new ExpectedEdgeDescriptor[0], graph);
         }
 
         [Test]
         public void CreateMixedUnweightedGraph()
         {
             Graph graph = new Graph();
-            Vertex x = graph.AddVertex("x");
-            Vertex y = graph.AddVertex("y");
-            graph.AddArrow(x, y);
-            Vertex z = graph.AddVertex("z");
-            graph.AddLine(x, z);
-            Vertex v = graph.AddVertex("v");
+            Vertex x = graph.GraphStructure.AddVertex("x");
+            Vertex y = graph.GraphStructure.AddVertex("y");
+            graph.GraphStructure.AddArrow(x, y);
+            Vertex z = graph.GraphStructure.AddVertex("z");
+            graph.GraphStructure.AddLine(x, z);
+            Vertex v = graph.GraphStructure.AddVertex("v");
 
-            this.AssertExpectedVertices(new ExpectedVertexDescriptor[]
+            this.AssertExpectedGraph(new ExpectedVertexDescriptor[]
             {
-                new ExpectedVertexDescriptor("x", new Dictionary<object,double?>()
-                {
-                    {"y", null},
-                    {"z", null}
-                }),
-                new ExpectedVertexDescriptor("y", new Dictionary<object,double?>()),
-                new ExpectedVertexDescriptor("z", new Dictionary<object,double?>()
-                {
-                    {"x", null}
-                }),
-                new ExpectedVertexDescriptor("v", new Dictionary<object,double?>())
+                new ExpectedVertexDescriptor() { Value = "x"},
+                new ExpectedVertexDescriptor() { Value = "y"},
+                new ExpectedVertexDescriptor() { Value = "z"},
+                new ExpectedVertexDescriptor() { Value = "v"},
             },
-            graph.Vertices.ToArray());
+            new ExpectedEdgeDescriptor[]
+            {
+                new ExpectedEdgeDescriptor() { FirstVertexValue = "x", SecondVertexValue = "y", IsDirected = true, Value = null},
+                new ExpectedEdgeDescriptor() { FirstVertexValue = "x", SecondVertexValue = "z", IsDirected = false, Value = null}
+            },
+            graph);
         }
 
         [Test]
         public void CreateGraphWithVerticesWithDuplicatingValues()
         {
             Graph graph = new Graph();
-            Vertex x = graph.AddVertex("x");
+            Vertex x = graph.GraphStructure.AddVertex("x");
 
-            Assert.Throws<InvalidOperationException>(() => graph.AddVertex("x"));
+            Assert.Throws<InvalidOperationException>(() => graph.GraphStructure.AddVertex("x"));
         }
 
-        private void AssertExpectedVertices(ExpectedVertexDescriptor[] expectedVertices, Vertex[] resultVertices)
+        private void AssertExpectedGraph(ExpectedVertexDescriptor[] expectedVertices, ExpectedEdgeDescriptor[] expectedEdges, Graph actualGraph)
+        {
+            Vertex[] resultVertices = actualGraph.GraphStructure.Vertices.ToArray();
+            this.AssertVertices(expectedVertices, resultVertices);
+
+            Edge[] resultEdges = actualGraph.GraphStructure.Edges.ToArray();
+            this.AssertEdges(expectedEdges, resultEdges);
+        }
+
+        private void AssertVertices(ExpectedVertexDescriptor[] expectedVertices, Vertex[] resultVertices)
         {
             Assert.AreEqual(resultVertices.Length, expectedVertices.Length);
 
@@ -217,28 +220,23 @@ namespace GraphTests
                 ExpectedVertexDescriptor expectedVertex = expectedVertices[i];
                 Vertex resultVertex = resultVertices[i];
 
-                this.AssertExpectedVertex(expectedVertex, resultVertex);
+                Assert.AreEqual(expectedVertex.Value, resultVertex.ValueAsObject);
             }
         }
 
-        private void AssertExpectedVertex(ExpectedVertexDescriptor expectedVertex, Vertex resultVertex)
+        private void AssertEdges(ExpectedEdgeDescriptor[] expectedEdges, Edge[] resultEdges)
         {
-            Assert.AreSame(expectedVertex.Value, resultVertex.ValueAsObject);
+            Assert.AreEqual(resultEdges.Length, expectedEdges.Length);
 
-            KeyValuePair<object, double?>[] expectedSuccessorValuesAndWeights = expectedVertex.SuccessorNameToWeight.ToArray();
-            Vertex[] resultSuccessors = resultVertex.GetSuccessors().ToArray();
-
-            Assert.AreEqual(expectedSuccessorValuesAndWeights.Length, resultSuccessors.Length);
-
-            for (int i = 0; i < expectedSuccessorValuesAndWeights.Length; i++)
+            for (int i = 0; i < expectedEdges.Length; i++)
             {
-                object expectedSuccessorValue = expectedSuccessorValuesAndWeights[i].Key;
-                double? expectedSuccessorWeight = expectedSuccessorValuesAndWeights[i].Value;
-                object resultSuccessorValue = resultSuccessors[i].ValueAsObject;
-                double? resultSuccessorWeight = resultVertex.GetMinArrowWeight(resultSuccessors[i]);
+                ExpectedEdgeDescriptor expectedEdge = expectedEdges[i];
+                Edge resultEdge = resultEdges[i];
 
-                Assert.AreEqual(expectedSuccessorValue, resultSuccessorValue);
-                Assert.AreEqual(expectedSuccessorWeight, resultSuccessorWeight);
+                Assert.AreEqual(expectedEdge.Value, resultEdge.ValueAsObject);
+                Assert.AreEqual(expectedEdge.FirstVertexValue, resultEdge.FirstVertex.ValueAsObject);
+                Assert.AreEqual(expectedEdge.SecondVertexValue, resultEdge.SecondVertex.ValueAsObject);
+                Assert.AreEqual(expectedEdge.IsDirected, resultEdge.IsDirected);
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using GraphCore.Utilities;
+﻿using GraphCore.Edges;
+using GraphCore.Utilities;
 using GraphCore.VertexProperties;
 using GraphCore.Vertices;
 using System;
@@ -9,14 +10,15 @@ using System.Threading.Tasks;
 
 namespace GraphCore
 {
-    internal class GraphStructure
+    public class GraphStructure
     {
         private VertexFactory vertexFactory;
-        private GraphItemPropertyFactory graphItemPropertyFactory;
+        private EdgeFactory edgeFactory;
+        private GraphItemPropertyFactory vertexPropertyFactory;
+        private GraphItemPropertyFactory edgePropertyFactory;
 
         private readonly Dictionary<object, Vertex> valueToVertexIndex;
-        private readonly AdjacencyList successorAdjacencyList;
-        private readonly AdjacencyList predecessorAdjacencyList;
+        private readonly AdjacencyList adjacencyList;
 
         public VertexFactory VertexFactory
         {
@@ -30,15 +32,39 @@ namespace GraphCore
             }
         }
 
-        public GraphItemPropertyFactory GraphItemPropertyFactory
+        public EdgeFactory EdgeFactory
         {
             get
             {
-                return this.graphItemPropertyFactory;
+                return this.edgeFactory;
             }
             set
             {
-                this.graphItemPropertyFactory = value;
+                this.edgeFactory = value;
+            }
+        }
+
+        public GraphItemPropertyFactory VertexPropertyFactory
+        {
+            get
+            {
+                return this.vertexPropertyFactory;
+            }
+            set
+            {
+                this.vertexPropertyFactory = value;
+            }
+        }
+
+        public GraphItemPropertyFactory EdgePropertyFactory
+        {
+            get
+            {
+                return this.edgePropertyFactory;
+            }
+            set
+            {
+                this.edgePropertyFactory = value;
             }
         }
 
@@ -50,14 +76,22 @@ namespace GraphCore
             }
         }
 
+        public IEnumerable<Edge> Edges
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public GraphStructure()
         {
             this.vertexFactory = new VertexFactory();
-            this.graphItemPropertyFactory = new GraphItemPropertyFactory();
+            this.edgeFactory = new EdgeFactory();
+            this.vertexPropertyFactory = new GraphItemPropertyFactory();
 
             this.valueToVertexIndex = new Dictionary<object, Vertex>();
-            this.successorAdjacencyList = new AdjacencyList();
-            this.predecessorAdjacencyList = new AdjacencyList();
+            this.adjacencyList = new AdjacencyList();
         }
 
         public Vertex AddVertex(object value)
@@ -78,66 +112,74 @@ namespace GraphCore
             return this.UnregisterVertex(vertex);
         }
 
-        public void AddArrow(Vertex firstVertex, Vertex secondVertex, double? weight)
+        public Edge AddArrow(Vertex firstVertex, Vertex secondVertex)
         {
-            Guard.ThrowExceptionIfNull(firstVertex, "firstVertex");
-            Guard.ThrowExceptionIfNull(secondVertex, "secondVertex");
-
-            if (!this.VertexBelongsToThisStructure(firstVertex) ||
-                !this.VertexBelongsToThisStructure(secondVertex))
-            {
-                throw new ArgumentException("One of the vertices does not belong to this structure.");
-            }
-
-            this.successorAdjacencyList.AddAdjacentVertexToVertex(firstVertex, secondVertex, weight);
-            this.predecessorAdjacencyList.AddAdjacentVertexToVertex(secondVertex, firstVertex, weight);
+            return this.AddArrow(firstVertex, secondVertex, null);
         }
 
-        public bool RemoveArrows(Vertex firstVertex, Vertex secondVertex)
+        public Edge AddArrow(Vertex firstVertex, Vertex secondVertex, object arrowValue)
         {
-            Guard.ThrowExceptionIfNull(firstVertex, "firstVertex");
-            Guard.ThrowExceptionIfNull(secondVertex, "secondVertex");
+            this.CheckValidityOfVertexDuo(firstVertex, secondVertex);
 
-            if (!this.VertexBelongsToThisStructure(firstVertex) ||
-                !this.VertexBelongsToThisStructure(secondVertex))
-            {
-                throw new ArgumentException("One of the vertices does not belong to this structure.");
-            }
+            Edge edge = this.EdgeFactory.CreateEdge(firstVertex, secondVertex, true, arrowValue);
+            this.adjacencyList.AddEdge(edge);
 
-            bool result = this.successorAdjacencyList.RemoveAdjacentVertexFromVertex(firstVertex, secondVertex);
+            return edge;
+        }
 
-            if (result)
-            {
-                this.predecessorAdjacencyList.RemoveAdjacentVertexFromVertex(secondVertex, firstVertex);
-            }
+        public Edge AddLine(Vertex firstVertex, Vertex secondVertex)
+        {
+            return this.AddLine(firstVertex, secondVertex, null);
+        }
 
-            return result;
+        public Edge AddLine(Vertex firstVertex, Vertex secondVertex, object lineValue)
+        {
+            this.CheckValidityOfVertexDuo(firstVertex, secondVertex);
+
+            Edge edge = this.EdgeFactory.CreateEdge(firstVertex, secondVertex, false, lineValue);
+            this.adjacencyList.AddEdge(edge);
+
+            return edge;
+        }
+
+        public bool RemoveEdge(Edge edge)
+        {
+            return this.adjacencyList.RemoveEdge(edge);
+        }
+
+        public bool RemoveEdgesBetween(Vertex firstVertex, Vertex secondVertex)
+        {
+            this.CheckValidityOfVertexDuo(firstVertex, secondVertex);
+
+            return this.adjacencyList.RemoveAllEdgesBetween(firstVertex, secondVertex);
         }
 
         public IEnumerable<Vertex> GetVertexSuccessors(Vertex vertex)
         {
             Guard.ThrowExceptionIfNull(vertex, "vertex");
 
-            if (!this.VertexBelongsToThisStructure(vertex))
-            {
-                throw new ArgumentException("The vertex does not belong to this structure.");
-            }
-
-            return this.successorAdjacencyList.GetAdjacentVertices(vertex);
+            return this.adjacencyList.GetAllSuccessors(vertex);
         }
 
-        public IEnumerable<double?> GetArrowWeights(Vertex vertex, Vertex successor)
+        public IEnumerable<Vertex> GetVertexPredecessors(Vertex vertex)
         {
             Guard.ThrowExceptionIfNull(vertex, "vertex");
-            Guard.ThrowExceptionIfNull(successor, "successor");
 
-            if (!this.VertexBelongsToThisStructure(vertex) ||
-                !this.VertexBelongsToThisStructure(successor))
-            {
-                throw new ArgumentException("One of the vertices does not belong to this structure.");
-            }
+            return this.adjacencyList.GetAllPredecessors(vertex);
+        }
 
-            return this.successorAdjacencyList.GetWeights(vertex, successor);
+        public IEnumerable<Edge> GetEdgesBetween(Vertex firstVertex, Vertex secondVertex)
+        {
+            this.CheckValidityOfVertexDuo(firstVertex, secondVertex);
+
+            return this.adjacencyList.GetAllEdgesBetween(firstVertex, secondVertex);
+        }
+
+        public IEnumerable<Edge> GetEdgesLeadingFromTo(Vertex predecessor, Vertex successor)
+        {
+            this.CheckValidityOfVertexDuo(predecessor, successor);
+
+            return this.adjacencyList.GetAllEdgesLeadingFromTo(predecessor, successor);
         }
 
         private void RegisterVertex(Vertex vertex)
@@ -158,20 +200,23 @@ namespace GraphCore
                 return false;
             }
 
-            IEnumerable<Vertex> predecessors = this.predecessorAdjacencyList.GetAdjacentVertices(vertex);
-
-            foreach (Vertex predecessor in predecessors)
-            {
-                this.successorAdjacencyList.RemoveAdjacentVertexFromVertex(predecessor, vertex);
-            }
-
-            this.predecessorAdjacencyList.RemoveAdjacencyListItem(vertex);
-            this.successorAdjacencyList.RemoveAdjacencyListItem(vertex);
+            this.adjacencyList.RemoveVertex(vertex);
             this.valueToVertexIndex.Remove(vertex.ValueAsObject);
-
             vertex.UnregisterItemFromAnyStructure();
 
             return true;
+        }
+
+        private void CheckValidityOfVertexDuo(Vertex firstVertex, Vertex secondVertex)
+        {
+            Guard.ThrowExceptionIfNull(firstVertex, "firstVertex");
+            Guard.ThrowExceptionIfNull(secondVertex, "secondVertex");
+
+            if (!this.VertexBelongsToThisStructure(firstVertex) ||
+                !this.VertexBelongsToThisStructure(secondVertex))
+            {
+                throw new ArgumentException("One of the vertices does not belong to this structure.");
+            }
         }
 
         private bool VertexBelongsToThisStructure(Vertex vertex)

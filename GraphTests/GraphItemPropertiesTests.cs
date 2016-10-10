@@ -1,4 +1,5 @@
 ﻿using GraphCore;
+using GraphCore.Edges;
 using GraphCore.Vertices;
 using NUnit.Framework;
 using System;
@@ -10,16 +11,16 @@ using System.Threading.Tasks;
 namespace GraphTests
 {
     [TestFixture]
-    public class VertexPropertiesTests
+    public class GraphItemPropertiesTests
     {
         private Vertex GetTestVertex()
         {
             Graph graph = new Graph();
-            return graph.AddVertex("x");
+            return graph.GraphStructure.AddVertex("x");
         }
 
         [Test]
-        public void SetPropertyTest()
+        public void SetPropertyToVertexTest()
         {
             string propertyName = "name";
             object propertyValue = "test";
@@ -28,6 +29,19 @@ namespace GraphTests
             vertex.SetProperty(propertyName, propertyValue);
 
             Assert.AreEqual(propertyValue, vertex.GetProperty(propertyName).ValueAsObject);
+        }
+
+        [Test]
+        public void SetPropertyToEdgeTest()
+        {
+            string propertyName = "name";
+            object propertyValue = "test";
+            Graph graph = new Graph();
+            Edge edge = graph.GraphStructure.AddLine(graph.GraphStructure.AddVertex("x"), graph.GraphStructure.AddVertex("y"));
+
+            edge.SetProperty(propertyName, propertyValue);
+
+            Assert.AreEqual(propertyValue, edge.GetProperty(propertyName).ValueAsObject);
         }
 
         [Test]

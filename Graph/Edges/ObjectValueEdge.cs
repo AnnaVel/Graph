@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace GraphCore.Edges
 {
-    public class DoubleValueEdge : EdgeBase<double?>
+    public class ObjectValueEdge : EdgeBase<object>
     {
-        public DoubleValueEdge(Vertex firstVertex, Vertex secondVertex, bool isDirected, double? value)
+        public ObjectValueEdge(Vertex firstVertex, Vertex secondVertex, bool isDirected, object value)
             :base(firstVertex, secondVertex, isDirected, value)
         {
         }

@@ -1,4 +1,5 @@
-﻿using GraphCore.Utilities;
+﻿using GraphCore.Edges;
+using GraphCore.Utilities;
 using GraphCore.VertexProperties;
 using System;
 using System.Collections.Generic;
@@ -12,40 +13,53 @@ namespace GraphCore.Vertices
     {
         public IEnumerable<Vertex> GetSuccessors()
         {
-            if (this.Owner == null)
-            {
-                throw new InvalidOperationException("The vertex is not registered in a graph structure.");
-            }
+            this.VerifyVertexHasOwner();
 
             return this.Owner.GetVertexSuccessors(this);
         }
 
-        public IEnumerable<double?> GetArrowWeights(Vertex successor)
+        public IEnumerable<Vertex> GetPredecessors()
+        {
+            this.VerifyVertexHasOwner();
+
+            return this.Owner.GetVertexPredecessors(this);
+        }
+
+        public IEnumerable<Edge> GetOutgoingEdges()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Edge> GetIncomingEdges()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Edge> GetEdgesTo(Vertex successor)
         {
             Guard.ThrowExceptionIfNull(successor, "successor");
+            this.VerifyVertexHasOwner();
 
+            IEnumerable<Edge> successorEdges = this.Owner.GetEdgesLeadingFromTo(this, successor);
+            return successorEdges;
+        }
+
+        public IEnumerable<Edge> GetEdgesFrom(Vertex predecessor)
+        {
+            Guard.ThrowExceptionIfNull(predecessor, "predecessor");
+            this.VerifyVertexHasOwner();
+
+            IEnumerable<Edge> predecessorEdges = this.Owner.GetEdgesLeadingFromTo(predecessor, this);
+            return predecessorEdges;
+        }
+
+        private void VerifyVertexHasOwner()
+        {
             if (this.Owner == null)
             {
                 throw new InvalidOperationException("The vertex is not registered in a graph structure.");
             }
-
-            IEnumerable<double?> arrowWeights = this.Owner.GetArrowWeights(this, successor);
-            return arrowWeights;
         }
 
-        public double? GetMinArrowWeight(Vertex successor)
-        {
-            Guard.ThrowExceptionIfNull(successor, "successor");
-
-            IEnumerable<double?> allArrowWeightsToSuccessor = this.GetArrowWeights(successor);
-
-            if (allArrowWeightsToSuccessor.Count() == 0)
-            {
-                throw new ArgumentException("The vertex passed is not a successor of this vertex.");
-            }
-
-            double? minimalWeight = allArrowWeightsToSuccessor.Min();
-            return minimalWeight;
-        }
     }
 }

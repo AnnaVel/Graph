@@ -31,8 +31,6 @@ namespace GraphCore.Edges
         protected EdgeBase(Vertex firstVertex, Vertex secondVertex, bool isDirected, T value)
             :base(firstVertex, secondVertex, isDirected)
         {
-            Guard.ThrowExceptionIfNull(value, "value");
-
             this.value = value;
         }
     }

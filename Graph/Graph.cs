@@ -11,92 +11,19 @@ namespace GraphCore
 {
     public class Graph
     {
-        private GraphStructure vertexStructure;
+        private GraphStructure graphStructure;
 
-        public IEnumerable<Vertex> Vertices
+        public GraphStructure GraphStructure
         {
             get
             {
-                return this.vertexStructure.Vertices;
-            }
-        }
-
-        public VertexFactory VertexFactory
-        {
-            get
-            {
-                return this.vertexStructure.VertexFactory;
-            }
-            set
-            {
-                this.vertexStructure.VertexFactory = value;
-            }
-        }
-
-        public GraphItemPropertyFactory VertexPropertyFactory
-        {
-            get
-            {
-                return this.vertexStructure.GraphItemPropertyFactory;
-            }
-            set
-            {
-                this.vertexStructure.GraphItemPropertyFactory = value;
+                return this.graphStructure;
             }
         }
 
         public Graph()
         {
-            this.vertexStructure = new GraphStructure();
-        }
-
-        public Vertex AddVertex(object value)
-        {
-            Guard.ThrowExceptionIfNull(value, "value");
-
-            return this.vertexStructure.AddVertex(value);
-        }
-
-        public bool RemoveVertex(Vertex vertex)
-        {
-            Guard.ThrowExceptionIfNull(vertex, "vertex");
-
-            return this.vertexStructure.RemoveVertex(vertex);
-        }
-
-        public void AddLine(Vertex firstVertex, Vertex secondVertex)
-        {
-            this.AddLine(firstVertex, secondVertex, null);
-        }
-
-        public void AddLine(Vertex firstVertex, Vertex secondVertex, double? weight)
-        {
-            this.AddArrow(firstVertex, secondVertex, weight);
-            this.AddArrow(secondVertex, firstVertex, weight);
-        }
-
-        public void AddArrow(Vertex firstVertex, Vertex secondVertex)
-        {
-            this.AddArrow(firstVertex, secondVertex, null);
-        }
-
-        public void AddArrow(Vertex firstVertex, Vertex secondVertex, double? weight)
-        {
-            Guard.ThrowExceptionIfNull(firstVertex, "firstVertex");
-            Guard.ThrowExceptionIfNull(secondVertex, "secondVertex");
-
-            this.vertexStructure.AddArrow(firstVertex, secondVertex, weight);
-        }
-
-        public bool RemoveAllEdges(Vertex firstVertex, Vertex secondVertex)
-        {
-            Guard.ThrowExceptionIfNull(firstVertex, "firstVertex");
-            Guard.ThrowExceptionIfNull(secondVertex, "secondVertex");
-
-            bool firstToSecondArrowsRemoved = this.vertexStructure.RemoveArrows(firstVertex, secondVertex);
-            bool secondToFirstArrowsRemoved = this.vertexStructure.RemoveArrows(secondVertex, firstVertex);
-
-            return firstToSecondArrowsRemoved || secondToFirstArrowsRemoved;
+            this.graphStructure = new GraphStructure();
         }
     }
 }

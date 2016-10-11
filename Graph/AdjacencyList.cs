@@ -12,26 +12,9 @@ namespace GraphCore
     {
         private readonly Dictionary<Vertex, AdjacencyItem> innerList;
 
-        private HashSet<Edge> edges;
-        private bool edgeListInvalidated;
-
         public AdjacencyList()
         {
             this.innerList = new Dictionary<Vertex, AdjacencyItem>();
-            this.edgeListInvalidated = true;
-        }
-
-        public IEnumerable<Edge> Edges
-        {
-            get
-            {
-                if (this.edgeListInvalidated)
-                {
-                    this.ConstructEdgeList();
-                }
-
-                return this.edges;
-            }
         }
 
         public void AddEdge(Edge edge)
@@ -45,8 +28,6 @@ namespace GraphCore
                 this.AddEdgeInOneDirection(edge, edge.FirstVertex, edge.SecondVertex);
                 this.AddEdgeInOneDirection(edge, edge.SecondVertex, edge.FirstVertex);
             }
-
-            this.OnEdgesChanged();
         }
 
         private void AddEdgeInOneDirection(Edge edge, Vertex predecessor, Vertex successor)
@@ -79,8 +60,6 @@ namespace GraphCore
                 result |= this.RemoveEdgeInOneDirection(edge, edge.FirstVertex, edge.SecondVertex);
                 result |= this.RemoveEdgeInOneDirection(edge, edge.SecondVertex, edge.FirstVertex);
             }
-
-            this.OnEdgesChanged();
 
             return result;
         }
@@ -134,8 +113,6 @@ namespace GraphCore
                 resultSecondDirection |= this.innerList[firstVertex].RemovePredecessorAndCorrespondingEdges(secondVertex);
             }
 
-            this.OnEdgesChanged();
-
             return resultFirstDirection || resultSecondDirection;
         }
 
@@ -168,7 +145,7 @@ namespace GraphCore
 
         public IEnumerable<Edge> GetAllEdgesLeadingFromTo(Vertex predecessor, Vertex successor)
         {
-            if (this.innerList.ContainsKey(predecessor))
+            if (!this.innerList.ContainsKey(predecessor))
             {
                 return Enumerable.Empty<Edge>();
             }
@@ -218,31 +195,7 @@ namespace GraphCore
 
             this.innerList.Remove(vertex);
 
-            this.OnEdgesChanged();
-
             return true;
-        }
-
-        private void OnEdgesChanged()
-        {
-            this.edgeListInvalidated = true;
-        }
-
-        private void ConstructEdgeList()
-        {
-            HashSet<Edge> edges = new HashSet<Edge>();
-
-            foreach (var pair in this.innerList)
-            {
-                AdjacencyItem adjacencyItem = pair.Value;
-                foreach (Edge edge in adjacencyItem.RelatedEdges)
-                {
-                    edges.Add(edge);
-                }
-            }
-
-            this.edges = edges;
-            this.edgeListInvalidated = false;
         }
 
         private void RemoveVertexFromDictionaryIfItemIsEmpty(Vertex key)

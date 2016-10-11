@@ -13,24 +13,8 @@ namespace GraphCore
     {
         private readonly Vertex owningVertex;
 
-        private bool edgeListInvalidated;
-        private HashSet<Edge> relatedEdges;
-
         private Dictionary<Vertex, List<Edge>> successors;
         private Dictionary<Vertex, List<Edge>> predecessors;
-
-        public IEnumerable<Edge> RelatedEdges
-        {
-            get
-            {
-                if (this.edgeListInvalidated)
-                {
-                    this.ConstructEdgeList();
-                }
-
-                return this.relatedEdges;
-            }
-        }
 
         public bool IsEmpty
         {
@@ -74,7 +58,6 @@ namespace GraphCore
             Guard.ThrowExceptionIfNull(owningVertex, "owningVertex");
 
             this.owningVertex = owningVertex;
-            this.edgeListInvalidated = true;
         }
 
         public void AddSuccessorEdge(Edge edge)
@@ -91,8 +74,6 @@ namespace GraphCore
             }
 
             successors[successor].Add(edge);
-
-            this.OnEdgesChanged();
         }
 
         public void AddPredecessorEdge(Edge edge)
@@ -109,8 +90,6 @@ namespace GraphCore
             }
 
             predecessors[predecessor].Add(edge);
-
-            this.OnEdgesChanged();
         }
 
         public bool RemoveSuccessorEdge(Edge edge)
@@ -127,7 +106,6 @@ namespace GraphCore
             if (result)
             {
                 this.RemoveVertexFromSuccessorsDictionaryIfEdgeListEmpty(successor);
-                this.OnEdgesChanged();
             }
 
             return result;
@@ -147,7 +125,6 @@ namespace GraphCore
             if (result)
             {
                 this.RemoveVertexFromPredecessorsDictionaryIfEdgeListEmpty(predecessor);
-                this.OnEdgesChanged();
             }
 
             return result;
@@ -160,7 +137,6 @@ namespace GraphCore
             if (result)
             {
                 this.SetSuccessorsDictionaryToNullIfEmpty();
-                this.OnEdgesChanged();
             }
 
             return result;
@@ -173,7 +149,6 @@ namespace GraphCore
             if (result)
             {
                 this.SetPredecessorsDictionaryToNullIfEmpty();
-                this.OnEdgesChanged();
             }
 
             return result;
@@ -268,38 +243,6 @@ namespace GraphCore
             }
 
             return predecessor;
-        }
-
-        private void OnEdgesChanged()
-        {
-            this.edgeListInvalidated = true;
-        }
-
-        private void ConstructEdgeList()
-        {
-            HashSet<Edge> relatedEdges = new HashSet<Edge>();
-
-            //TODO: using the properties will probably lead to a lot of setting and unsetting of the field.
-            foreach (var pair in this.Predecessors)
-            {
-                List<Edge> edgesLeadingToSuccessorVertex = pair.Value;
-                foreach (Edge edge in edgesLeadingToSuccessorVertex)
-                {
-                    relatedEdges.Add(edge);
-                }
-            }
-
-            foreach (var pair in this.Predecessors)
-            {
-                List<Edge> edgesLeadingToSuccessorVertex = pair.Value;
-                foreach (Edge edge in edgesLeadingToSuccessorVertex)
-                {
-                    relatedEdges.Add(edge);
-                }
-            }
-
-            this.relatedEdges = relatedEdges;
-            this.edgeListInvalidated = false;
         }
 
         private void RemoveVertexFromSuccessorsDictionaryIfEdgeListEmpty(Vertex vertex)

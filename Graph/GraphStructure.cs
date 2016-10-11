@@ -12,13 +12,31 @@ namespace GraphCore
 {
     public class GraphStructure
     {
+        private readonly AdjacencyList adjacencyList;
+
+        private readonly Dictionary<object, Vertex> valueToVertexIndex;
+        private readonly HashSet<Edge> edges;
+
         private VertexFactory vertexFactory;
         private EdgeFactory edgeFactory;
         private GraphItemPropertyFactory vertexPropertyFactory;
         private GraphItemPropertyFactory edgePropertyFactory;
 
-        private readonly Dictionary<object, Vertex> valueToVertexIndex;
-        private readonly AdjacencyList adjacencyList;
+        public IEnumerable<Vertex> Vertices
+        {
+            get
+            {
+                return this.valueToVertexIndex.Values;
+            }
+        }
+
+        public IEnumerable<Edge> Edges
+        {
+            get
+            {
+                return this.edges;
+            }
+        }
 
         public VertexFactory VertexFactory
         {
@@ -68,30 +86,16 @@ namespace GraphCore
             }
         }
 
-        public IEnumerable<Vertex> Vertices
-        {
-            get
-            {
-                return this.valueToVertexIndex.Values;
-            }
-        }
-
-        public IEnumerable<Edge> Edges
-        {
-            get
-            {
-                return this.adjacencyList.Edges;
-            }
-        }
-
         public GraphStructure()
         {
+            this.adjacencyList = new AdjacencyList();
+            
+            this.valueToVertexIndex = new Dictionary<object, Vertex>();
+            this.edges = new HashSet<Edge>();
+
             this.vertexFactory = new VertexFactory();
             this.edgeFactory = new EdgeFactory();
             this.vertexPropertyFactory = new GraphItemPropertyFactory();
-
-            this.valueToVertexIndex = new Dictionary<object, Vertex>();
-            this.adjacencyList = new AdjacencyList();
         }
 
         public Vertex AddVertex(object value)
@@ -109,7 +113,30 @@ namespace GraphCore
         {
             Guard.ThrowExceptionIfNull(vertex, "vertex");
 
-            return this.UnregisterVertex(vertex);
+            if (!this.VertexBelongsToThisStructure(vertex))
+            {
+                return false;
+            }
+
+            this.adjacencyList.RemoveVertex(vertex);
+
+            this.UnregisterRelatedEdges(vertex);
+            this.UnregisterVertex(vertex);
+
+            return true;
+        }
+
+        private void UnregisterRelatedEdges(Vertex vertex)
+        {
+            foreach (Edge edge in vertex.GetIncomingEdges())
+            {
+                this.UnregisterEdge(edge);
+            }
+
+            foreach (Edge edge in vertex.GetOutgoingEdges())
+            {
+                this.UnregisterEdge(edge);
+            }
         }
 
         public Edge AddArrow(Vertex firstVertex, Vertex secondVertex)
@@ -123,6 +150,8 @@ namespace GraphCore
 
             Edge edge = this.EdgeFactory.CreateEdge(firstVertex, secondVertex, true, arrowValue);
             this.adjacencyList.AddEdge(edge);
+
+            this.RegisterEdge(edge);
 
             return edge;
         }
@@ -139,17 +168,25 @@ namespace GraphCore
             Edge edge = this.EdgeFactory.CreateEdge(firstVertex, secondVertex, false, lineValue);
             this.adjacencyList.AddEdge(edge);
 
+            this.RegisterEdge(edge);
+
             return edge;
         }
 
         public bool RemoveEdge(Edge edge)
         {
+            this.UnregisterEdge(edge);
             return this.adjacencyList.RemoveEdge(edge);
         }
 
         public bool RemoveEdgesBetween(Vertex firstVertex, Vertex secondVertex)
         {
             this.CheckValidityOfVertexDuo(firstVertex, secondVertex);
+
+            foreach (Edge edge in this.GetEdgesBetween(firstVertex, secondVertex))
+            {
+                this.UnregisterEdge(edge);
+            }
 
             return this.adjacencyList.RemoveAllEdgesBetween(firstVertex, secondVertex);
         }
@@ -193,18 +230,22 @@ namespace GraphCore
             vertex.RegisterItemToAStructure(this);
         }
 
-        private bool UnregisterVertex(Vertex vertex)
+        private void UnregisterVertex(Vertex vertex)
         {
-            if (!this.VertexBelongsToThisStructure(vertex))
-            {
-                return false;
-            }
-
-            this.adjacencyList.RemoveVertex(vertex);
-            this.valueToVertexIndex.Remove(vertex.ValueAsObject);
             vertex.UnregisterItemFromAnyStructure();
+            this.valueToVertexIndex.Remove(vertex.ValueAsObject);
+        }
 
-            return true;
+        private void RegisterEdge(Edge edge)
+        {
+            this.edges.Add(edge);
+            edge.RegisterItemToAStructure(this);
+        }
+
+        private void UnregisterEdge(Edge edge)
+        {
+            edge.UnregisterItemFromAnyStructure();
+            this.edges.Remove(edge);
         }
 
         private void CheckValidityOfVertexDuo(Vertex firstVertex, Vertex secondVertex)

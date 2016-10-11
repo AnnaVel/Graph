@@ -21,6 +21,7 @@ namespace GraphTests
 
             Assert.AreEqual(1, graph.GraphStructure.Vertices.Count());
             Assert.AreEqual(xVertex, graph.GraphStructure.Vertices.First());
+            Assert.AreEqual(graph.GraphStructure, xVertex.Owner);
         }
 
         [Test]
@@ -45,6 +46,7 @@ namespace GraphTests
             bool result = graph.GraphStructure.RemoveVertex(xVertex);
 
             Assert.IsTrue(result);
+            Assert.IsNull(xVertex.Owner);
             Assert.AreEqual(0, graph.GraphStructure.Vertices.Count());
             Assert.DoesNotThrow(() => graph.GraphStructure.AddVertex(vertexValue));
         }

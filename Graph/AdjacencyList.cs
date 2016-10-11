@@ -12,16 +12,25 @@ namespace GraphCore
     {
         private readonly Dictionary<Vertex, AdjacencyItem> innerList;
 
+        private HashSet<Edge> edges;
+        private bool edgeListInvalidated;
+
         public AdjacencyList()
         {
             this.innerList = new Dictionary<Vertex, AdjacencyItem>();
+            this.edgeListInvalidated = true;
         }
 
         public IEnumerable<Edge> Edges
         {
             get
             {
-                throw new NotImplementedException();
+                if (this.edgeListInvalidated)
+                {
+                    this.ConstructEdgeList();
+                }
+
+                return this.edges;
             }
         }
 
@@ -29,72 +38,142 @@ namespace GraphCore
         {
             if (edge.IsDirected)
             {
-                this.AddDirectedEdge(edge);
+                this.AddEdgeInOneDirection(edge, edge.FirstVertex, edge.SecondVertex);
             }
             else
             {
-                this.AddUndirectedEdge(edge);
+                this.AddEdgeInOneDirection(edge, edge.FirstVertex, edge.SecondVertex);
+                this.AddEdgeInOneDirection(edge, edge.SecondVertex, edge.FirstVertex);
             }
+
+            this.OnEdgesChanged();
         }
 
-        private void AddUndirectedEdge(Edge edge)
+        private void AddEdgeInOneDirection(Edge edge, Vertex predecessor, Vertex successor)
         {
-            throw new NotImplementedException();
-        }
-
-        private void AddDirectedEdge(Edge edge)
-        {
-            Vertex predecessor = edge.FirstVertex;
-
             if (!this.innerList.ContainsKey(predecessor))
             {
                 this.innerList.Add(predecessor, new AdjacencyItem(predecessor));
             }
 
             this.innerList[predecessor].AddSuccessorEdge(edge);
+
+            if (!this.innerList.ContainsKey(successor))
+            {
+                this.innerList.Add(successor, new AdjacencyItem(successor));
+            }
+
+            this.innerList[successor].AddPredecessorEdge(edge);
         }
 
         public bool RemoveEdge(Edge edge)
         {
+            bool result = false;
+
             if (edge.IsDirected)
             {
-                return this.RemoveDirectedEdge(edge);
+                result = this.RemoveEdgeInOneDirection(edge, edge.FirstVertex, edge.SecondVertex);
             }
             else
             {
-                return this.RemoveUndirectedEdge(edge);
+                result |= this.RemoveEdgeInOneDirection(edge, edge.FirstVertex, edge.SecondVertex);
+                result |= this.RemoveEdgeInOneDirection(edge, edge.SecondVertex, edge.FirstVertex);
             }
+
+            this.OnEdgesChanged();
+
+            return result;
         }
 
-        private bool RemoveDirectedEdge(Edge edge)
+        private bool RemoveEdgeInOneDirection(Edge edge, Vertex predecessor, Vertex successor)
         {
-            this.RemoveVertexFromDictionaryIfItemIsEmpty();
+            if (!this.innerList.ContainsKey(predecessor))
+            {
+                return false;
+            }
 
-            throw new NotImplementedException();
-        }
+            bool result = this.innerList[predecessor].RemoveSuccessorEdge(edge);
 
-        private bool RemoveUndirectedEdge(Edge edge)
-        {
-            this.RemoveVertexFromDictionaryIfItemIsEmpty();
+            this.RemoveVertexFromDictionaryIfItemIsEmpty(predecessor);
 
-            throw new NotImplementedException();
+            if (!this.innerList.ContainsKey(successor))
+            {
+                return false;
+            }
+
+            result |= this.innerList[successor].RemovePredecessorEdge(edge);
+
+            this.RemoveVertexFromDictionaryIfItemIsEmpty(successor);
+
+            return result;
         }
 
         public bool RemoveAllEdgesBetween(Vertex firstVertex, Vertex secondVertex)
         {
-            this.RemoveVertexFromDictionaryIfItemIsEmpty();
+            bool resultFirstDirection = false;
 
-            throw new NotImplementedException();
+            if (!this.innerList.ContainsKey(firstVertex))
+            {
+                resultFirstDirection = false;
+            }
+            else
+            {
+                resultFirstDirection = this.innerList[firstVertex].RemoveSuccessorAndCorrespondingEdges(secondVertex);
+                resultFirstDirection |= this.innerList[secondVertex].RemovePredecessorAndCorrespondingEdges(firstVertex);
+            }
+
+            bool resultSecondDirection = false;
+
+            if (!this.innerList.ContainsKey(secondVertex))
+            {
+                resultSecondDirection = false;
+            }
+            else
+            {
+                resultSecondDirection = this.innerList[secondVertex].RemoveSuccessorAndCorrespondingEdges(firstVertex);
+                resultSecondDirection |= this.innerList[firstVertex].RemovePredecessorAndCorrespondingEdges(secondVertex);
+            }
+
+            this.OnEdgesChanged();
+
+            return resultFirstDirection || resultSecondDirection;
         }
 
         public IEnumerable<Edge> GetAllEdgesBetween(Vertex firstVertex, Vertex secondVertex)
         {
-            throw new NotImplementedException();
+            HashSet<Edge> edges = new HashSet<Edge>();
+
+            if(this.innerList.ContainsKey(firstVertex))
+            {
+                IEnumerable<Edge> firstToSecond = this.innerList[firstVertex].GetEdgesLeadingTo(secondVertex);
+
+                foreach (Edge edge in firstToSecond)
+                {
+                    edges.Add(edge);
+                }
+            }
+
+            if (this.innerList.ContainsKey(secondVertex))
+            {
+                IEnumerable<Edge> secondToFirst = this.innerList[secondVertex].GetEdgesLeadingTo(firstVertex);
+
+                foreach (Edge edge in secondToFirst)
+                {
+                    edges.Add(edge);
+                }
+            }
+
+            return edges;
         }
 
         public IEnumerable<Edge> GetAllEdgesLeadingFromTo(Vertex predecessor, Vertex successor)
         {
-            throw new NotImplementedException();
+            if (this.innerList.ContainsKey(predecessor))
+            {
+                return Enumerable.Empty<Edge>();
+            }
+
+            return this.innerList[predecessor].GetEdgesLeadingTo(successor);
         }
 
         public IEnumerable<Vertex> GetAllSuccessors(Vertex vertex)
@@ -129,22 +208,49 @@ namespace GraphCore
 
             foreach (Vertex successor in vertexSuccessors)
             {
-                this.innerList[successor].RemovePredecessor(vertex);
+                this.innerList[successor].RemovePredecessorAndCorrespondingEdges(vertex);
             }
 
             foreach (Vertex predecessor in vertexPredecessors)
             {
-                this.innerList[predecessor].RemoveSuccessor(vertex);
+                this.innerList[predecessor].RemoveSuccessorAndCorrespondingEdges(vertex);
             }
 
             this.innerList.Remove(vertex);
 
+            this.OnEdgesChanged();
+
             return true;
         }
 
-        private void RemoveVertexFromDictionaryIfItemIsEmpty()
+        private void OnEdgesChanged()
         {
-            throw new NotImplementedException();
+            this.edgeListInvalidated = true;
+        }
+
+        private void ConstructEdgeList()
+        {
+            HashSet<Edge> edges = new HashSet<Edge>();
+
+            foreach (var pair in this.innerList)
+            {
+                AdjacencyItem adjacencyItem = pair.Value;
+                foreach (Edge edge in adjacencyItem.RelatedEdges)
+                {
+                    edges.Add(edge);
+                }
+            }
+
+            this.edges = edges;
+            this.edgeListInvalidated = false;
+        }
+
+        private void RemoveVertexFromDictionaryIfItemIsEmpty(Vertex key)
+        {
+            if (this.innerList.ContainsKey(key) && this.innerList[key].IsEmpty)
+            {
+                this.innerList.Remove(key);
+            }
         }
     }
 }

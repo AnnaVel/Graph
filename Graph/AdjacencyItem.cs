@@ -13,6 +13,9 @@ namespace GraphCore
     {
         private readonly Vertex owningVertex;
 
+        private bool edgeListInvalidated;
+        private HashSet<Edge> relatedEdges;
+
         private Dictionary<Vertex, List<Edge>> successors;
         private Dictionary<Vertex, List<Edge>> predecessors;
 
@@ -20,7 +23,23 @@ namespace GraphCore
         {
             get
             {
-                throw new NotImplementedException();
+                if (this.edgeListInvalidated)
+                {
+                    this.ConstructEdgeList();
+                }
+
+                return this.relatedEdges;
+            }
+        }
+
+        public bool IsEmpty
+        {
+            get
+            {
+                bool successorAndPredecessorListsEmpty = (this.successors == null || this.successors.Count == 0) &&
+                                                        (this.predecessors == null || this.predecessors.Count == 0);
+                
+                return successorAndPredecessorListsEmpty;
             }
         }
 
@@ -55,22 +74,14 @@ namespace GraphCore
             Guard.ThrowExceptionIfNull(owningVertex, "owningVertex");
 
             this.owningVertex = owningVertex;
+            this.edgeListInvalidated = true;
         }
 
         public void AddSuccessorEdge(Edge edge)
         {
-            this.CheckEdgeValidity(edge);
+            this.ThrowExceptionIfEdgeIsInvalid(edge);
 
-            Vertex successor;
-
-            if (edge.IsDirected)
-            {
-                successor = edge.SecondVertex;
-            }
-            else
-            {
-                successor = edge.FirstVertex == this.owningVertex ? edge.SecondVertex : edge.FirstVertex;
-            }
+            Vertex successor = this.GetSuccessorVertexFromEdge(edge);
 
             Dictionary<Vertex, List<Edge>> successors = this.Successors;
 
@@ -80,22 +91,15 @@ namespace GraphCore
             }
 
             successors[successor].Add(edge);
+
+            this.OnEdgesChanged();
         }
 
         public void AddPredecessorEdge(Edge edge)
         {
-            this.CheckEdgeValidity(edge);
+            this.ThrowExceptionIfEdgeIsInvalid(edge);
 
-            Vertex predecessor;
-
-            if (edge.IsDirected)
-            {
-                predecessor = edge.FirstVertex;
-            }
-            else
-            {
-                predecessor = edge.SecondVertex == this.owningVertex ? edge.FirstVertex : edge.SecondVertex;
-            }
+            Vertex predecessor = this.GetPredecessorVertexFromEdge(edge);
 
             Dictionary<Vertex, List<Edge>> predecessors = this.Predecessors;
 
@@ -105,36 +109,74 @@ namespace GraphCore
             }
 
             predecessors[predecessor].Add(edge);
+
+            this.OnEdgesChanged();
         }
 
         public bool RemoveSuccessorEdge(Edge edge)
         {
-            //this.RemoveVertexFromSuccessorsDictionaryIfEdgeListEmpty();
+            if (!this.OwningVertexIsOneOfEdgeVertices(edge))
+            {
+                return false;
+            }
 
-            throw new NotImplementedException();
+            Vertex successor = this.GetSuccessorVertexFromEdge(edge);
+
+            bool result = this.Successors[successor].Remove(edge);
+
+            if (result)
+            {
+                this.RemoveVertexFromSuccessorsDictionaryIfEdgeListEmpty(successor);
+                this.OnEdgesChanged();
+            }
+
+            return result;
         }
-
+       
         public bool RemovePredecessorEdge(Edge edge)
         {
+            if (!this.OwningVertexIsOneOfEdgeVertices(edge))
+            {
+                return false;
+            }
 
+            Vertex predecessor = this.GetPredecessorVertexFromEdge(edge);
 
-            //this.RemoveVertexFromPredecessorsrDictionaryIfEdgeListEmpty();
+            bool result = this.Predecessors[predecessor].Remove(edge);
 
-            throw new NotImplementedException();
+            if (result)
+            {
+                this.RemoveVertexFromPredecessorsDictionaryIfEdgeListEmpty(predecessor);
+                this.OnEdgesChanged();
+            }
+
+            return result;
         }
 
-        public bool RemoveSuccessor(Vertex successor)
+        public bool RemoveSuccessorAndCorrespondingEdges(Vertex successor)
         {
-            this.SetSuccessorsDictionaryToNullIfEmpty();
+            bool result = this.Successors.Remove(successor);
 
-            throw new NotImplementedException();
+            if (result)
+            {
+                this.SetSuccessorsDictionaryToNullIfEmpty();
+                this.OnEdgesChanged();
+            }
+
+            return result;
         }
 
-        public bool RemovePredecessor(Vertex successor)
+        public bool RemovePredecessorAndCorrespondingEdges(Vertex predecessor)
         {
-            this.SetPredecessorsDictionaryToNullIfEmpty();
+            bool result = this.Predecessors.Remove(predecessor);
 
-            throw new NotImplementedException();
+            if (result)
+            {
+                this.SetPredecessorsDictionaryToNullIfEmpty();
+                this.OnEdgesChanged();
+            }
+
+            return result;
         }
 
         public IEnumerable<Vertex> GetSuccessors()
@@ -171,34 +213,118 @@ namespace GraphCore
             return dictionary[neighbour];
         }
 
-        private void CheckEdgeValidity(Edge edge)
+        private void ThrowExceptionIfEdgeIsInvalid(Edge edge)
         {
             Guard.ThrowExceptionIfNull(edge, "edge");
 
-            bool owningVertexIsOneOfEdgeVertices = this.owningVertex == edge.FirstVertex || this.owningVertex == edge.SecondVertex;
-
-            if (!owningVertexIsOneOfEdgeVertices)
+            if (!this.OwningVertexIsOneOfEdgeVertices(edge))
             {
                 throw new InvalidOperationException("This edge is not related to the vertex.");
             }
         }
 
-        private void RemoveVertexFromSuccessorsDictionaryIfEdgeListEmpty(Vertex vertex)
+        private bool OwningVertexIsOneOfEdgeVertices(Edge edge)
         {
-
-            this.SetSuccessorsDictionaryToNullIfEmpty();
-            throw new NotImplementedException();
+            return this.owningVertex == edge.FirstVertex || this.owningVertex == edge.SecondVertex;
         }
 
-        private void RemoveVertexFromPredecessorsrDictionaryIfEdgeListEmpty(Vertex vertex)
+        private Vertex GetSuccessorVertexFromEdge(Edge edge)
         {
+            if(!this.OwningVertexIsOneOfEdgeVertices(edge))
+            {
+                throw new InvalidOperationException();
+            }
+
+            Vertex successor;
+
+            if (edge.IsDirected)
+            {
+                successor = edge.SecondVertex;
+            }
+            else
+            {
+                successor = edge.FirstVertex == this.owningVertex ? edge.SecondVertex : edge.FirstVertex;
+            }
+
+            return successor;
+        }
+
+        private Vertex GetPredecessorVertexFromEdge(Edge edge)
+        {
+            if (!this.OwningVertexIsOneOfEdgeVertices(edge))
+            {
+                throw new InvalidOperationException();
+            }
+
+            Vertex predecessor;
+
+            if (edge.IsDirected)
+            {
+                predecessor = edge.FirstVertex;
+            }
+            else
+            {
+                predecessor = edge.SecondVertex == this.owningVertex ? edge.FirstVertex : edge.SecondVertex;
+            }
+
+            return predecessor;
+        }
+
+        private void OnEdgesChanged()
+        {
+            this.edgeListInvalidated = true;
+        }
+
+        private void ConstructEdgeList()
+        {
+            HashSet<Edge> relatedEdges = new HashSet<Edge>();
+
+            //TODO: using the properties will probably lead to a lot of setting and unsetting of the field.
+            foreach (var pair in this.Predecessors)
+            {
+                List<Edge> edgesLeadingToSuccessorVertex = pair.Value;
+                foreach (Edge edge in edgesLeadingToSuccessorVertex)
+                {
+                    relatedEdges.Add(edge);
+                }
+            }
+
+            foreach (var pair in this.Predecessors)
+            {
+                List<Edge> edgesLeadingToSuccessorVertex = pair.Value;
+                foreach (Edge edge in edgesLeadingToSuccessorVertex)
+                {
+                    relatedEdges.Add(edge);
+                }
+            }
+
+            this.relatedEdges = relatedEdges;
+            this.edgeListInvalidated = false;
+        }
+
+        private void RemoveVertexFromSuccessorsDictionaryIfEdgeListEmpty(Vertex vertex)
+        {
+            if (this.Successors[vertex].Count == 0)
+            {
+                this.Successors.Remove(vertex);
+            }
+
+            this.SetSuccessorsDictionaryToNullIfEmpty();
+        }
+
+        private void RemoveVertexFromPredecessorsDictionaryIfEdgeListEmpty(Vertex vertex)
+        {
+            if (this.Predecessors[vertex].Count == 0)
+            {
+                this.Predecessors.Remove(vertex);
+            }
+
             this.SetPredecessorsDictionaryToNullIfEmpty();
-            throw new NotImplementedException();
         }
 
         private void SetSuccessorsDictionaryToNullIfEmpty()
         {
-            if (this.successors.Count == 0)
+            if (this.Successors.Count == 0)
             {
                 this.successors = null;
             }
@@ -206,7 +332,7 @@ namespace GraphCore
 
         private void SetPredecessorsDictionaryToNullIfEmpty()
         {
-            if (this.predecessors.Count == 0)
+            if (this.Predecessors.Count == 0)
             {
                 this.predecessors = null;
             }

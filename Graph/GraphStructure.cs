@@ -80,7 +80,7 @@ namespace GraphCore
         {
             get
             {
-                throw new NotImplementedException();
+                return this.adjacencyList.Edges;
             }
         }
 

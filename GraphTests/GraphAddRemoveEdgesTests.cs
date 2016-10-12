@@ -22,8 +22,8 @@ namespace GraphTests
 
             Edge edge = graph.GraphStructure.AddArrow(x, y);
 
-            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, null, typeof(UnweightedEdge), edge); 
-            this.AssertRelationshipFromTo(graph, x, y, new List<Edge>() { edge });
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, null, typeof(UnweightedEdge), edge);
+            this.AssertRelationship(graph, x, y, new List<Edge>() { edge }, new List<Edge>());
         }
 
         [Test]
@@ -37,8 +37,7 @@ namespace GraphTests
             Edge edge = graph.GraphStructure.AddArrow(x, y, weight);
 
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, weight, typeof(DoubleValueEdge), edge);
-            this.AssertRelationshipFromTo(graph, x, y, new List<Edge>() { edge });
-            this.AssertRelationshipFromTo(graph, y, x, new List<Edge>() { edge });
+            this.AssertRelationship(graph, x, y, new List<Edge>() { edge }, new List<Edge>());
         }
 
         [Test]
@@ -58,7 +57,7 @@ namespace GraphTests
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, null, typeof(UnweightedEdge), secondArrow);
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, weight, typeof(DoubleValueEdge), thirdArrow);
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, null, typeof(UnweightedEdge), fourthArrow);
-            this.AssertRelationshipFromTo(graph, x, y, new List<Edge>() { firstArrow, secondArrow, thirdArrow, fourthArrow });
+            this.AssertRelationship(graph, x, y, new List<Edge>() { firstArrow, secondArrow, thirdArrow, fourthArrow }, new List<Edge>());
         }
 
         [Test]
@@ -75,7 +74,13 @@ namespace GraphTests
         [Test]
         public void AddArrowPredecessorAndSuccessorAreSameVertexTest()
         {
-            Assert.Fail();
+            Graph graph = new Graph();
+            Vertex x = graph.GraphStructure.AddVertex("x");
+
+            Edge arrow = graph.GraphStructure.AddArrow(x, x);
+
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, x, true, null, typeof(UnweightedEdge), arrow);
+            this.AssertRelationship(graph, x, x, new List<Edge>() { arrow }, new List<Edge>());
         }
 
         [Test]
@@ -88,8 +93,7 @@ namespace GraphTests
             Edge lineEdge = graph.GraphStructure.AddLine(x, y);
 
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, false, null, typeof(UnweightedEdge), lineEdge);
-            this.AssertRelationshipFromTo(graph, x, y, new List<Edge>() { lineEdge });
-            this.AssertRelationshipFromTo(graph, y, x, new List<Edge>() { lineEdge });
+            this.AssertRelationship(graph, x, y, new List<Edge>() { lineEdge }, new List<Edge>() { lineEdge });
         }
 
         [Test]
@@ -103,8 +107,7 @@ namespace GraphTests
             Edge lineEdge = graph.GraphStructure.AddLine(x, y, weight);
 
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, false, weight, typeof(DoubleValueEdge), lineEdge);
-            this.AssertRelationshipFromTo(graph, x, y, new List<Edge>() { lineEdge });
-            this.AssertRelationshipFromTo(graph, y, x, new List<Edge>() { lineEdge });
+            this.AssertRelationship(graph, x, y, new List<Edge>() { lineEdge }, new List<Edge>() { lineEdge });
         }
 
         [Test]
@@ -124,14 +127,9 @@ namespace GraphTests
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, z, false, null, typeof(UnweightedEdge), xZ);
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, u, false, null, typeof(UnweightedEdge), xU);
 
-            this.AssertRelationshipFromTo(graph, x, y, new List<Edge>() { xY });
-            this.AssertRelationshipFromTo(graph, y, x, new List<Edge>() { xY });
-
-            this.AssertRelationshipFromTo(graph, x, z, new List<Edge>() { xZ });
-            this.AssertRelationshipFromTo(graph, z, x, new List<Edge>() { xZ });
-
-            this.AssertRelationshipFromTo(graph, x, u, new List<Edge>() { xU });
-            this.AssertRelationshipFromTo(graph, u, x, new List<Edge>() { xU });
+            this.AssertRelationship(graph, x, y, new List<Edge>() { xY }, new List<Edge>() { xY });
+            this.AssertRelationship(graph, x, z, new List<Edge>() { xZ }, new List<Edge>() { xZ });
+            this.AssertRelationship(graph, x, u, new List<Edge>() { xU }, new List<Edge>() { xU });
         }
 
         [Test]
@@ -149,7 +147,13 @@ namespace GraphTests
         [Test]
         public void AddLinePredecessorAndSuccessorAreSameVertexTest()
         {
-            Assert.Fail();
+            Graph graph = new Graph();
+            Vertex x = graph.GraphStructure.AddVertex("x");
+
+            Edge line = graph.GraphStructure.AddLine(x, x);
+
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, x, false, null, typeof(UnweightedEdge), line);
+            this.AssertRelationship(graph, x, x, new List<Edge>() { line }, new List<Edge>() { line });
         }
 
         [Test]
@@ -165,6 +169,7 @@ namespace GraphTests
             Assert.IsTrue(result);
             this.AssertEdgesHaveBeenUnregistered(arrow);
             this.AssertOnlyRelationshipsHaveBeenRemoved(graph, x, y);
+            this.AssertRelationship(graph, x, y, new List<Edge>(), new List<Edge>());
         }
 
         [Test]
@@ -180,6 +185,7 @@ namespace GraphTests
             Assert.IsTrue(result);
             this.AssertEdgesHaveBeenUnregistered(line);
             this.AssertOnlyRelationshipsHaveBeenRemoved(graph, x, y);
+            this.AssertRelationship(graph, x, y, new List<Edge>(), new List<Edge>());
         }
 
         [Test]
@@ -210,6 +216,7 @@ namespace GraphTests
             Assert.IsTrue(result);
             this.AssertEdgesHaveBeenUnregistered(firstArrow, secondArrow, thirdArrow, fourthArrow);
             this.AssertOnlyRelationshipsHaveBeenRemoved(graph, x, y);
+            this.AssertRelationship(graph, x, y, new List<Edge>(), new List<Edge>());
         }
 
         [Test]
@@ -228,7 +235,16 @@ namespace GraphTests
         [Test]
         public void RemoveEdgesBetweenPredecessorAndSuccessorAreSameVertexTest()
         {
-            Assert.Fail();
+            Graph graph = new Graph();
+            Vertex x = graph.GraphStructure.AddVertex("x");
+            Edge arrow = graph.GraphStructure.AddArrow(x, x);
+            Edge line = graph.GraphStructure.AddLine(x, x);
+
+            bool result = graph.GraphStructure.RemoveEdgesBetween(x, x);
+
+            Assert.IsTrue(result);
+            this.AssertEdgesHaveBeenUnregistered(line, arrow);
+            this.AssertRelationship(graph, x, x, new List<Edge>(), new List<Edge>());
         }
 
         [Test]
@@ -244,6 +260,7 @@ namespace GraphTests
             Assert.IsTrue(result);
             this.AssertEdgesHaveBeenUnregistered(arrow);
             this.AssertOnlyRelationshipsHaveBeenRemoved(graph, x, y);
+            this.AssertRelationship(graph, x, y, new List<Edge>(), new List<Edge>());
         }
 
         [Test]
@@ -259,6 +276,7 @@ namespace GraphTests
             Assert.IsTrue(result);
             this.AssertEdgesHaveBeenUnregistered(line);
             this.AssertOnlyRelationshipsHaveBeenRemoved(graph, x, y);
+            this.AssertRelationship(graph, x, y, new List<Edge>(), new List<Edge>());
         }
 
         [Test]
@@ -275,8 +293,7 @@ namespace GraphTests
 
             Assert.IsTrue(result);
             this.AssertEdgesHaveBeenUnregistered(weightedLine);
-            this.AssertRelationshipFromTo(graph, x, y, new List<Edge>() { arrow, line });
-            this.AssertRelationshipFromTo(graph, y, x, new List<Edge>() { line });
+            this.AssertRelationship(graph, x, y, new List<Edge>() { arrow, line }, new List<Edge>() { line });
         }
 
         [Test]
@@ -293,8 +310,7 @@ namespace GraphTests
 
             Assert.IsTrue(result);
             this.AssertEdgesHaveBeenUnregistered(arrow);
-            this.AssertRelationshipFromTo(graph, x, y, new List<Edge>() { line, weightedLine });
-            this.AssertRelationshipFromTo(graph, y, x, new List<Edge>() { line, weightedLine });
+            this.AssertRelationship(graph, x, y, new List<Edge>() { line, weightedLine }, new List<Edge>() { line, weightedLine });
         }
 
         [Test]
@@ -309,6 +325,7 @@ namespace GraphTests
             bool result = graph.GraphStructure.RemoveEdge(line);
 
             Assert.IsFalse(result);
+            this.AssertRelationship(graph, x, y, new List<Edge>(), new List<Edge>());
         }
 
         [Test]
@@ -327,13 +344,29 @@ namespace GraphTests
         [Test]
         public void RemoveEdgeArrowPredecessorAndSuccessorAreSameVertexTest()
         {
-            Assert.Fail();
+            Graph graph = new Graph();
+            Vertex x = graph.GraphStructure.AddVertex("x");
+            Edge arrow = graph.GraphStructure.AddArrow(x, x);
+
+            bool result = graph.GraphStructure.RemoveEdge(arrow);
+
+            Assert.IsTrue(result);
+            this.AssertEdgesHaveBeenUnregistered(arrow);
+            this.AssertRelationship(graph, x, x, new List<Edge>(), new List<Edge>());
         }
 
         [Test]
         public void RemoveEdgeLinePredecessorAndSuccessorAreSameVertexTest()
         {
-            Assert.Fail();
+            Graph graph = new Graph();
+            Vertex x = graph.GraphStructure.AddVertex("x");
+            Edge line = graph.GraphStructure.AddLine(x, x);
+
+            bool result = graph.GraphStructure.RemoveEdge(line);
+
+            Assert.IsTrue(result);
+            this.AssertEdgesHaveBeenUnregistered(line);
+            this.AssertRelationship(graph, x, x, new List<Edge>(), new List<Edge>());
         }
 
         [Test]
@@ -355,30 +388,43 @@ namespace GraphTests
             }
 
             this.AssertOnlyRelationshipsHaveBeenRemoved(graph, x, y);
+            this.AssertRelationship(graph, x, y, new List<Edge>(), new List<Edge>());
+        }
+
+        private void AssertRelationship(Graph graph, Vertex firstVertex, Vertex secondVertex, 
+            IEnumerable<Edge> expectedEdgesFirstToSecond, IEnumerable<Edge> expectedEdgesSecondToFirst)
+        {
+            this.AssertRelationshipFromTo(graph, firstVertex, secondVertex, expectedEdgesFirstToSecond);
+            this.AssertRelationshipFromTo(graph, secondVertex, firstVertex, expectedEdgesSecondToFirst);
+
+            IEnumerable<Edge> allExpectedEdges = expectedEdgesFirstToSecond.Union(expectedEdgesSecondToFirst);
+            IEnumerable<Edge> actualEdges = graph.GraphStructure.GetEdgesBetween(firstVertex, secondVertex);
+            TestHelper.AssertEnumerablesAreEqual<Edge>(allExpectedEdges, actualEdges);
         }
 
         private void AssertRelationshipFromTo(Graph graph, Vertex fromVertex, Vertex toVertex, IEnumerable<Edge> expectedEdges)
         {
-            IEnumerable<Vertex> fromVertexSuccessors = fromVertex.GetSuccessors();
-            Assert.AreEqual(1, fromVertexSuccessors.Count());
-            Assert.AreEqual(toVertex, fromVertexSuccessors.First());
+            IEnumerable<Vertex> fromVertexSuccessorsVertexApi = fromVertex.GetSuccessors();
+            IEnumerable<Vertex> fromVertexSuccessorsGraphApi = graph.GraphStructure.GetVertexSuccessors(fromVertex);
+            IEnumerable<Vertex> toVertexPredecessorsVertexApi = toVertex.GetPredecessors();
+            IEnumerable<Vertex> toVertexPredecessorsGraphApi = graph.GraphStructure.GetVertexPredecessors(toVertex);
 
-            fromVertexSuccessors = graph.GraphStructure.GetVertexSuccessors(fromVertex);
-            Assert.AreEqual(1, fromVertexSuccessors.Count());
-            Assert.AreEqual(toVertex, fromVertexSuccessors.First());
+            if (expectedEdges.Count() != 0)
+            {
+                Assert.IsTrue(fromVertexSuccessorsVertexApi.Contains(toVertex));
+                Assert.IsTrue(fromVertexSuccessorsGraphApi.Contains(toVertex));
+                Assert.IsTrue(toVertexPredecessorsVertexApi.Contains(fromVertex));
+                Assert.IsTrue(toVertexPredecessorsGraphApi.Contains(fromVertex));
+            }
+            else
+            {
+                Assert.IsFalse(fromVertexSuccessorsVertexApi.Contains(toVertex));
+                Assert.IsFalse(fromVertexSuccessorsGraphApi.Contains(toVertex));
+                Assert.IsFalse(toVertexPredecessorsVertexApi.Contains(fromVertex));
+                Assert.IsFalse(toVertexPredecessorsGraphApi.Contains(fromVertex));
+            }
 
-            IEnumerable<Vertex> toVertexPredecessors = toVertex.GetPredecessors();
-            Assert.AreEqual(1, toVertexPredecessors.Count());
-            Assert.AreEqual(fromVertex, toVertexPredecessors.First());
-
-            toVertexPredecessors = graph.GraphStructure.GetVertexPredecessors(toVertex);
-            Assert.AreEqual(1, toVertexPredecessors.Count());
-            Assert.AreEqual(fromVertex, toVertexPredecessors.First());
-
-            IEnumerable<Edge> actualEdges = graph.GraphStructure.GetEdgesBetween(fromVertex, toVertex);
-            TestHelper.AssertEnumerablesAreEqual<Edge>(expectedEdges, actualEdges);
-
-            actualEdges = graph.GraphStructure.GetEdgesLeadingFromTo(fromVertex, toVertex);
+            IEnumerable<Edge> actualEdges = graph.GraphStructure.GetEdgesLeadingFromTo(fromVertex, toVertex);
             TestHelper.AssertEnumerablesAreEqual<Edge>(expectedEdges, actualEdges);
 
             actualEdges = fromVertex.GetEdgesTo(toVertex);

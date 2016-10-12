@@ -58,7 +58,7 @@ namespace GraphTests
         [Test]
         public void GetSuccessorsUnnecessaryIterationTest()
         {
-            TimeSpan expectedSpeed = TimeSpan.FromMilliseconds(3);
+            TimeSpan expectedSpeed = TimeSpan.FromSeconds(0.001);
 
             string[] expectedSuccessorValues = new string[1000000];
 
@@ -82,8 +82,6 @@ namespace GraphTests
             sw.Stop();
 
             Assert.IsTrue(sw.Elapsed < expectedSpeed);
-
-            Assert.Fail("Make sure this one fails for shorter time.");
         }
 
         [Test]
@@ -224,6 +222,40 @@ namespace GraphTests
 
             IEnumerable<Edge> resultEdges = mainVertex.GetOutgoingEdges();
             this.AssertEdgesAreAsExpected(expectedEdges, resultEdges);
+
+            resultEdges = graph.GraphStructure.GetEdgesGoingOutOfVertex(mainVertex);
+            this.AssertEdgesAreAsExpected(expectedEdges, resultEdges);
+        }
+
+        [Test]
+        public void GetOutgoingEdgesSpeedTest()
+        {
+            TimeSpan expectedTime = TimeSpan.FromSeconds(0.01);
+
+            Graph graph = new Graph();
+            Vertex mainVertex = graph.GraphStructure.AddVertex("x");
+
+            for(int i = 0; i < 1000000; i++)
+            {
+                Vertex successor = graph.GraphStructure.AddVertex(i);
+                graph.GraphStructure.AddArrow(mainVertex, successor);
+            }
+
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+            IEnumerable<Edge> resultEdges = mainVertex.GetOutgoingEdges();
+            sw.Stop();
+
+            Assert.IsTrue(sw.Elapsed < expectedTime);
+
+            sw.Reset();
+
+            sw.Start();
+            resultEdges = graph.GraphStructure.GetEdgesGoingOutOfVertex(mainVertex);
+            sw.Stop();
+
+            Assert.IsTrue(sw.Elapsed < expectedTime);
         }
 
         [Test]
@@ -255,6 +287,40 @@ namespace GraphTests
 
             IEnumerable<Edge> resultEdges = mainVertex.GetIncomingEdges();
             this.AssertEdgesAreAsExpected(expectedEdges, resultEdges);
+
+            resultEdges = graph.GraphStructure.GetEdgesComingIntoVertex(mainVertex);
+            this.AssertEdgesAreAsExpected(expectedEdges, resultEdges);
+        }
+
+        [Test]
+        public void GetIncomingEdgesSpeedTest()
+        {
+            TimeSpan expectedTime = TimeSpan.FromSeconds(0.01);
+
+            Graph graph = new Graph();
+            Vertex mainVertex = graph.GraphStructure.AddVertex("x");
+
+            for (int i = 0; i < 1000000; i++)
+            {
+                Vertex predecessor = graph.GraphStructure.AddVertex(i);
+                graph.GraphStructure.AddArrow(predecessor, mainVertex);
+            }
+
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+            IEnumerable<Edge> resultEdges = mainVertex.GetIncomingEdges();
+            sw.Stop();
+
+            Assert.IsTrue(sw.Elapsed < expectedTime);
+
+            sw.Reset();
+
+            sw.Start();
+            resultEdges = graph.GraphStructure.GetEdgesComingIntoVertex(mainVertex);
+            sw.Stop();
+
+            Assert.IsTrue(sw.Elapsed < expectedTime);
         }
 
         [Test]

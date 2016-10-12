@@ -27,12 +27,16 @@ namespace GraphCore.Vertices
 
         public IEnumerable<Edge> GetOutgoingEdges()
         {
-            throw new NotImplementedException();
+            this.VerifyVertexHasOwner();
+
+            return this.Owner.GetEdgesGoingOutOfVertex(this);
         }
 
         public IEnumerable<Edge> GetIncomingEdges()
         {
-            throw new NotImplementedException();
+            this.VerifyVertexHasOwner();
+
+            return this.Owner.GetEdgesComingIntoVertex(this);
         }
 
         public IEnumerable<Edge> GetEdgesTo(Vertex successor)

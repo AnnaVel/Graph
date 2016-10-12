@@ -219,6 +219,36 @@ namespace GraphCore
             return this.adjacencyList.GetAllEdgesLeadingFromTo(predecessor, successor);
         }
 
+        public IEnumerable<Edge> GetEdgesGoingOutOfVertex(Vertex vertex)
+        {
+            Guard.ThrowExceptionIfNull(vertex, "vertex");
+
+            IEnumerable<Vertex> successors = this.GetVertexSuccessors(vertex);
+            IEnumerable<Edge> allEdges = new List<Edge>();
+
+            foreach (Vertex successor in successors)
+            {
+                allEdges = allEdges.Union(this.GetEdgesLeadingFromTo(vertex, successor));
+            }
+            
+            return allEdges;
+        }
+
+        public IEnumerable<Edge> GetEdgesComingIntoVertex(Vertex vertex)
+        {
+            Guard.ThrowExceptionIfNull(vertex, "vertex");
+
+            IEnumerable<Vertex> predecessors = this.GetVertexPredecessors(vertex);
+            IEnumerable<Edge> allEdges = new List<Edge>();
+
+            foreach (Vertex predecessor in predecessors)
+            {
+                allEdges = allEdges.Union(this.GetEdgesLeadingFromTo(predecessor, vertex));
+            }
+            
+            return allEdges;
+        }
+
         private void RegisterVertex(Vertex vertex)
         {
             if (this.valueToVertexIndex.ContainsKey(vertex.ValueAsObject))

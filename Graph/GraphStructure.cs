@@ -120,13 +120,13 @@ namespace GraphCore
 
             this.adjacencyList.RemoveVertex(vertex);
 
-            this.UnregisterRelatedEdges(vertex);
+            this.UnregisterEdgesRelatedToVertex(vertex);
             this.UnregisterVertex(vertex);
 
             return true;
         }
 
-        private void UnregisterRelatedEdges(Vertex vertex)
+        private void UnregisterEdgesRelatedToVertex(Vertex vertex)
         {
             foreach (Edge edge in vertex.GetIncomingEdges())
             {
@@ -177,6 +177,13 @@ namespace GraphCore
 
         public bool RemoveEdge(Edge edge)
         {
+            Guard.ThrowExceptionIfNull(edge, "edge");
+
+            if(!this.EdgeBelongsToThisStructure(edge))
+            {
+                return false;
+            }
+
             this.UnregisterEdge(edge);
             return this.adjacencyList.RemoveEdge(edge);
         }
@@ -186,7 +193,19 @@ namespace GraphCore
             this.CheckVertexValidity(firstVertex);
             this.CheckVertexValidity(secondVertex);
 
-            return this.adjacencyList.RemoveAllEdgesBetween(firstVertex, secondVertex);
+            IEnumerable<Edge> edgesBetween = this.GetEdgesBetween(firstVertex, secondVertex);
+
+            bool result = this.adjacencyList.RemoveAllEdgesBetween(firstVertex, secondVertex);
+
+            if (result)
+            {
+                foreach (Edge edge in edgesBetween)
+                {
+                    this.UnregisterEdge(edge);
+                }
+            }
+
+            return result;
         }
 
         public IEnumerable<Vertex> GetVertexSuccessors(Vertex vertex)
@@ -321,10 +340,14 @@ namespace GraphCore
             }
         }
 
+        private bool EdgeBelongsToThisStructure(Edge edge)
+        {
+            return edge.Owner == this;
+        }
+
         private bool VertexBelongsToThisStructure(Vertex vertex)
         {
-            return this.valueToVertexIndex.ContainsKey(vertex.ValueAsObject) &&
-                this.valueToVertexIndex[vertex.ValueAsObject] == vertex;
+            return vertex.Owner == this;
         }
     }
 }

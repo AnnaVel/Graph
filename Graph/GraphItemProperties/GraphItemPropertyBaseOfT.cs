@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphCore.VertexProperties
+namespace GraphCore.GraphItemProperties
 {
     public abstract class VertexPropertyBase<T> : IGraphItemProperty
     {

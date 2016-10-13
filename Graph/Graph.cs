@@ -1,5 +1,5 @@
 ﻿using GraphCore.Utilities;
-using GraphCore.VertexProperties;
+using GraphCore.GraphItemProperties;
 using GraphCore.Vertices;
 using System;
 using System.Collections.Generic;

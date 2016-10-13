@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphCore.VertexProperties
+namespace GraphCore.GraphItemProperties
 {
-    public class IntegerGraphItemProperty : VertexPropertyBase<int>
+    public class BooleanGraphItemProperty : VertexPropertyBase<bool>
     {
-        public IntegerGraphItemProperty(string name, int value)
+        public BooleanGraphItemProperty(string name, bool value)
             :base(name, value)
         {
 

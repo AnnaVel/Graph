@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphCore.VertexProperties
+namespace GraphCore.GraphItemProperties
 {
-    public class DoubleGraphItemProperty : VertexPropertyBase<double>
+    public class ObjectGraphItemProperty : VertexPropertyBase<object>
     {
-        public DoubleGraphItemProperty(string name, double value)
+        public ObjectGraphItemProperty(string name, object value)
             :base(name, value)
         {
 

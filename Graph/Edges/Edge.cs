@@ -1,4 +1,5 @@
-﻿using GraphCore.Utilities;
+﻿using GraphCore.GraphItemProperties;
+using GraphCore.Utilities;
 using GraphCore.Vertices;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ namespace GraphCore.Edges
 {
     public abstract class Edge : GraphStructureItem
     {
+        private readonly EdgePropertyList propertyList;
+
         private Vertex firstVertex;
         private Vertex secondVertex;
         private bool isDirected;
@@ -38,6 +41,14 @@ namespace GraphCore.Edges
             }
         }
 
+        internal override GraphItemPropertyList PropertyList
+        {
+            get
+            {
+                return this.propertyList;
+            }
+        }
+
         public Edge(Vertex firstVertex, Vertex secondVertex, bool isDirected)
         {
             Guard.ThrowExceptionIfNull(firstVertex, "firstVertex");
@@ -46,6 +57,8 @@ namespace GraphCore.Edges
             this.firstVertex = firstVertex;
             this.secondVertex = secondVertex;
             this.isDirected = isDirected;
+
+            this.propertyList = new EdgePropertyList(this);
         }
     }
 }

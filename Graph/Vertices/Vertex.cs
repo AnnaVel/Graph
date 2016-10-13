@@ -1,6 +1,6 @@
 ﻿using GraphCore.Edges;
+using GraphCore.GraphItemProperties;
 using GraphCore.Utilities;
-using GraphCore.VertexProperties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +11,21 @@ namespace GraphCore.Vertices
 {
     public abstract class Vertex : GraphStructureItem
     {
+        private readonly VertexPropertyList propertyList;
+
+        internal override GraphItemPropertyList PropertyList
+        {
+            get
+            {
+                return this.propertyList;
+            }
+        }
+
+        public Vertex()
+        {
+            this.propertyList = new VertexPropertyList(this);
+        }
+
         public IEnumerable<Vertex> GetSuccessors()
         {
             this.VerifyVertexHasOwner();

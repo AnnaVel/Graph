@@ -6,13 +6,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphCore.VertexProperties
+namespace GraphCore.GraphItemProperties
 {
-    internal class GraphItemPropertyList
+    internal abstract class GraphItemPropertyList
     {
         private readonly GraphStructureItem owner;
-
         private readonly Dictionary<string, IGraphItemProperty> innerList;
+
+        protected GraphStructureItem Owner
+        {
+            get
+            {
+                return this.owner;
+            }
+        }
 
         public GraphItemPropertyList(GraphStructureItem owner)
         {
@@ -23,16 +30,12 @@ namespace GraphCore.VertexProperties
             this.innerList = new Dictionary<string, IGraphItemProperty>();
         }
 
+        protected abstract GraphItemPropertyFactory GetPropertyFactoryFromOwner();
+
         public void SetProperty(string name, object value)
         {
-            GraphStructure owningStructure = this.owner.Owner;
-
-            if (owningStructure == null)
-            {
-                throw new InvalidOperationException("The item is not part of a structure and a property cannot be added.");
-            }
-
-            IGraphItemProperty newProperty = owningStructure.VertexPropertyFactory.CreateVertexProperty(name, value);
+            GraphItemPropertyFactory factory = this.GetPropertyFactoryFromOwner();
+            IGraphItemProperty newProperty = factory.CreateVertexProperty(name, value);
 
             this.innerList[name] = newProperty;
         }

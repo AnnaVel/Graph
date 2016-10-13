@@ -1,6 +1,6 @@
 ﻿using GraphCore.Edges;
 using GraphCore.Utilities;
-using GraphCore.VertexProperties;
+using GraphCore.GraphItemProperties;
 using GraphCore.Vertices;
 using System;
 using System.Collections.Generic;
@@ -96,6 +96,7 @@ namespace GraphCore
             this.vertexFactory = new VertexFactory();
             this.edgeFactory = new EdgeFactory();
             this.vertexPropertyFactory = new GraphItemPropertyFactory();
+            this.edgePropertyFactory = new GraphItemPropertyFactory();
         }
 
         public Vertex AddVertex(object value)

@@ -80,7 +80,7 @@ namespace GraphTests
             Edge arrow = graph.GraphStructure.AddArrow(x, x);
 
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, x, true, null, typeof(UnweightedEdge), arrow);
-            this.AssertRelationship(graph, x, x, new List<Edge>() { arrow }, new List<Edge>());
+            this.AssertRelationship(graph, x, x, new List<Edge>() { arrow }, new List<Edge>() { arrow });
         }
 
         [Test]
@@ -338,7 +338,9 @@ namespace GraphTests
             graph.GraphStructure.RemoveVertex(x);
             graph.GraphStructure.RemoveVertex(y);
 
-            Assert.Throws<ArgumentException>(() => graph.GraphStructure.RemoveEdge(line));
+            bool result = graph.GraphStructure.RemoveEdge(line);
+
+            Assert.IsFalse(result);
         }
 
         [Test]

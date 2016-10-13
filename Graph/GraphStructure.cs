@@ -119,10 +119,10 @@ namespace GraphCore
                 return false;
             }
 
-            this.adjacencyList.RemoveVertex(vertex);
-
             this.UnregisterEdgesRelatedToVertex(vertex);
             this.UnregisterVertex(vertex);
+
+            this.adjacencyList.RemoveVertex(vertex);
 
             return true;
         }
@@ -196,17 +196,12 @@ namespace GraphCore
 
             IEnumerable<Edge> edgesBetween = this.GetEdgesBetween(firstVertex, secondVertex);
 
-            bool result = this.adjacencyList.RemoveAllEdgesBetween(firstVertex, secondVertex);
-
-            if (result)
+            foreach (Edge edge in edgesBetween)
             {
-                foreach (Edge edge in edgesBetween)
-                {
-                    this.UnregisterEdge(edge);
-                }
+                this.UnregisterEdge(edge);
             }
 
-            return result;
+            return this.adjacencyList.RemoveAllEdgesBetween(firstVertex, secondVertex);
         }
 
         public IEnumerable<Vertex> GetVertexSuccessors(Vertex vertex)

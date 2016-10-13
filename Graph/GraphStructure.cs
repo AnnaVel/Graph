@@ -146,7 +146,8 @@ namespace GraphCore
 
         public Edge AddArrow(Vertex firstVertex, Vertex secondVertex, object arrowValue)
         {
-            this.CheckValidityOfVertexDuo(firstVertex, secondVertex);
+            this.CheckVertexValidity(firstVertex);
+            this.CheckVertexValidity(secondVertex);
 
             Edge edge = this.EdgeFactory.CreateEdge(firstVertex, secondVertex, true, arrowValue);
             this.adjacencyList.AddEdge(edge);
@@ -163,7 +164,8 @@ namespace GraphCore
 
         public Edge AddLine(Vertex firstVertex, Vertex secondVertex, object lineValue)
         {
-            this.CheckValidityOfVertexDuo(firstVertex, secondVertex);
+            this.CheckVertexValidity(firstVertex);
+            this.CheckVertexValidity(secondVertex);
 
             Edge edge = this.EdgeFactory.CreateEdge(firstVertex, secondVertex, false, lineValue);
             this.adjacencyList.AddEdge(edge);
@@ -181,54 +183,76 @@ namespace GraphCore
 
         public bool RemoveEdgesBetween(Vertex firstVertex, Vertex secondVertex)
         {
-            this.CheckValidityOfVertexDuo(firstVertex, secondVertex);
-
-            foreach (Edge edge in this.GetEdgesBetween(firstVertex, secondVertex))
-            {
-                this.UnregisterEdge(edge);
-            }
+            this.CheckVertexValidity(firstVertex);
+            this.CheckVertexValidity(secondVertex);
 
             return this.adjacencyList.RemoveAllEdgesBetween(firstVertex, secondVertex);
         }
 
         public IEnumerable<Vertex> GetVertexSuccessors(Vertex vertex)
         {
-            Guard.ThrowExceptionIfNull(vertex, "vertex");
+            this.CheckVertexValidity(vertex);
 
+            return this.GetVertexSuccessorsWithoutValidityCheck(vertex);
+        }
+
+        internal IEnumerable<Vertex> GetVertexSuccessorsWithoutValidityCheck(Vertex vertex)
+        {
             return this.adjacencyList.GetAllSuccessors(vertex);
         }
 
         public IEnumerable<Vertex> GetVertexPredecessors(Vertex vertex)
         {
-            Guard.ThrowExceptionIfNull(vertex, "vertex");
+            this.CheckVertexValidity(vertex);
 
+            return this.GetVertexPredecessorsWithoutValidityCheck(vertex);
+        }
+
+        internal IEnumerable<Vertex> GetVertexPredecessorsWithoutValidityCheck(Vertex vertex)
+        {
             return this.adjacencyList.GetAllPredecessors(vertex);
         }
 
         public IEnumerable<Edge> GetEdgesBetween(Vertex firstVertex, Vertex secondVertex)
         {
-            this.CheckValidityOfVertexDuo(firstVertex, secondVertex);
+            this.CheckVertexValidity(firstVertex);
+            this.CheckVertexValidity(secondVertex);
 
             return this.adjacencyList.GetAllEdgesBetween(firstVertex, secondVertex);
         }
 
         public IEnumerable<Edge> GetEdgesLeadingFromTo(Vertex predecessor, Vertex successor)
         {
-            this.CheckValidityOfVertexDuo(predecessor, successor);
+            this.CheckVertexValidity(predecessor);
+            this.CheckVertexValidity(successor);
 
+            return this.GetEdgesLeadingFromToWithoutValidityCheck(predecessor, successor);
+        }
+
+        public IEnumerable<Edge> GetEdgesLeadingFromToWithoutValidityCheck(Vertex predecessor, Vertex successor)
+        {
             return this.adjacencyList.GetAllEdgesLeadingFromTo(predecessor, successor);
         }
 
         public IEnumerable<Edge> GetEdgesGoingOutOfVertex(Vertex vertex)
         {
-            Guard.ThrowExceptionIfNull(vertex, "vertex");
+            this.CheckVertexValidity(vertex);
 
-            IEnumerable<Vertex> successors = this.GetVertexSuccessors(vertex);
-            IEnumerable<Edge> allEdges = new List<Edge>();
+            return this.GetEdgesGoingOutOfVertexWithoutValidityCheck(vertex);
+        }
+
+        internal IEnumerable<Edge> GetEdgesGoingOutOfVertexWithoutValidityCheck(Vertex vertex)
+        {
+            IEnumerable<Vertex> successors = this.GetVertexSuccessorsWithoutValidityCheck(vertex);
+            HashSet<Edge> allEdges = new HashSet<Edge>();
 
             foreach (Vertex successor in successors)
             {
-                allEdges = allEdges.Union(this.GetEdgesLeadingFromTo(vertex, successor));
+                IEnumerable<Edge> edgesToAdd = this.GetEdgesLeadingFromToWithoutValidityCheck(vertex, successor);
+                foreach (Edge edge in edgesToAdd)
+                {
+                    allEdges.Add(edge);
+                }
             }
             
             return allEdges;
@@ -236,14 +260,23 @@ namespace GraphCore
 
         public IEnumerable<Edge> GetEdgesComingIntoVertex(Vertex vertex)
         {
-            Guard.ThrowExceptionIfNull(vertex, "vertex");
+            this.CheckVertexValidity(vertex);
 
-            IEnumerable<Vertex> predecessors = this.GetVertexPredecessors(vertex);
-            IEnumerable<Edge> allEdges = new List<Edge>();
+            return this.GetEdgesComingIntoVertexWithoutValidityCheck(vertex);
+        }
+
+        internal IEnumerable<Edge> GetEdgesComingIntoVertexWithoutValidityCheck(Vertex vertex)
+        {
+            IEnumerable<Vertex> predecessors = this.GetVertexPredecessorsWithoutValidityCheck(vertex);
+            HashSet<Edge> allEdges = new HashSet<Edge>();
 
             foreach (Vertex predecessor in predecessors)
             {
-                allEdges = allEdges.Union(this.GetEdgesLeadingFromTo(predecessor, vertex));
+                IEnumerable<Edge> edgesToAdd = this.GetEdgesLeadingFromToWithoutValidityCheck(predecessor, vertex);
+                foreach (Edge edge in edgesToAdd)
+                {
+                    allEdges.Add(edge);
+                }
             }
             
             return allEdges;
@@ -278,15 +311,13 @@ namespace GraphCore
             this.edges.Remove(edge);
         }
 
-        private void CheckValidityOfVertexDuo(Vertex firstVertex, Vertex secondVertex)
+        private void CheckVertexValidity(Vertex vertex)
         {
-            Guard.ThrowExceptionIfNull(firstVertex, "firstVertex");
-            Guard.ThrowExceptionIfNull(secondVertex, "secondVertex");
+            Guard.ThrowExceptionIfNull(vertex, "vertex");
 
-            if (!this.VertexBelongsToThisStructure(firstVertex) ||
-                !this.VertexBelongsToThisStructure(secondVertex))
+            if (!this.VertexBelongsToThisStructure(vertex))
             {
-                throw new ArgumentException("One of the vertices does not belong to this structure.");
+                throw new ArgumentException("The vertex does not belong to this structure.");
             }
         }
 

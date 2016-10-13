@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GraphTests
@@ -112,7 +113,7 @@ namespace GraphTests
                 x.GetSuccessors();
             });
 
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
                 graph.GraphStructure.GetVertexSuccessors(x);
             });
@@ -187,7 +188,7 @@ namespace GraphTests
                 y.GetPredecessors();
             });
 
-            Assert.Throws<InvalidOperationException>(() =>
+            Assert.Throws<ArgumentException>(() =>
             {
                 graph.GraphStructure.GetVertexPredecessors(y);
             });
@@ -230,7 +231,9 @@ namespace GraphTests
         [Test]
         public void GetOutgoingEdgesSpeedTest()
         {
-            TimeSpan expectedTime = TimeSpan.FromSeconds(0.01);
+            this.EnsureTestSpeedConsistency();
+
+            TimeSpan expectedTime = TimeSpan.FromSeconds(0.8);
 
             Graph graph = new Graph();
             Vertex mainVertex = graph.GraphStructure.AddVertex("x");
@@ -247,7 +250,7 @@ namespace GraphTests
             IEnumerable<Edge> resultEdges = mainVertex.GetOutgoingEdges();
             sw.Stop();
 
-            Assert.IsTrue(sw.Elapsed < expectedTime);
+            Assert.IsTrue(sw.Elapsed < expectedTime, String.Format("Elapsed time for GetOutgoingEdges() was: {0}", sw.Elapsed.ToString()));
 
             sw.Reset();
 
@@ -255,7 +258,20 @@ namespace GraphTests
             resultEdges = graph.GraphStructure.GetEdgesGoingOutOfVertex(mainVertex);
             sw.Stop();
 
-            Assert.IsTrue(sw.Elapsed < expectedTime);
+            Assert.IsTrue(sw.Elapsed < expectedTime, String.Format("Elapsed time for GetEdgesGoingOutOfVertex(Vertex vertex) was: {0}", sw.Elapsed.ToString()));
+        }
+
+        [Test]
+        public void GetOutgoingEdgesRemovedVertexTest()
+        {
+            Graph graph = new Graph();
+            Vertex x = graph.GraphStructure.AddVertex("x");
+            Vertex y = graph.GraphStructure.AddVertex("y");
+            Edge edge = graph.GraphStructure.AddArrow(x, y);
+            graph.GraphStructure.RemoveVertex(x);
+
+            Assert.Throws<InvalidOperationException>(() => x.GetOutgoingEdges());
+            Assert.Throws<ArgumentException>(() => graph.GraphStructure.GetEdgesGoingOutOfVertex(x));
         }
 
         [Test]
@@ -274,7 +290,7 @@ namespace GraphTests
             foreach (string predecessorValue in predecessorValues)
             {
                 Vertex predecessor = graph.GraphStructure.AddVertex(predecessorValue);
-                graph.GraphStructure.AddArrow(mainVertex, predecessor);
+                graph.GraphStructure.AddArrow(predecessor, mainVertex);
 
                 expectedEdges.Add(new ExpectedEdgeDescriptor()
                 {
@@ -295,7 +311,9 @@ namespace GraphTests
         [Test]
         public void GetIncomingEdgesSpeedTest()
         {
-            TimeSpan expectedTime = TimeSpan.FromSeconds(0.01);
+            this.EnsureTestSpeedConsistency();
+
+            TimeSpan expectedTime = TimeSpan.FromSeconds(1);
 
             Graph graph = new Graph();
             Vertex mainVertex = graph.GraphStructure.AddVertex("x");
@@ -312,7 +330,7 @@ namespace GraphTests
             IEnumerable<Edge> resultEdges = mainVertex.GetIncomingEdges();
             sw.Stop();
 
-            Assert.IsTrue(sw.Elapsed < expectedTime);
+            Assert.IsTrue(sw.Elapsed < expectedTime, String.Format("Elapsed time for GetIncomingEdges() was: {0}", sw.Elapsed.ToString()));
 
             sw.Reset();
 
@@ -320,7 +338,20 @@ namespace GraphTests
             resultEdges = graph.GraphStructure.GetEdgesComingIntoVertex(mainVertex);
             sw.Stop();
 
-            Assert.IsTrue(sw.Elapsed < expectedTime);
+            Assert.IsTrue(sw.Elapsed < expectedTime, String.Format("Elapsed time for GetEdgesComingIntoVertex(Vertex vertex) was: {0}", sw.Elapsed.ToString()));
+        }
+
+        [Test]
+        public void GetIncomingEdgesRemovedVertexTest()
+        {
+            Graph graph = new Graph();
+            Vertex x = graph.GraphStructure.AddVertex("x");
+            Vertex y = graph.GraphStructure.AddVertex("y");
+            Edge edge = graph.GraphStructure.AddArrow(x, y);
+            graph.GraphStructure.RemoveVertex(y);
+
+            Assert.Throws<InvalidOperationException>(() => y.GetIncomingEdges());
+            Assert.Throws<ArgumentException>(() => graph.GraphStructure.GetEdgesComingIntoVertex(y));
         }
 
         [Test]
@@ -566,6 +597,13 @@ namespace GraphTests
 
                 Assert.AreEqual(expectedEdge.Value, resultEdge.ValueAsObject);
             }
+        }
+
+        private void EnsureTestSpeedConsistency()
+        {
+            Process.GetCurrentProcess().ProcessorAffinity = new IntPtr(2);
+            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
         }
     }
 }

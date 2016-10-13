@@ -370,6 +370,22 @@ namespace GraphTests
         }
 
         [Test]
+        public void RemoveEdgeFromDifferentStructureTest()
+        {
+            Graph graph = new Graph();
+            Vertex x = graph.GraphStructure.AddVertex("x");
+            Vertex y = graph.GraphStructure.AddVertex("y");
+            Edge line = graph.GraphStructure.AddLine(x, y);
+            Graph otherGraph = new Graph();
+
+
+            bool result = otherGraph.GraphStructure.RemoveEdge(line);
+
+            Assert.IsFalse(result);
+            Assert.AreEqual(graph.GraphStructure, line.Owner);
+        }
+
+        [Test]
         public void AddAndRemoveIterationTest()
         {
             Graph graph = new Graph();

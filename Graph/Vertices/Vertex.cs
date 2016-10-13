@@ -15,28 +15,28 @@ namespace GraphCore.Vertices
         {
             this.VerifyVertexHasOwner();
 
-            return this.Owner.GetVertexSuccessors(this);
+            return this.Owner.GetVertexSuccessorsWithoutValidityCheck(this);
         }
 
         public IEnumerable<Vertex> GetPredecessors()
         {
             this.VerifyVertexHasOwner();
 
-            return this.Owner.GetVertexPredecessors(this);
+            return this.Owner.GetVertexPredecessorsWithoutValidityCheck(this);
         }
 
         public IEnumerable<Edge> GetOutgoingEdges()
         {
             this.VerifyVertexHasOwner();
 
-            return this.Owner.GetEdgesGoingOutOfVertex(this);
+            return this.Owner.GetEdgesGoingOutOfVertexWithoutValidityCheck(this);
         }
 
         public IEnumerable<Edge> GetIncomingEdges()
         {
             this.VerifyVertexHasOwner();
 
-            return this.Owner.GetEdgesComingIntoVertex(this);
+            return this.Owner.GetEdgesComingIntoVertexWithoutValidityCheck(this);
         }
 
         public IEnumerable<Edge> GetEdgesTo(Vertex successor)

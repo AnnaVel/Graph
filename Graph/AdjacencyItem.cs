@@ -13,8 +13,8 @@ namespace GraphCore
     {
         private readonly Vertex owningVertex;
 
-        private Dictionary<Vertex, List<Edge>> successors;
-        private Dictionary<Vertex, List<Edge>> predecessors;
+        private Dictionary<Vertex, HashSet<Edge>> successors;
+        private Dictionary<Vertex, HashSet<Edge>> predecessors;
 
         public bool IsEmpty
         {
@@ -27,26 +27,26 @@ namespace GraphCore
             }
         }
 
-        private Dictionary<Vertex, List<Edge>> Successors
+        private Dictionary<Vertex, HashSet<Edge>> Successors
         {
             get
             {
                 if (this.successors == null)
                 {
-                    this.successors = new Dictionary<Vertex, List<Edge>>();
+                    this.successors = new Dictionary<Vertex, HashSet<Edge>>();
                 }
 
                 return this.successors;
             }
         }
 
-        private Dictionary<Vertex, List<Edge>> Predecessors
+        private Dictionary<Vertex, HashSet<Edge>> Predecessors
         {
             get
             {
                 if (this.predecessors == null)
                 {
-                    this.predecessors = new Dictionary<Vertex, List<Edge>>();
+                    this.predecessors = new Dictionary<Vertex, HashSet<Edge>>();
                 }
 
                 return this.predecessors;
@@ -66,11 +66,11 @@ namespace GraphCore
 
             Vertex successor = this.GetSuccessorVertexFromEdge(edge);
 
-            Dictionary<Vertex, List<Edge>> successors = this.Successors;
+            Dictionary<Vertex, HashSet<Edge>> successors = this.Successors;
 
             if (!successors.ContainsKey(successor))
             {
-                successors.Add(successor, new List<Edge>());
+                successors.Add(successor, new HashSet<Edge>());
             }
 
             successors[successor].Add(edge);
@@ -82,11 +82,11 @@ namespace GraphCore
 
             Vertex predecessor = this.GetPredecessorVertexFromEdge(edge);
 
-            Dictionary<Vertex, List<Edge>> predecessors = this.Predecessors;
+            Dictionary<Vertex, HashSet<Edge>> predecessors = this.Predecessors;
 
             if (!predecessors.ContainsKey(predecessor))
             {
-                predecessors.Add(predecessor, new List<Edge>());
+                predecessors.Add(predecessor, new HashSet<Edge>());
             }
 
             predecessors[predecessor].Add(edge);
@@ -166,19 +166,19 @@ namespace GraphCore
 
         public IEnumerable<Edge> GetEdgesLeadingTo(Vertex successor)
         {
-            Dictionary<Vertex, List<Edge>> successors = this.Successors;
+            Dictionary<Vertex, HashSet<Edge>> successors = this.Successors;
 
             return this.GetEdgesConnectedToVertex(successors, successor);
         }
 
         public IEnumerable<Edge> GetEdgesComingFrom(Vertex predecessor)
         {
-            Dictionary<Vertex, List<Edge>> predecessors = this.Predecessors;
+            Dictionary<Vertex, HashSet<Edge>> predecessors = this.Predecessors;
 
             return this.GetEdgesConnectedToVertex(predecessors, predecessor);
         }
 
-        private IEnumerable<Edge> GetEdgesConnectedToVertex(Dictionary<Vertex, List<Edge>> dictionary, Vertex neighbour)
+        private IEnumerable<Edge> GetEdgesConnectedToVertex(Dictionary<Vertex, HashSet<Edge>> dictionary, Vertex neighbour)
         {
             if (!dictionary.ContainsKey(neighbour))
             {

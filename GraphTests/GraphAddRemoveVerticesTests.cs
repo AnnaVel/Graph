@@ -65,7 +65,7 @@ namespace GraphTests
 
             Assert.AreEqual(0, xVertex.GetSuccessors().Count());
             Assert.AreEqual(0, graph.GraphStructure.Edges.Count());
-            Assert.AreEqual(0, graph.GraphStructure.GetVertexSuccessors(xVertex));
+            Assert.AreEqual(0, graph.GraphStructure.GetVertexSuccessors(xVertex).Count());
         }
 
         [Test]
@@ -120,6 +120,21 @@ namespace GraphTests
             Assert.IsFalse(result);
             Assert.AreEqual(1, otherGraph.GraphStructure.Vertices.Count());
             Assert.AreEqual(otherGraphXVertex, otherGraph.GraphStructure.Vertices.First());
+        }
+
+        [Test]
+        public void RemoveVertexWithCircularEdge()
+        {
+            string vertexValue = "x";
+            Graph graph = new Graph();
+            Vertex xVertex = graph.GraphStructure.AddVertex(vertexValue);
+            graph.GraphStructure.AddLine(xVertex, xVertex);
+
+            bool result = graph.GraphStructure.RemoveVertex(xVertex);
+
+            Assert.IsTrue(result);
+            Assert.AreEqual(0, graph.GraphStructure.Vertices.Count());
+            Assert.AreEqual(0, graph.GraphStructure.Edges.Count());
         }
     }
 }

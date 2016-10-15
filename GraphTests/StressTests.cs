@@ -18,9 +18,9 @@ namespace GraphTests
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(1.5);
 #if TRAVISENVIRONMENT
-            int expectedMemory = 141000;
-#else
             int expectedMemory = 207000;
+#else
+            int expectedMemory = 141000;
 #endif
 
             this.AssertPerformanceAndMemory(() =>
@@ -41,7 +41,7 @@ namespace GraphTests
         public void AddAMillionVerticesWithEdgesBetweenThem()
         {
 #if TRAVISENVIRONMENT
-            TimeSpan expectedTime = TimeSpan.FromSeconds(12);
+            TimeSpan expectedTime = TimeSpan.FromSeconds(15);
 #else
             TimeSpan expectedTime = TimeSpan.FromSeconds(7);
 #endif
@@ -69,10 +69,11 @@ namespace GraphTests
         {
 #if TRAVISENVIRONMENT
             TimeSpan expectedTime = TimeSpan.FromSeconds(38);
+            int expectedMemory = 1400000;
 #else
             TimeSpan expectedTime = TimeSpan.FromSeconds(8);
-#endif
             int expectedMemory = 945000;
+#endif
 
             this.AssertPerformanceAndMemory(() =>
             {
@@ -146,7 +147,11 @@ namespace GraphTests
         [Test]
         public void RemoveAMillionVerticesWithEdgesBetweenThem()
         {
+#if TRAVISENVIRONMENT
+            TimeSpan expectedTime = TimeSpan.FromSeconds(9);
+#else
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
+#endif
             int expectedMemory = 17000;
 
             int numberOfVertices = 1000000;
@@ -181,11 +186,11 @@ namespace GraphTests
         {
 #if TRAVISENVIRONMENT
             TimeSpan expectedTime = TimeSpan.FromSeconds(6);
+            int expectedMemory = 23000;
 #else
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
-#endif
             int expectedMemory = 15000;
-
+#endif
             int numberOfVertices = 1000000;
 
             Graph graph = new Graph();
@@ -272,7 +277,7 @@ namespace GraphTests
         public void TraverseAMillionVerticesWithEdgesBetweenThem()
         {
 #if TRAVISENVIRONMENT
-            TimeSpan expectedTime = TimeSpan.FromSeconds(4);
+            TimeSpan expectedTime = TimeSpan.FromSeconds(5);
 #else
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
 #endif

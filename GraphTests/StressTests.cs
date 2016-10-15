@@ -42,10 +42,11 @@ namespace GraphTests
         {
 #if TRAVISENVIRONMENT
             TimeSpan expectedTime = TimeSpan.FromSeconds(15);
+            int expectedMemory = 1320000;
 #else
             TimeSpan expectedTime = TimeSpan.FromSeconds(7);
-#endif
             int expectedMemory = 864000;
+#endif
 
             this.AssertPerformanceAndMemory(() =>
             {
@@ -149,10 +150,12 @@ namespace GraphTests
         {
 #if TRAVISENVIRONMENT
             TimeSpan expectedTime = TimeSpan.FromSeconds(9);
+            int expectedMemory = 23000;
 #else
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
-#endif
             int expectedMemory = 17000;
+#endif
+
 
             int numberOfVertices = 1000000;
 
@@ -185,7 +188,7 @@ namespace GraphTests
         public void RemoveAMillionVerticesWithEdgesBetweenThemReverseOrder()
         {
 #if TRAVISENVIRONMENT
-            TimeSpan expectedTime = TimeSpan.FromSeconds(6);
+            TimeSpan expectedTime = TimeSpan.FromSeconds(7);
             int expectedMemory = 23000;
 #else
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
@@ -277,7 +280,7 @@ namespace GraphTests
         public void TraverseAMillionVerticesWithEdgesBetweenThem()
         {
 #if TRAVISENVIRONMENT
-            TimeSpan expectedTime = TimeSpan.FromSeconds(5);
+            TimeSpan expectedTime = TimeSpan.FromSeconds(8);
 #else
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
 #endif

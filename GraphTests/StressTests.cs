@@ -17,7 +17,11 @@ namespace GraphTests
         public void AddAMillionVertices()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(1.5);
+#if TRAVISENVIRONMENT
             int expectedMemory = 141000;
+#else
+            int expectedMemory = 207000;
+#endif
 
             this.AssertPerformanceAndMemory(() =>
             {
@@ -36,7 +40,11 @@ namespace GraphTests
         [Test]
         public void AddAMillionVerticesWithEdgesBetweenThem()
         {
+#if TRAVISENVIRONMENT
+            TimeSpan expectedTime = TimeSpan.FromSeconds(12);
+#else
             TimeSpan expectedTime = TimeSpan.FromSeconds(7);
+#endif
             int expectedMemory = 864000;
 
             this.AssertPerformanceAndMemory(() =>
@@ -59,7 +67,11 @@ namespace GraphTests
         [Test]
         public void AddVertexWithAMillionEdgesLeadingFromItToOthers()
         {
+#if TRAVISENVIRONMENT
+            TimeSpan expectedTime = TimeSpan.FromSeconds(38);
+#else
             TimeSpan expectedTime = TimeSpan.FromSeconds(8);
+#endif
             int expectedMemory = 945000;
 
             this.AssertPerformanceAndMemory(() =>
@@ -81,7 +93,11 @@ namespace GraphTests
         [Test]
         public void AddTwoVerticesWithAMillionEdgesBetweenThem()
         {
+#if TRAVISENVIRONMENT
+            TimeSpan expectedTime = TimeSpan.FromSeconds(8);
+#else
             TimeSpan expectedTime = TimeSpan.FromSeconds(1.5);
+#endif
             int expectedMemory = 132000;
             //This fluctuates between 74000 and 132000
 
@@ -131,7 +147,7 @@ namespace GraphTests
         public void RemoveAMillionVerticesWithEdgesBetweenThem()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
-            int expectedMemory = 16000;
+            int expectedMemory = 17000;
 
             int numberOfVertices = 1000000;
 
@@ -163,7 +179,11 @@ namespace GraphTests
         [Test]
         public void RemoveAMillionVerticesWithEdgesBetweenThemReverseOrder()
         {
+#if TRAVISENVIRONMENT
+            TimeSpan expectedTime = TimeSpan.FromSeconds(6);
+#else
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
+#endif
             int expectedMemory = 15000;
 
             int numberOfVertices = 1000000;
@@ -198,7 +218,11 @@ namespace GraphTests
         [Test]
         public void RemoveVertexWithAMillionEdgesLeadingFromItToOthers()
         {
+#if TRAVISENVIRONMENT
+            TimeSpan expectedTime = TimeSpan.FromSeconds(15);
+#else
             TimeSpan expectedTime = TimeSpan.FromSeconds(0.6);
+#endif
             int expectedMemory = 10;
 
             int numberOfVertices = 1000000;
@@ -247,8 +271,12 @@ namespace GraphTests
         [Test]
         public void TraverseAMillionVerticesWithEdgesBetweenThem()
         {
+#if TRAVISENVIRONMENT
+            TimeSpan expectedTime = TimeSpan.FromSeconds(4);
+#else
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
-            int expectedMemory = 16000;
+#endif
+            int expectedMemory = 17000;
 
             int numberOfVertices = 1000000;
 

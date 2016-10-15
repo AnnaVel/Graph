@@ -7,4 +7,4 @@ install:
   
 script:
   - xbuild /p:Configuration="TravisEnvironment" GraphApplication.sln
-  - nunit-console ./GraphTests/bin/Release/GraphTests.dll
+  - nunit-console ./GraphTests/bin/TravisEnvironment/GraphTests.dll

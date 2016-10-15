@@ -38,7 +38,7 @@ namespace GraphTests
         [Test]
         public void AddAMillionVerticesWithEdgesBetweenThem()
         {
-            TimeSpan expectedTime = TimeSpan.FromSeconds(7);
+            TimeSpan expectedTime = TimeSpan.FromSeconds(8);
             int expectedMemory = 864000;
 
             this.AssertPerformanceAndMemory(() =>
@@ -246,6 +246,54 @@ namespace GraphTests
         }
 
         [Test]
+        public void RemoveAMillionEdgesBetweenTwoVertices()
+        {
+            TimeSpan expectedTime = TimeSpan.FromSeconds(0.001);
+            int expectedMemory = 10;
+
+            int numberOfEdges = 1000000;
+
+            Graph graph = new Graph();
+
+            Vertex firstVertex = graph.AddVertex(0);
+            Vertex secondVertex = graph.AddVertex(1);
+            for (int i = 1; i < numberOfEdges; i++)
+            {
+                graph.AddLine(firstVertex, secondVertex);
+            }
+
+            this.AssertPerformanceAndMemory(() =>
+            {
+                graph.RemoveAllEdges(firstVertex, secondVertex);
+            },
+            expectedTime, expectedMemory);
+        }
+
+        [Test]
+        public void GetSuccessorsOfVertexWithAMillionEdgesLeadingFromItToOthers()
+        {
+            TimeSpan expectedTime = TimeSpan.FromSeconds(0.001);
+            int expectedMemory = 20;
+
+            int numberOfVertices = 1000000;
+
+            Graph graph = new Graph();
+
+            Vertex mainVertex = graph.AddVertex(0);
+            for (int i = 1; i < numberOfVertices; i++)
+            {
+                Vertex currentVertex = graph.AddVertex(i);
+                graph.AddLine(mainVertex, currentVertex);
+            }
+
+            this.AssertPerformanceAndMemory(() =>
+            {
+                mainVertex.GetSuccessors();
+            },
+            expectedTime, expectedMemory);
+        }
+
+        [Test]
         public void TraverseAMillionVerticesWithEdgesBetweenThem()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
@@ -272,7 +320,7 @@ namespace GraphTests
                     currentVertex = currentVertex.GetSuccessors().FirstOrDefault();
                 }
             },
-                expectedTime, expectedMemory);
+            expectedTime, expectedMemory);
         }
 
         private void AssertPerformanceAndMemory(Action action, TimeSpan expectedDuration, long expectedMemoryInKbs)

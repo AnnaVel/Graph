@@ -6,5 +6,5 @@ install:
   - nuget restore GraphApplication.sln
   
 script:
-  - xbuild /p:Configuration="Release" GraphApplication.sln
-  - nunit-console ./GraphTests/bin/Release/GraphTests.dll
+  - xbuild /p:Configuration="TravisEnvironment" GraphApplication.sln
+  - nunit-console ./GraphTests/bin/TravisEnvironment/GraphTests.dll

@@ -8,21 +8,22 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		NoUnitTests|Any CPU = NoUnitTests|Any CPU
 		Release|Any CPU = Release|Any CPU
+		TravisEnvironment|Any CPU = TravisEnvironment|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D1083C1E-62C8-463B-9B01-5A02064CC3C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D1083C1E-62C8-463B-9B01-5A02064CC3C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D1083C1E-62C8-463B-9B01-5A02064CC3C0}.NoUnitTests|Any CPU.ActiveCfg = NoUnitTests|Any CPU
-		{D1083C1E-62C8-463B-9B01-5A02064CC3C0}.NoUnitTests|Any CPU.Build.0 = NoUnitTests|Any CPU
 		{D1083C1E-62C8-463B-9B01-5A02064CC3C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1083C1E-62C8-463B-9B01-5A02064CC3C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1083C1E-62C8-463B-9B01-5A02064CC3C0}.TravisEnvironment|Any CPU.ActiveCfg = TravisEnvironment|Any CPU
+		{D1083C1E-62C8-463B-9B01-5A02064CC3C0}.TravisEnvironment|Any CPU.Build.0 = TravisEnvironment|Any CPU
 		{21FFDC20-37CD-4906-B401-214C2AF0CD8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{21FFDC20-37CD-4906-B401-214C2AF0CD8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{21FFDC20-37CD-4906-B401-214C2AF0CD8E}.NoUnitTests|Any CPU.ActiveCfg = NoUnitTests|Any CPU
 		{21FFDC20-37CD-4906-B401-214C2AF0CD8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21FFDC20-37CD-4906-B401-214C2AF0CD8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21FFDC20-37CD-4906-B401-214C2AF0CD8E}.TravisEnvironment|Any CPU.ActiveCfg = TravisEnvironment|Any CPU
+		{21FFDC20-37CD-4906-B401-214C2AF0CD8E}.TravisEnvironment|Any CPU.Build.0 = TravisEnvironment|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

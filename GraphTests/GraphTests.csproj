@@ -43,6 +43,15 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TravisEnvironment|AnyCPU'">
+    <OutputPath>bin\TravisEnvironment\</OutputPath>
+    <DefineConstants>TRACE;TRAVISENVIRONMENT</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
@@ -77,6 +86,7 @@
     <Compile Include="HelperClasses\TestHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VertexEdgeRelationshipsTests.cs" />
+    <Compile Include="StressTests.cs" />
     <Compile Include="VertexFactoryTests.cs" />
     <Compile Include="GraphItemPropertiesTests.cs" />
     <Compile Include="GraphItemPropertyFactoryTests.cs" />

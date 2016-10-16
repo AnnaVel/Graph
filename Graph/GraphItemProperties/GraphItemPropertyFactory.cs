@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphCore.VertexProperties
+namespace GraphCore.GraphItemProperties
 {
-    public class VertexPropertyFactory
+    public class GraphItemPropertyFactory
     {
-        private readonly Dictionary<Predicate<object>, Func<string, object, IVertexProperty>> vertexPropertyConstructorFunctions;
+        private readonly Dictionary<Predicate<object>, Func<string, object, IGraphItemProperty>> vertexPropertyConstructorFunctions;
 
-        protected Dictionary<Predicate<object>, Func<string, object, IVertexProperty>> VertexPropertyConstructorFunctions
+        protected Dictionary<Predicate<object>, Func<string, object, IGraphItemProperty>> VertexPropertyConstructorFunctions
         {
             get
             {
@@ -18,14 +18,14 @@ namespace GraphCore.VertexProperties
             }
         }
 
-        public VertexPropertyFactory()
+        public GraphItemPropertyFactory()
         {
-            this.vertexPropertyConstructorFunctions = new Dictionary<Predicate<object>, Func<string, object, IVertexProperty>>();
+            this.vertexPropertyConstructorFunctions = new Dictionary<Predicate<object>, Func<string, object, IGraphItemProperty>>();
 
             this.RegisterConstructorFunctions();
         }
 
-        public IVertexProperty CreateVertexProperty(string name, object value)
+        public IGraphItemProperty CreateVertexProperty(string name, object value)
         {
             foreach (var pair in this.vertexPropertyConstructorFunctions)
             {
@@ -38,7 +38,7 @@ namespace GraphCore.VertexProperties
                 }
             }
 
-            return new ObjectVertexProperty(name, value);
+            return new ObjectGraphItemProperty(name, value);
         }
 
         protected virtual void RegisterConstructorFunctions()
@@ -50,7 +50,7 @@ namespace GraphCore.VertexProperties
                 },
                 (name, value) =>
                 {
-                    return new StringVertexProperty(name, (string)value);
+                    return new StringGraphItemProperty(name, (string)value);
                 });
 
             this.vertexPropertyConstructorFunctions.Add(
@@ -60,7 +60,7 @@ namespace GraphCore.VertexProperties
                 },
                 (name, value) =>
                 {
-                    return new BooleanVertexProperty(name, (bool)value);
+                    return new BooleanGraphItemProperty(name, (bool)value);
                 });
 
             this.vertexPropertyConstructorFunctions.Add(
@@ -70,7 +70,7 @@ namespace GraphCore.VertexProperties
                 },
                 (name, value) =>
                 {
-                    return new IntegerVertexProperty(name, (int)value);
+                    return new IntegerGraphItemProperty(name, (int)value);
                 });
 
             this.vertexPropertyConstructorFunctions.Add(
@@ -80,7 +80,7 @@ namespace GraphCore.VertexProperties
                 },
                 (name, value) =>
                 {
-                    return new DoubleVertexProperty(name, (double)value);
+                    return new DoubleGraphItemProperty(name, (double)value);
                 });
         }
     }

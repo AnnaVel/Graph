@@ -17,10 +17,11 @@ namespace GraphTests
         {
             string vertexValue = "x";
             Graph graph = new Graph();
-            Vertex xVertex = graph.AddVertex(vertexValue);
+            Vertex xVertex = graph.GraphStructure.AddVertex(vertexValue);
 
-            Assert.AreEqual(1, graph.Vertices.Count());
-            Assert.AreEqual(xVertex, graph.Vertices.First());
+            Assert.AreEqual(1, graph.GraphStructure.Vertices.Count());
+            Assert.AreEqual(xVertex, graph.GraphStructure.Vertices.First());
+            Assert.AreEqual(graph.GraphStructure, xVertex.Owner);
         }
 
         [Test]
@@ -28,10 +29,10 @@ namespace GraphTests
         {
             string vertexValue = "x";
             Graph graph = new Graph();
-            Vertex xVertex = graph.AddVertex(vertexValue);
+            Vertex xVertex = graph.GraphStructure.AddVertex(vertexValue);
 
             Assert.Throws<InvalidOperationException>(() =>
-                    graph.AddVertex(vertexValue)
+                    graph.GraphStructure.AddVertex(vertexValue)
                 );
         }
 
@@ -40,31 +41,56 @@ namespace GraphTests
         {
             string vertexValue = "x";
             Graph graph = new Graph();
-            Vertex xVertex = graph.AddVertex(vertexValue);
+            Vertex xVertex = graph.GraphStructure.AddVertex(vertexValue);
 
-            bool result = graph.RemoveVertex(xVertex);
+            bool result = graph.GraphStructure.RemoveVertex(xVertex);
 
             Assert.IsTrue(result);
-            Assert.AreEqual(0, graph.Vertices.Count());
-            Assert.DoesNotThrow(() => graph.AddVertex(vertexValue));
+            Assert.IsNull(xVertex.Owner);
+            Assert.AreEqual(0, graph.GraphStructure.Vertices.Count());
+            Assert.DoesNotThrow(() => graph.GraphStructure.AddVertex(vertexValue));
         }
 
         [Test]
-        public void RemoveVertexRelationshipTest()
+        public void RemoveVertexResultRelationshipTest()
         {
             string firstVertexValue = "x";
             string secondVertexValue = "y";
             Graph graph = new Graph();
-            Vertex xVertex = graph.AddVertex(firstVertexValue);
-            Vertex yVertex = graph.AddVertex(secondVertexValue);
-            graph.AddLine(xVertex, yVertex);
+            Vertex xVertex = graph.GraphStructure.AddVertex(firstVertexValue);
+            Vertex yVertex = graph.GraphStructure.AddVertex(secondVertexValue);
+            graph.GraphStructure.AddLine(xVertex, yVertex);
 
-            graph.RemoveVertex(yVertex);
+            graph.GraphStructure.RemoveVertex(yVertex);
 
             Assert.AreEqual(0, xVertex.GetSuccessors().Count());
+            Assert.AreEqual(0, graph.GraphStructure.Edges.Count());
+            Assert.AreEqual(0, graph.GraphStructure.GetVertexSuccessors(xVertex).Count());
+        }
+
+        [Test]
+        public void RemoveVertexInactiveApiTest()
+        {
+            string firstVertexValue = "x";
+            string secondVertexValue = "y";
+            Graph graph = new Graph();
+            Vertex xVertex = graph.GraphStructure.AddVertex(firstVertexValue);
+            Vertex yVertex = graph.GraphStructure.AddVertex(secondVertexValue);
+            graph.GraphStructure.AddLine(xVertex, yVertex);
+
+            graph.GraphStructure.RemoveVertex(yVertex);
+
             Assert.Throws<InvalidOperationException>(() => yVertex.GetSuccessors());
-            Assert.Throws<ArgumentException>(() => xVertex.GetArrowWeights(yVertex));
-            Assert.Throws<InvalidOperationException>(() => yVertex.GetArrowWeights(xVertex));
+            Assert.Throws<InvalidOperationException>(() => yVertex.GetPredecessors());
+            Assert.Throws<InvalidOperationException>(() => yVertex.GetEdgesFrom(xVertex));
+            Assert.Throws<InvalidOperationException>(() => yVertex.GetEdgesTo(xVertex));
+            Assert.Throws<InvalidOperationException>(() => yVertex.GetIncomingEdges());
+            Assert.Throws<InvalidOperationException>(() => yVertex.GetOutgoingEdges());
+            Assert.Throws<ArgumentException>(() => xVertex.GetEdgesTo(yVertex));
+            Assert.Throws<ArgumentException>(() => graph.GraphStructure.GetEdgesBetween(xVertex, yVertex));
+            Assert.Throws<ArgumentException>(() => graph.GraphStructure.GetEdgesLeadingFromTo(xVertex, yVertex));
+            Assert.Throws<ArgumentException>(() => graph.GraphStructure.GetVertexSuccessors(yVertex));
+            Assert.Throws<ArgumentException>(() => graph.GraphStructure.GetVertexPredecessors(yVertex));
         }
 
         [Test]
@@ -72,10 +98,10 @@ namespace GraphTests
         {
             string vertexValue = "x";
             Graph graph = new Graph();
-            Vertex xVertex = graph.AddVertex(vertexValue);
-            graph.RemoveVertex(xVertex);
+            Vertex xVertex = graph.GraphStructure.AddVertex(vertexValue);
+            graph.GraphStructure.RemoveVertex(xVertex);
 
-            bool result = graph.RemoveVertex(xVertex);
+            bool result = graph.GraphStructure.RemoveVertex(xVertex);
 
             Assert.IsFalse(result);
         }
@@ -85,15 +111,30 @@ namespace GraphTests
         {
             string vertexValue = "x";
             Graph graph = new Graph();
-            Vertex graphXVertex = graph.AddVertex(vertexValue);
+            Vertex graphXVertex = graph.GraphStructure.AddVertex(vertexValue);
             Graph otherGraph = new Graph();
-            Vertex otherGraphXVertex = otherGraph.AddVertex(vertexValue);
+            Vertex otherGraphXVertex = otherGraph.GraphStructure.AddVertex(vertexValue);
 
-            bool result = otherGraph.RemoveVertex(graphXVertex);
+            bool result = otherGraph.GraphStructure.RemoveVertex(graphXVertex);
 
             Assert.IsFalse(result);
-            Assert.AreEqual(1, otherGraph.Vertices.Count());
-            Assert.AreEqual(otherGraphXVertex, otherGraph.Vertices.First());
+            Assert.AreEqual(1, otherGraph.GraphStructure.Vertices.Count());
+            Assert.AreEqual(otherGraphXVertex, otherGraph.GraphStructure.Vertices.First());
+        }
+
+        [Test]
+        public void RemoveVertexWithCircularEdge()
+        {
+            string vertexValue = "x";
+            Graph graph = new Graph();
+            Vertex xVertex = graph.GraphStructure.AddVertex(vertexValue);
+            graph.GraphStructure.AddLine(xVertex, xVertex);
+
+            bool result = graph.GraphStructure.RemoveVertex(xVertex);
+
+            Assert.IsTrue(result);
+            Assert.AreEqual(0, graph.GraphStructure.Vertices.Count());
+            Assert.AreEqual(0, graph.GraphStructure.Edges.Count());
         }
     }
 }

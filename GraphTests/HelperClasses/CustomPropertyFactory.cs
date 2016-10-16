@@ -1,4 +1,4 @@
-﻿using GraphCore.VertexProperties;
+﻿using GraphCore.GraphItemProperties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GraphTests
 {
-    public class CustomVertexPropertyFactory : VertexPropertyFactory
+    public class CustomPropertyFactory : GraphItemPropertyFactory
     {
         protected override void RegisterConstructorFunctions()
         {
@@ -18,7 +18,7 @@ namespace GraphTests
                 },
                 (name, value) =>
                 {
-                    return new CustomVertexProperty();
+                    return new CustomProperty();
                 });
         }
     }

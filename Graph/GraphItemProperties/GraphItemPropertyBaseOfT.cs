@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphCore.VertexProperties
+namespace GraphCore.GraphItemProperties
 {
-    public abstract class VertexPropertyBase<T> : IVertexProperty
+    public abstract class VertexPropertyBase<T> : IGraphItemProperty
     {
         private string name;
         private T value;

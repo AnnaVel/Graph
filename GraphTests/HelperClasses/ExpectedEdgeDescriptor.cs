@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace GraphTests
 {
-    public class ExpectedVertexDescriptor
+    internal class ExpectedEdgeDescriptor
     {
+        public object FirstVertexValue { get; set; }
+        public object SecondVertexValue { get; set; }
+        public bool IsDirected { get; set; }
         public object Value { get; set; }
     }
 }

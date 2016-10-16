@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphCore.VertexProperties
+namespace GraphCore.GraphItemProperties
 {
-    public interface IVertexProperty
+    public interface IGraphItemProperty
     {
         string Name { get; }
         Type ValueType { get; }

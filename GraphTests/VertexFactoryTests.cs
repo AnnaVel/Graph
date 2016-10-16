@@ -17,9 +17,8 @@ namespace GraphTests
         {
             Graph graph = new Graph();
 
-            graph.AddVertex("test");
+            Vertex vertex = graph.GraphStructure.AddVertex("test");
 
-            Vertex vertex = graph.Vertices.First();
             Assert.IsInstanceOf(typeof(TextValueVertex), vertex);
         }
 
@@ -28,9 +27,8 @@ namespace GraphTests
         {
             Graph graph = new Graph();
 
-            graph.AddVertex(1d);
+            Vertex vertex = graph.GraphStructure.AddVertex(1d);
 
-            Vertex vertex = graph.Vertices.First();
             Assert.IsInstanceOf(typeof(DoubleValueVertex), vertex);
         }
 
@@ -39,9 +37,8 @@ namespace GraphTests
         {
             Graph graph = new Graph();
 
-            graph.AddVertex(graph);
+            Vertex vertex = graph.GraphStructure.AddVertex(graph);
 
-            Vertex vertex = graph.Vertices.First();
             Assert.IsInstanceOf(typeof(ObjectValueVertex), vertex);
         }
 
@@ -50,10 +47,9 @@ namespace GraphTests
         {
             Graph graph = new Graph();
 
-            graph.VertexFactory = new CustomVertexFactory();
-            graph.AddVertex("customVertex");
+            graph.GraphStructure.VertexFactory = new CustomVertexFactory();
+            Vertex vertex = graph.GraphStructure.AddVertex("customVertex");
 
-            Vertex vertex = graph.Vertices.First();
             Assert.IsInstanceOf(typeof(CustomValueVertex), vertex);
         }
 
@@ -62,8 +58,8 @@ namespace GraphTests
         {
             Graph graph = new Graph();
 
-            Assert.Throws<ArgumentNullException>(() => 
-                graph.AddVertex(null)
+            Assert.Throws<ArgumentNullException>(() =>
+                graph.GraphStructure.AddVertex(null)
             );
         }
 
@@ -73,7 +69,7 @@ namespace GraphTests
             Graph graph = new Graph();
 
             Assert.Throws<ArgumentException>(() =>
-                graph.AddVertex(string.Empty)
+                graph.GraphStructure.AddVertex(string.Empty)
             );
         }
     }

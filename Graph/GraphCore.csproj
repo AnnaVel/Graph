@@ -57,26 +57,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdjacencyItem.cs" />
+    <Compile Include="AdjacencyList.cs" />
+    <Compile Include="Edges\DoubleValueEdge.cs" />
+    <Compile Include="Edges\Edge.cs" />
+    <Compile Include="Edges\EdgeBaseOfT.cs" />
+    <Compile Include="Edges\EdgeFactory.cs" />
+    <Compile Include="Edges\ObjectValueEdge.cs" />
+    <Compile Include="Edges\UnweightedEdge.cs" />
     <Compile Include="Graph.cs" />
+    <Compile Include="GraphItemProperties\EdgePropertyList.cs" />
+    <Compile Include="GraphItemProperties\VertexPropertyList.cs" />
+    <Compile Include="GraphStructureItem.cs" />
     <Compile Include="Utilities\Guard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VertexProperties\BooleanVertexProperty.cs" />
-    <Compile Include="VertexProperties\DoubleVertexProperty.cs" />
-    <Compile Include="VertexProperties\IntegerVertexProperty.cs" />
-    <Compile Include="VertexProperties\IVertexProperty.cs" />
-    <Compile Include="VertexProperties\ObjectVertexProperty.cs" />
-    <Compile Include="VertexProperties\StringVertexProperty.cs" />
-    <Compile Include="VertexProperties\VertexPropertyBaseOfT.cs" />
-    <Compile Include="VertexProperties\VertexPropertyFactory.cs" />
-    <Compile Include="VertexProperties\VertexPropertyList.cs" />
-    <Compile Include="Vertices\AdjacencyList.cs" />
+    <Compile Include="GraphItemProperties\BooleanGraphItemProperty.cs" />
+    <Compile Include="GraphItemProperties\DoubleGraphItemProperty.cs" />
+    <Compile Include="GraphItemProperties\IntegerGraphItemProperty.cs" />
+    <Compile Include="GraphItemProperties\IGraphItemProperty.cs" />
+    <Compile Include="GraphItemProperties\ObjectGraphItemProperty.cs" />
+    <Compile Include="GraphItemProperties\StringGraphItemProperty.cs" />
+    <Compile Include="GraphItemProperties\GraphItemPropertyBaseOfT.cs" />
+    <Compile Include="GraphItemProperties\GraphItemPropertyFactory.cs" />
+    <Compile Include="GraphItemProperties\GraphItemPropertyList.cs" />
     <Compile Include="Vertices\DoubleValueVertex.cs" />
     <Compile Include="Vertices\ObjectValueVertex.cs" />
     <Compile Include="Vertices\TextValueVertex.cs" />
     <Compile Include="Vertices\Vertex.cs" />
     <Compile Include="Vertices\VertexBaseOfT.cs" />
     <Compile Include="Vertices\VertexFactory.cs" />
-    <Compile Include="Vertices\VertexStructure.cs" />
+    <Compile Include="GraphStructure.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

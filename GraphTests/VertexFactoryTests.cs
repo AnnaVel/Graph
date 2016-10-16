@@ -17,9 +17,8 @@ namespace GraphTests
         {
             Graph graph = new Graph();
 
-            graph.GraphStructure.AddVertex("test");
+            Vertex vertex = graph.GraphStructure.AddVertex("test");
 
-            Vertex vertex = graph.GraphStructure.Vertices.First();
             Assert.IsInstanceOf(typeof(TextValueVertex), vertex);
         }
 
@@ -28,9 +27,8 @@ namespace GraphTests
         {
             Graph graph = new Graph();
 
-            graph.GraphStructure.AddVertex(1d);
+            Vertex vertex = graph.GraphStructure.AddVertex(1d);
 
-            Vertex vertex = graph.GraphStructure.Vertices.First();
             Assert.IsInstanceOf(typeof(DoubleValueVertex), vertex);
         }
 
@@ -39,9 +37,8 @@ namespace GraphTests
         {
             Graph graph = new Graph();
 
-            graph.GraphStructure.AddVertex(graph);
+            Vertex vertex = graph.GraphStructure.AddVertex(graph);
 
-            Vertex vertex = graph.GraphStructure.Vertices.First();
             Assert.IsInstanceOf(typeof(ObjectValueVertex), vertex);
         }
 
@@ -51,9 +48,8 @@ namespace GraphTests
             Graph graph = new Graph();
 
             graph.GraphStructure.VertexFactory = new CustomVertexFactory();
-            graph.GraphStructure.AddVertex("customVertex");
+            Vertex vertex = graph.GraphStructure.AddVertex("customVertex");
 
-            Vertex vertex = graph.GraphStructure.Vertices.First();
             Assert.IsInstanceOf(typeof(CustomValueVertex), vertex);
         }
 

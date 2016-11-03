@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GraphCore.Events;
 
 namespace GraphCore
 {
@@ -107,6 +108,8 @@ namespace GraphCore
 
             this.RegisterVertex(newVertex);
 
+            this.OnGraphStructureChanged(ChangeAction.Add, newVertex);
+
             return newVertex;
         }
 
@@ -124,20 +127,31 @@ namespace GraphCore
 
             this.adjacencyList.RemoveVertex(vertex);
 
+            this.OnGraphStructureChanged(ChangeAction.Remove, vertex);
+
             return true;
         }
 
         private void UnregisterEdgesRelatedToVertex(Vertex vertex)
         {
+            HashSet<Edge> relatedEdges = new HashSet<Edge>();
+
             foreach (Edge edge in vertex.GetIncomingEdges())
             {
-                this.UnregisterEdge(edge);
+                relatedEdges.Add(edge);
             }
 
             foreach (Edge edge in vertex.GetOutgoingEdges())
             {
+                relatedEdges.Add(edge);
+            }
+
+            foreach (Edge edge in relatedEdges)
+            {
                 this.UnregisterEdge(edge);
             }
+
+            this.OnGraphStructureChanged(ChangeAction.Remove, relatedEdges);
         }
 
         public Edge AddArrow(Vertex firstVertex, Vertex secondVertex)
@@ -147,15 +161,7 @@ namespace GraphCore
 
         public Edge AddArrow(Vertex firstVertex, Vertex secondVertex, object arrowValue)
         {
-            this.CheckVertexValidity(firstVertex);
-            this.CheckVertexValidity(secondVertex);
-
-            Edge edge = this.EdgeFactory.CreateEdge(firstVertex, secondVertex, true, arrowValue);
-            this.adjacencyList.AddEdge(edge);
-
-            this.RegisterEdge(edge);
-
-            return edge;
+            return this.AddEdge(firstVertex, secondVertex, true, arrowValue);
         }
 
         public Edge AddLine(Vertex firstVertex, Vertex secondVertex)
@@ -165,13 +171,20 @@ namespace GraphCore
 
         public Edge AddLine(Vertex firstVertex, Vertex secondVertex, object lineValue)
         {
+            return this.AddEdge(firstVertex, secondVertex, false, lineValue);
+        }
+
+        private Edge AddEdge(Vertex firstVertex, Vertex secondVertex, bool isDirected, object edgeValue)
+        {
             this.CheckVertexValidity(firstVertex);
             this.CheckVertexValidity(secondVertex);
 
-            Edge edge = this.EdgeFactory.CreateEdge(firstVertex, secondVertex, false, lineValue);
+            Edge edge = this.EdgeFactory.CreateEdge(firstVertex, secondVertex, isDirected, edgeValue);
             this.adjacencyList.AddEdge(edge);
 
             this.RegisterEdge(edge);
+
+            this.OnGraphStructureChanged(ChangeAction.Add, edge);
 
             return edge;
         }
@@ -185,8 +198,15 @@ namespace GraphCore
                 return false;
             }
 
-            this.UnregisterEdge(edge);
-            return this.adjacencyList.RemoveEdge(edge);
+            bool result = this.adjacencyList.RemoveEdge(edge);
+
+            if (result)
+            {
+                this.UnregisterEdge(edge);
+                this.OnGraphStructureChanged(ChangeAction.Remove, edge);
+            }
+
+            return result;
         }
 
         public bool RemoveEdgesBetween(Vertex firstVertex, Vertex secondVertex)
@@ -196,12 +216,19 @@ namespace GraphCore
 
             IEnumerable<Edge> edgesBetween = this.GetEdgesBetween(firstVertex, secondVertex);
 
-            foreach (Edge edge in edgesBetween)
+            bool result = this.adjacencyList.RemoveAllEdgesBetween(firstVertex, secondVertex);
+
+            if (result)
             {
-                this.UnregisterEdge(edge);
+                foreach (Edge edge in edgesBetween)
+                {
+                    this.UnregisterEdge(edge);
+                }
+
+                this.OnGraphStructureChanged(ChangeAction.Remove, edgesBetween);
             }
 
-            return this.adjacencyList.RemoveAllEdgesBetween(firstVertex, secondVertex);
+            return result;
         }
 
         public IEnumerable<Vertex> GetVertexSuccessors(Vertex vertex)
@@ -344,6 +371,23 @@ namespace GraphCore
         private bool VertexBelongsToThisStructure(Vertex vertex)
         {
             return vertex.Owner == this;
+        }
+
+        public delegate void GraphStructureChangedEventHandler(GraphStructureChangedEventArgs args);
+
+        public event GraphStructureChangedEventHandler GraphStructureChanged;
+
+        private void OnGraphStructureChanged(ChangeAction changeAction, params GraphStructureItem[] itemsChanged)
+        {
+            this.OnGraphStructureChanged(changeAction, itemsChanged as IEnumerable<GraphStructureItem>);
+        }
+
+        private void OnGraphStructureChanged(ChangeAction changeAction, IEnumerable<GraphStructureItem> itemsChanged)
+        {
+            if (this.GraphStructureChanged != null)
+            {
+                this.GraphStructureChanged(new GraphStructureChangedEventArgs(changeAction, itemsChanged));
+            }
         }
     }
 }

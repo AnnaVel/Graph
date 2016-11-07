@@ -82,6 +82,7 @@
     <Compile Include="GraphItemProperties\GraphItemPropertyBaseOfT.cs" />
     <Compile Include="GraphItemProperties\GraphItemPropertyFactory.cs" />
     <Compile Include="GraphItemProperties\GraphItemPropertyList.cs" />
+    <Compile Include="Utilities\HashHelper.cs" />
     <Compile Include="Vertices\DoubleValueVertex.cs" />
     <Compile Include="Vertices\ObjectValueVertex.cs" />
     <Compile Include="Vertices\TextValueVertex.cs" />

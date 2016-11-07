@@ -1,5 +1,6 @@
 ﻿using GraphCore;
 using GraphCore.Edges;
+using GraphCore.Events;
 using GraphCore.Vertices;
 using NUnit.Framework;
 using System;
@@ -19,11 +20,14 @@ namespace GraphTests
             Graph graph = new Graph();
             Vertex x = graph.GraphStructure.AddVertex("x");
             Vertex y = graph.GraphStructure.AddVertex("y");
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
 
             Edge edge = graph.GraphStructure.AddArrow(x, y);
+            eventAsserter.AddExpectedChange(ChangeAction.Add, edge);
 
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, null, typeof(UnweightedEdge), edge);
             this.AssertRelationship(graph, x, y, new List<Edge>() { edge }, new List<Edge>());
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -32,12 +36,15 @@ namespace GraphTests
             Graph graph = new Graph();
             Vertex x = graph.GraphStructure.AddVertex("x");
             Vertex y = graph.GraphStructure.AddVertex("y");
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
 
             double weight = 0.5;
             Edge edge = graph.GraphStructure.AddArrow(x, y, weight);
+            eventAsserter.AddExpectedChange(ChangeAction.Add, edge);
 
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, weight, typeof(DoubleValueEdge), edge);
             this.AssertRelationship(graph, x, y, new List<Edge>() { edge }, new List<Edge>());
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -46,6 +53,7 @@ namespace GraphTests
             Graph graph = new Graph();
             Vertex x = graph.GraphStructure.AddVertex("x");
             Vertex y = graph.GraphStructure.AddVertex("y");
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
 
             double weight = 0.5;
             Edge firstArrow = graph.GraphStructure.AddArrow(x, y, weight);
@@ -53,11 +61,17 @@ namespace GraphTests
             Edge thirdArrow = graph.GraphStructure.AddArrow(x, y, weight);
             Edge fourthArrow = graph.GraphStructure.AddArrow(x, y);
 
+            eventAsserter.AddExpectedChange(ChangeAction.Add, firstArrow);
+            eventAsserter.AddExpectedChange(ChangeAction.Add, secondArrow);
+            eventAsserter.AddExpectedChange(ChangeAction.Add, thirdArrow);
+            eventAsserter.AddExpectedChange(ChangeAction.Add, fourthArrow);
+
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, weight, typeof(DoubleValueEdge), firstArrow);
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, null, typeof(UnweightedEdge), secondArrow);
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, weight, typeof(DoubleValueEdge), thirdArrow);
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, null, typeof(UnweightedEdge), fourthArrow);
             this.AssertRelationship(graph, x, y, new List<Edge>() { firstArrow, secondArrow, thirdArrow, fourthArrow }, new List<Edge>());
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -67,8 +81,10 @@ namespace GraphTests
             Vertex x = graph.GraphStructure.AddVertex("x");
             Vertex y = graph.GraphStructure.AddVertex("y");
             graph.GraphStructure.RemoveVertex(x);
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
 
             Assert.Throws<ArgumentException>(() => graph.GraphStructure.AddArrow(x, y));
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -76,11 +92,14 @@ namespace GraphTests
         {
             Graph graph = new Graph();
             Vertex x = graph.GraphStructure.AddVertex("x");
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
 
             Edge arrow = graph.GraphStructure.AddArrow(x, x);
+            eventAsserter.AddExpectedChange(ChangeAction.Add, arrow);
 
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, x, true, null, typeof(UnweightedEdge), arrow);
             this.AssertRelationship(graph, x, x, new List<Edge>() { arrow }, new List<Edge>() { arrow });
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -89,11 +108,14 @@ namespace GraphTests
             Graph graph = new Graph();
             Vertex x = graph.GraphStructure.AddVertex("x");
             Vertex y = graph.GraphStructure.AddVertex("y");
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
 
             Edge lineEdge = graph.GraphStructure.AddLine(x, y);
+            eventAsserter.AddExpectedChange(ChangeAction.Add, lineEdge);
 
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, false, null, typeof(UnweightedEdge), lineEdge);
             this.AssertRelationship(graph, x, y, new List<Edge>() { lineEdge }, new List<Edge>() { lineEdge });
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -102,12 +124,15 @@ namespace GraphTests
             Graph graph = new Graph();
             Vertex x = graph.GraphStructure.AddVertex("x");
             Vertex y = graph.GraphStructure.AddVertex("y");
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
 
             double weight = 0.5;
             Edge lineEdge = graph.GraphStructure.AddLine(x, y, weight);
+            eventAsserter.AddExpectedChange(ChangeAction.Add, lineEdge);
 
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, false, weight, typeof(DoubleValueEdge), lineEdge);
             this.AssertRelationship(graph, x, y, new List<Edge>() { lineEdge }, new List<Edge>() { lineEdge });
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -118,10 +143,14 @@ namespace GraphTests
             Vertex y = graph.GraphStructure.AddVertex("y");
             Vertex z = graph.GraphStructure.AddVertex("z");
             Vertex u = graph.GraphStructure.AddVertex("u");
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
 
             Edge xY = graph.GraphStructure.AddLine(x, y);
             Edge xZ = graph.GraphStructure.AddLine(x, z);
             Edge xU = graph.GraphStructure.AddLine(x, u);
+            eventAsserter.AddExpectedChange(ChangeAction.Add, xY);
+            eventAsserter.AddExpectedChange(ChangeAction.Add, xZ);
+            eventAsserter.AddExpectedChange(ChangeAction.Add, xU);
 
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, false, null, typeof(UnweightedEdge), xY);
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, z, false, null, typeof(UnweightedEdge), xZ);
@@ -130,6 +159,8 @@ namespace GraphTests
             this.AssertRelationship(graph, x, y, new List<Edge>() { xY }, new List<Edge>() { xY });
             this.AssertRelationship(graph, x, z, new List<Edge>() { xZ }, new List<Edge>() { xZ });
             this.AssertRelationship(graph, x, u, new List<Edge>() { xU }, new List<Edge>() { xU });
+
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -140,8 +171,10 @@ namespace GraphTests
             Vertex y = graph.GraphStructure.AddVertex("y");
             graph.GraphStructure.RemoveVertex(x);
             graph.GraphStructure.RemoveVertex(y);
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
 
             Assert.Throws<ArgumentException>(() => graph.GraphStructure.AddArrow(x, y));
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -149,11 +182,14 @@ namespace GraphTests
         {
             Graph graph = new Graph();
             Vertex x = graph.GraphStructure.AddVertex("x");
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
 
             Edge line = graph.GraphStructure.AddLine(x, x);
+            eventAsserter.AddExpectedChange(ChangeAction.Add, line);
 
             this.AssertEdgeCreatedAndAddedCorrectly(graph, x, x, false, null, typeof(UnweightedEdge), line);
             this.AssertRelationship(graph, x, x, new List<Edge>() { line }, new List<Edge>() { line });
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -163,6 +199,8 @@ namespace GraphTests
             Vertex x = graph.GraphStructure.AddVertex("x");
             Vertex y = graph.GraphStructure.AddVertex("y");
             Edge arrow = graph.GraphStructure.AddArrow(x, y);
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
+            eventAsserter.AddExpectedChange(ChangeAction.Remove, arrow);
 
             bool result = graph.GraphStructure.RemoveEdgesBetween(x, y);
 
@@ -170,6 +208,7 @@ namespace GraphTests
             this.AssertEdgesHaveBeenUnregistered(arrow);
             this.AssertOnlyRelationshipsHaveBeenRemoved(graph, x, y);
             this.AssertRelationship(graph, x, y, new List<Edge>(), new List<Edge>());
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -179,6 +218,8 @@ namespace GraphTests
             Vertex x = graph.GraphStructure.AddVertex("x");
             Vertex y = graph.GraphStructure.AddVertex("y");
             Edge line = graph.GraphStructure.AddLine(x, y);
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
+            eventAsserter.AddExpectedChange(ChangeAction.Remove, line);
 
             bool result = graph.GraphStructure.RemoveEdgesBetween(x, y);
 
@@ -186,6 +227,7 @@ namespace GraphTests
             this.AssertEdgesHaveBeenUnregistered(line);
             this.AssertOnlyRelationshipsHaveBeenRemoved(graph, x, y);
             this.AssertRelationship(graph, x, y, new List<Edge>(), new List<Edge>());
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -194,10 +236,12 @@ namespace GraphTests
             Graph graph = new Graph();
             Vertex x = graph.GraphStructure.AddVertex("x");
             Vertex y = graph.GraphStructure.AddVertex("y");
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
 
             bool result = graph.GraphStructure.RemoveEdgesBetween(x, y);
 
             Assert.IsFalse(result);
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -210,6 +254,11 @@ namespace GraphTests
             Edge secondArrow = graph.GraphStructure.AddArrow(x, y);
             Edge thirdArrow = graph.GraphStructure.AddArrow(x, y);
             Edge fourthArrow = graph.GraphStructure.AddArrow(x, y);
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
+            eventAsserter.AddExpectedChange(ChangeAction.Remove, firstArrow);
+            eventAsserter.AddExpectedChange(ChangeAction.Remove, secondArrow);
+            eventAsserter.AddExpectedChange(ChangeAction.Remove, thirdArrow);
+            eventAsserter.AddExpectedChange(ChangeAction.Remove, fourthArrow);
 
             bool result = graph.GraphStructure.RemoveEdgesBetween(x, y);
 
@@ -217,6 +266,7 @@ namespace GraphTests
             this.AssertEdgesHaveBeenUnregistered(firstArrow, secondArrow, thirdArrow, fourthArrow);
             this.AssertOnlyRelationshipsHaveBeenRemoved(graph, x, y);
             this.AssertRelationship(graph, x, y, new List<Edge>(), new List<Edge>());
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -225,11 +275,13 @@ namespace GraphTests
             Graph graph = new Graph();
             Vertex x = graph.GraphStructure.AddVertex("x");
             Vertex y = graph.GraphStructure.AddVertex("y");
-            graph.GraphStructure.AddArrow(x, y);
+            Edge arrow = graph.GraphStructure.AddArrow(x, y);
             graph.GraphStructure.RemoveVertex(x);
             graph.GraphStructure.RemoveVertex(y);
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
 
             Assert.Throws<ArgumentException>(() => graph.GraphStructure.RemoveEdgesBetween(x, y));
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -239,12 +291,16 @@ namespace GraphTests
             Vertex x = graph.GraphStructure.AddVertex("x");
             Edge arrow = graph.GraphStructure.AddArrow(x, x);
             Edge line = graph.GraphStructure.AddLine(x, x);
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
+            eventAsserter.AddExpectedChange(ChangeAction.Remove, arrow);
+            eventAsserter.AddExpectedChange(ChangeAction.Remove, line);
 
             bool result = graph.GraphStructure.RemoveEdgesBetween(x, x);
 
             Assert.IsTrue(result);
             this.AssertEdgesHaveBeenUnregistered(line, arrow);
             this.AssertRelationship(graph, x, x, new List<Edge>(), new List<Edge>());
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -254,6 +310,8 @@ namespace GraphTests
             Vertex x = graph.GraphStructure.AddVertex("x");
             Vertex y = graph.GraphStructure.AddVertex("y");
             Edge arrow = graph.GraphStructure.AddArrow(x, y);
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
+            eventAsserter.AddExpectedChange(ChangeAction.Remove, arrow);
 
             bool result = graph.GraphStructure.RemoveEdge(arrow);
 
@@ -261,6 +319,7 @@ namespace GraphTests
             this.AssertEdgesHaveBeenUnregistered(arrow);
             this.AssertOnlyRelationshipsHaveBeenRemoved(graph, x, y);
             this.AssertRelationship(graph, x, y, new List<Edge>(), new List<Edge>());
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -270,6 +329,8 @@ namespace GraphTests
             Vertex x = graph.GraphStructure.AddVertex("x");
             Vertex y = graph.GraphStructure.AddVertex("y");
             Edge line = graph.GraphStructure.AddLine(x, y);
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
+            eventAsserter.AddExpectedChange(ChangeAction.Remove, line);
 
             bool result = graph.GraphStructure.RemoveEdge(line);
 
@@ -277,6 +338,7 @@ namespace GraphTests
             this.AssertEdgesHaveBeenUnregistered(line);
             this.AssertOnlyRelationshipsHaveBeenRemoved(graph, x, y);
             this.AssertRelationship(graph, x, y, new List<Edge>(), new List<Edge>());
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -288,12 +350,15 @@ namespace GraphTests
             Edge arrow = graph.GraphStructure.AddArrow(x, y, 0.5);
             Edge line = graph.GraphStructure.AddLine(x, y);
             Edge weightedLine = graph.GraphStructure.AddLine(x, y, 0.5);
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
+            eventAsserter.AddExpectedChange(ChangeAction.Remove, weightedLine);
 
             bool result = graph.GraphStructure.RemoveEdge(weightedLine);
 
             Assert.IsTrue(result);
             this.AssertEdgesHaveBeenUnregistered(weightedLine);
             this.AssertRelationship(graph, x, y, new List<Edge>() { arrow, line }, new List<Edge>() { line });
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -305,12 +370,15 @@ namespace GraphTests
             Edge arrow = graph.GraphStructure.AddArrow(x, y, 0.5);
             Edge line = graph.GraphStructure.AddLine(x, y);
             Edge weightedLine = graph.GraphStructure.AddLine(x, y, 0.5);
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
+            eventAsserter.AddExpectedChange(ChangeAction.Remove, arrow);
 
             bool result = graph.GraphStructure.RemoveEdge(arrow);
 
             Assert.IsTrue(result);
             this.AssertEdgesHaveBeenUnregistered(arrow);
             this.AssertRelationship(graph, x, y, new List<Edge>() { line, weightedLine }, new List<Edge>() { line, weightedLine });
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -321,11 +389,13 @@ namespace GraphTests
             Vertex y = graph.GraphStructure.AddVertex("y");
             Edge line = graph.GraphStructure.AddLine(x, y);
             graph.GraphStructure.RemoveEdge(line);
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
 
             bool result = graph.GraphStructure.RemoveEdge(line);
 
             Assert.IsFalse(result);
             this.AssertRelationship(graph, x, y, new List<Edge>(), new List<Edge>());
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -337,10 +407,12 @@ namespace GraphTests
             Edge line = graph.GraphStructure.AddLine(x, y);
             graph.GraphStructure.RemoveVertex(x);
             graph.GraphStructure.RemoveVertex(y);
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
 
             bool result = graph.GraphStructure.RemoveEdge(line);
 
             Assert.IsFalse(result);
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -349,12 +421,15 @@ namespace GraphTests
             Graph graph = new Graph();
             Vertex x = graph.GraphStructure.AddVertex("x");
             Edge arrow = graph.GraphStructure.AddArrow(x, x);
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
+            eventAsserter.AddExpectedChange(ChangeAction.Remove, arrow);
 
             bool result = graph.GraphStructure.RemoveEdge(arrow);
 
             Assert.IsTrue(result);
             this.AssertEdgesHaveBeenUnregistered(arrow);
             this.AssertRelationship(graph, x, x, new List<Edge>(), new List<Edge>());
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -363,12 +438,15 @@ namespace GraphTests
             Graph graph = new Graph();
             Vertex x = graph.GraphStructure.AddVertex("x");
             Edge line = graph.GraphStructure.AddLine(x, x);
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
+            eventAsserter.AddExpectedChange(ChangeAction.Remove, line);
 
             bool result = graph.GraphStructure.RemoveEdge(line);
 
             Assert.IsTrue(result);
             this.AssertEdgesHaveBeenUnregistered(line);
             this.AssertRelationship(graph, x, x, new List<Edge>(), new List<Edge>());
+            eventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -379,11 +457,15 @@ namespace GraphTests
             Vertex y = graph.GraphStructure.AddVertex("y");
             Edge line = graph.GraphStructure.AddLine(x, y);
             Graph otherGraph = new Graph();
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
+            GraphStructureChangedEventAsserter otherEventAsserter = new GraphStructureChangedEventAsserter(otherGraph);
 
             bool result = otherGraph.GraphStructure.RemoveEdge(line);
 
             Assert.IsFalse(result);
             Assert.AreEqual(graph.GraphStructure, line.Owner);
+            eventAsserter.AssertFiredChanges();
+            otherEventAsserter.AssertFiredChanges();
         }
 
         [Test]
@@ -392,6 +474,7 @@ namespace GraphTests
             Graph graph = new Graph();
             Vertex x = graph.GraphStructure.AddVertex("x");
             Vertex y = graph.GraphStructure.AddVertex("y");
+            GraphStructureChangedEventAsserter eventAsserter = new GraphStructureChangedEventAsserter(graph);
 
             int iterations = 5;
             bool result = false;
@@ -402,10 +485,13 @@ namespace GraphTests
                 result |= graph.GraphStructure.RemoveEdgesBetween(x, y);
                 Assert.IsTrue(result);
                 this.AssertEdgesHaveBeenUnregistered(arrow);
+                eventAsserter.AddExpectedChange(ChangeAction.Add, arrow);
+                eventAsserter.AddExpectedChange(ChangeAction.Remove, arrow);
             }
 
             this.AssertOnlyRelationshipsHaveBeenRemoved(graph, x, y);
             this.AssertRelationship(graph, x, y, new List<Edge>(), new List<Edge>());
+            eventAsserter.AssertFiredChanges();
         }
 
         private void AssertRelationship(Graph graph, Vertex firstVertex, Vertex secondVertex, 

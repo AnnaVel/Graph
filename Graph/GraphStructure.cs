@@ -151,7 +151,10 @@ namespace GraphCore
                 this.UnregisterEdge(edge);
             }
 
-            this.OnGraphStructureChanged(ChangeAction.Remove, relatedEdges);
+            if (relatedEdges.Count > 0)
+            {
+                this.OnGraphStructureChanged(ChangeAction.Remove, relatedEdges);
+            }
         }
 
         public Edge AddArrow(Vertex firstVertex, Vertex secondVertex)

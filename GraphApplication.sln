@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphCore", "Graph\GraphCor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphTests", "GraphTests\GraphTests.csproj", "{21FFDC20-37CD-4906-B401-214C2AF0CD8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphViewModel", "GraphViewModel\GraphViewModel.csproj", "{A43095E7-F259-4B54-A0EF-535B0C9F52D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,12 @@ Global
 		{21FFDC20-37CD-4906-B401-214C2AF0CD8E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{21FFDC20-37CD-4906-B401-214C2AF0CD8E}.TravisEnvironment|Any CPU.ActiveCfg = TravisEnvironment|Any CPU
 		{21FFDC20-37CD-4906-B401-214C2AF0CD8E}.TravisEnvironment|Any CPU.Build.0 = TravisEnvironment|Any CPU
+		{A43095E7-F259-4B54-A0EF-535B0C9F52D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A43095E7-F259-4B54-A0EF-535B0C9F52D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A43095E7-F259-4B54-A0EF-535B0C9F52D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A43095E7-F259-4B54-A0EF-535B0C9F52D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A43095E7-F259-4B54-A0EF-535B0C9F52D5}.TravisEnvironment|Any CPU.ActiveCfg = Release|Any CPU
+		{A43095E7-F259-4B54-A0EF-535B0C9F52D5}.TravisEnvironment|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

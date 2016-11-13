@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphCore", "Graph\GraphCore.csproj", "{D1083C1E-62C8-463B-9B01-5A02064CC3C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphTests", "GraphTests\GraphTests.csproj", "{21FFDC20-37CD-4906-B401-214C2AF0CD8E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphViewModel", "GraphViewModel\GraphViewModel.csproj", "{A43095E7-F259-4B54-A0EF-535B0C9F52D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphView", "GraphView\GraphView.csproj", "{1A999D7D-D3F3-48D9-84C8-F6BE12CA8F92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfGraphTestApp", "WpfGraphTestApp\WpfGraphTestApp.csproj", "{DB2CEDBC-9777-41AB-9508-BF6BDEC3B219}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +38,18 @@ Global
 		{A43095E7-F259-4B54-A0EF-535B0C9F52D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A43095E7-F259-4B54-A0EF-535B0C9F52D5}.TravisEnvironment|Any CPU.ActiveCfg = Release|Any CPU
 		{A43095E7-F259-4B54-A0EF-535B0C9F52D5}.TravisEnvironment|Any CPU.Build.0 = Release|Any CPU
+		{1A999D7D-D3F3-48D9-84C8-F6BE12CA8F92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A999D7D-D3F3-48D9-84C8-F6BE12CA8F92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A999D7D-D3F3-48D9-84C8-F6BE12CA8F92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A999D7D-D3F3-48D9-84C8-F6BE12CA8F92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A999D7D-D3F3-48D9-84C8-F6BE12CA8F92}.TravisEnvironment|Any CPU.ActiveCfg = Release|Any CPU
+		{1A999D7D-D3F3-48D9-84C8-F6BE12CA8F92}.TravisEnvironment|Any CPU.Build.0 = Release|Any CPU
+		{DB2CEDBC-9777-41AB-9508-BF6BDEC3B219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB2CEDBC-9777-41AB-9508-BF6BDEC3B219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB2CEDBC-9777-41AB-9508-BF6BDEC3B219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB2CEDBC-9777-41AB-9508-BF6BDEC3B219}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB2CEDBC-9777-41AB-9508-BF6BDEC3B219}.TravisEnvironment|Any CPU.ActiveCfg = Release|Any CPU
+		{DB2CEDBC-9777-41AB-9508-BF6BDEC3B219}.TravisEnvironment|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

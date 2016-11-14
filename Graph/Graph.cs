@@ -11,7 +11,7 @@ namespace GraphCore
 {
     public class Graph
     {
-        private GraphStructure graphStructure;
+        private readonly GraphStructure graphStructure;
 
         public GraphStructure GraphStructure
         {

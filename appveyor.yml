@@ -2,3 +2,6 @@ environment:
   matrix:
   - solution_name: SilverlightGraph.sln
   - solution_name: WpfGraph.sln
+  
+build_script:
+  - msbuild %solution_name%

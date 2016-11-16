@@ -18,21 +18,21 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>bin\Debug\Wpf\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;WPF</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release\Wpf\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TravisEnvironment|AnyCPU'">
-    <OutputPath>bin\TravisEnvironment\</OutputPath>
+    <OutputPath>bin\TravisEnvironment\Wpf\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -94,13 +94,13 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GraphViewModel\GraphViewModel.csproj">
-      <Project>{a43095e7-f259-4b54-a0ef-535b0c9f52d5}</Project>
-      <Name>GraphViewModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Graph\GraphCore.csproj">
+    <ProjectReference Include="..\GraphCore\GraphCoreWpf.csproj">
       <Project>{d1083c1e-62c8-463b-9b01-5a02064cc3c0}</Project>
-      <Name>GraphCore</Name>
+      <Name>GraphCoreWpf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GraphViewModel\GraphViewModelWpf.csproj">
+      <Project>{a43095e7-f259-4b54-a0ef-535b0c9f52d5}</Project>
+      <Name>GraphViewModelWpf</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

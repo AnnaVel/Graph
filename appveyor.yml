@@ -1,0 +1,3 @@
+build_script:
+  - msbuild WpfGraph.sln /p:Configuration=Release
+  - msbuild SilverlightGraph.sln /p:Configuration=AppveyorEnvironment

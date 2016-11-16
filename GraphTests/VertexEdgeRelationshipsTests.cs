@@ -1,6 +1,7 @@
 ﻿using GraphCore;
 using GraphCore.Edges;
 using GraphCore.Vertices;
+using GraphTestsSL.HelperClasses;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -81,7 +82,7 @@ namespace GraphTests
             Vertex firstVertex = mainVertex.GetSuccessors().First();
             sw.Stop();
 
-            Assert.IsTrue(sw.Elapsed < expectedSpeed);
+            Assert.IsTrue(sw.GetElapsedTimeSpan() < expectedSpeed);
         }
 
         [Test]

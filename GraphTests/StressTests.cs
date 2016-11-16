@@ -3,6 +3,7 @@
 using GraphCore;
 using GraphCore.Edges;
 using GraphCore.Vertices;
+using GraphTestsSL.HelperClasses;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace GraphTests
     //[TestFixture]
     class StressTests
     {
-       // [Test]
+        // [Test]
         public void AddAMillionVertices()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(1.5);
@@ -37,7 +38,7 @@ namespace GraphTests
                 expectedTime, expectedMemory);
         }
 
-       // [Test]
+        // [Test]
         public void AddAMillionVerticesWithEdgesBetweenThem()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(8);
@@ -60,7 +61,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-       // [Test]
+        // [Test]
         public void AddVertexWithAMillionEdgesLeadingFromItToOthers()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(8);
@@ -82,7 +83,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-      //  [Test]
+        //  [Test]
         public void AddTwoVerticesWithAMillionEdgesBetweenThem()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(1.5);
@@ -105,7 +106,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-       // [Test]
+        // [Test]
         public void RemoveAMillionVertices()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(0.5);
@@ -131,7 +132,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-       // [Test]
+        // [Test]
         public void RemoveAMillionVerticesWithEdgesBetweenThem()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
@@ -164,7 +165,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-       // [Test]
+        // [Test]
         public void RemoveAMillionVerticesWithEdgesBetweenThemReverseOrder()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
@@ -198,7 +199,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-       // [Test]
+        // [Test]
         public void RemoveVertexWithAMillionEdgesLeadingFromItToOthers()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(0.6);
@@ -222,7 +223,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-       // [Test]
+        // [Test]
         public void RemoveTwoVerticesWithAMillionEdgesBetweenThem()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(0.5);
@@ -247,7 +248,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-       // [Test]
+        // [Test]
         public void RemoveAMillionEdgesBetweenTwoVertices()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(0.001);
@@ -271,7 +272,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-       // [Test]
+        // [Test]
         public void GetSuccessorsOfVertexWithAMillionEdgesLeadingFromItToOthers()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(0.001);
@@ -295,7 +296,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-       // [Test]
+        // [Test]
         public void TraverseAMillionVerticesWithEdgesBetweenThem()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
@@ -343,16 +344,16 @@ namespace GraphTests
 
             long memoryUsageInKb = (memoryAfter - memoryBefore) / bytesToKb;
 
-            Assert.IsTrue(sw.Elapsed < expectedDuration, string.Format("Elapsed time was: {0} expected time was: {1}", sw.Elapsed, expectedDuration));
+            Assert.IsTrue(sw.GetElapsedTimeSpan() < expectedDuration, string.Format("Elapsed time was: {0} expected time was: {1}", sw.GetElapsedTimeSpan(), expectedDuration));
             Assert.IsTrue(memoryUsageInKb < expectedMemoryInKbs, string.Format("Used memory was: {0}kb, expected memory was: {1}kb", memoryUsageInKb, expectedMemoryInKbs));
             Assert.Pass(string.Format(@"Elapsed time was: {0},
 expected time was: {1};
 Used memory was: {2}kb,
 expected memory was: {3}kb",
-                         sw.Elapsed, expectedDuration, memoryUsageInKb, expectedMemoryInKbs));
+                         sw.GetElapsedTimeSpan(), expectedDuration, memoryUsageInKb, expectedMemoryInKbs));
         }
 
-       // [Test]
+        // [Test]
         public void GetIncomingEdgesSpeedTest()
         {
             this.EnsureTestSpeedConsistency();
@@ -374,7 +375,7 @@ expected memory was: {3}kb",
             IEnumerable<Edge> resultEdges = mainVertex.GetIncomingEdges();
             sw.Stop();
 
-            Assert.IsTrue(sw.Elapsed < expectedTime, String.Format("Elapsed time for GetIncomingEdges() was: {0}", sw.Elapsed.ToString()));
+            Assert.IsTrue(sw.GetElapsedTimeSpan() < expectedTime, String.Format("Elapsed time for GetIncomingEdges() was: {0}", sw.GetElapsedTimeSpan().ToString()));
 
             sw.Reset();
 
@@ -382,7 +383,7 @@ expected memory was: {3}kb",
             resultEdges = graph.GraphStructure.GetEdgesComingIntoVertex(mainVertex);
             sw.Stop();
 
-            Assert.IsTrue(sw.Elapsed < expectedTime, String.Format("Elapsed time for GetEdgesComingIntoVertex(Vertex vertex) was: {0}", sw.Elapsed.ToString()));
+            Assert.IsTrue(sw.GetElapsedTimeSpan() < expectedTime, String.Format("Elapsed time for GetEdgesComingIntoVertex(Vertex vertex) was: {0}", sw.GetElapsedTimeSpan().ToString()));
         }
 
         //[Test]
@@ -407,7 +408,7 @@ expected memory was: {3}kb",
             IEnumerable<Edge> resultEdges = mainVertex.GetOutgoingEdges();
             sw.Stop();
 
-            Assert.IsTrue(sw.Elapsed < expectedTime, String.Format("Elapsed time for GetOutgoingEdges() was: {0}", sw.Elapsed.ToString()));
+            Assert.IsTrue(sw.GetElapsedTimeSpan() < expectedTime, String.Format("Elapsed time for GetOutgoingEdges() was: {0}", sw.GetElapsedTimeSpan().ToString()));
 
             sw.Reset();
 
@@ -415,14 +416,17 @@ expected memory was: {3}kb",
             resultEdges = graph.GraphStructure.GetEdgesGoingOutOfVertex(mainVertex);
             sw.Stop();
 
-            Assert.IsTrue(sw.Elapsed < expectedTime, String.Format("Elapsed time for GetEdgesGoingOutOfVertex(Vertex vertex) was: {0}", sw.Elapsed.ToString()));
+            Assert.IsTrue(sw.GetElapsedTimeSpan() < expectedTime, String.Format("Elapsed time for GetEdgesGoingOutOfVertex(Vertex vertex) was: {0}", sw.GetElapsedTimeSpan().ToString()));
         }
+
 
         private void EnsureTestSpeedConsistency()
         {
+#if !SILVERLIGHT
             Process.GetCurrentProcess().ProcessorAffinity = new IntPtr(2);
             Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
+#endif
         }
     }
 }

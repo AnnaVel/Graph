@@ -98,7 +98,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Graph\GraphCoreWpf.csproj">
+    <ProjectReference Include="..\GraphCore\GraphCoreWpf.csproj">
       <Project>{d1083c1e-62c8-463b-9b01-5a02064cc3c0}</Project>
       <Name>GraphCoreWpf</Name>
     </ProjectReference>

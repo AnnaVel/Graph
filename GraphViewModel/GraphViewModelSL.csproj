@@ -68,7 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Graph\GraphCoreSL.csproj">
+    <ProjectReference Include="..\GraphCore\GraphCoreSL.csproj">
       <Project>{b9004160-4b1a-480b-8029-71bafd806cf3}</Project>
       <Name>GraphCoreSL</Name>
     </ProjectReference>

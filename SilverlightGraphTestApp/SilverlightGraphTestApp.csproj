@@ -93,13 +93,13 @@
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GraphCore\GraphCoreSL.csproj">
+      <Project>{b9004160-4b1a-480b-8029-71bafd806cf3}</Project>
+      <Name>GraphCoreSL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GraphView\GraphViewSL.csproj">
       <Project>{286e8bb7-c139-45d1-9197-189a80db0617}</Project>
       <Name>GraphViewSL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Graph\GraphCoreSL.csproj">
-      <Project>{b9004160-4b1a-480b-8029-71bafd806cf3}</Project>
-      <Name>GraphCoreSL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

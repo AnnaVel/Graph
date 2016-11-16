@@ -106,13 +106,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GraphCore\GraphCoreWpf.csproj">
+      <Project>{d1083c1e-62c8-463b-9b01-5a02064cc3c0}</Project>
+      <Name>GraphCoreWpf</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GraphView\GraphViewWpf.csproj">
       <Project>{1a999d7d-d3f3-48d9-84c8-f6be12ca8f92}</Project>
       <Name>GraphViewWpf</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Graph\GraphCoreWpf.csproj">
-      <Project>{d1083c1e-62c8-463b-9b01-5a02064cc3c0}</Project>
-      <Name>GraphCoreWpf</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

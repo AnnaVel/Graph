@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphViewWpf", "GraphView\G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfGraphTestApp", "WpfGraphTestApp\WpfGraphTestApp.csproj", "{DB2CEDBC-9777-41AB-9508-BF6BDEC3B219}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphCoreWpf", "Graph\GraphCoreWpf.csproj", "{D1083C1E-62C8-463B-9B01-5A02064CC3C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphCoreWpf", "GraphCore\GraphCoreWpf.csproj", "{D1083C1E-62C8-463B-9B01-5A02064CC3C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilverlightGraphTestApp", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilverlightGraphTestApp.Web", "SilverlightGraphTestApp.Web\SilverlightGraphTestApp.Web.csproj", "{2D198360-25C2-4EC9-AC3C-E179D3CA0868}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphCoreSL", "Graph\GraphCoreSL.csproj", "{B9004160-4B1A-480B-8029-71BAFD806CF3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphCoreSL", "GraphCore\GraphCoreSL.csproj", "{B9004160-4B1A-480B-8029-71BAFD806CF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

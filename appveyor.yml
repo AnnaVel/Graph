@@ -1,0 +1,4 @@
+environment:
+  matrix:
+  - solution_name: SilverlightGraph.sln
+  - solution_name: WpfGraph.sln

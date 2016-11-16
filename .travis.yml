@@ -3,7 +3,7 @@ solution: GraphApplication.sln
 
 install:
   - sudo apt-get install nunit-console
-  - nuget restore GraphApplication.sln
+  - nuget restore WpfGraph.sln
   
 script:
   - xbuild /p:Configuration="TravisEnvironment" WpfGraph.sln

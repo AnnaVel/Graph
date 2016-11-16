@@ -7,5 +7,4 @@ install:
   
 script:
   - xbuild /p:Configuration="TravisEnvironment" WpfGraph.sln
-  - nunit-console ./GraphTests/bin/TravisEnvironment/GraphTests.dll
-  - xbuild /p:Configuration="Release" SilverlightGraph.sln
+  - nunit-console ./GraphTests/bin/TravisEnvironment/Wpf/GraphTests.dll

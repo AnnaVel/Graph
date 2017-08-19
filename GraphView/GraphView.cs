@@ -25,19 +25,13 @@ namespace GraphView
             }
         }
 
-#if WPF
         static GraphView()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(GraphView), new FrameworkPropertyMetadata(typeof(GraphView)));
         }
-#endif
 
         public GraphView()
         {
-#if SILVERLIGHT
-            this.DefaultStyleKey = typeof(GraphView);
-#endif
-
             this.graphViewModel = new GVM.GraphViewModel();
             this.graphViewModel.GraphLayoutChanged += GraphViewModel_GraphLayoutChanged;
         }

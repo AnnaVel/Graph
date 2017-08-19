@@ -37,8 +37,3 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("GraphTests")]
 [assembly: InternalsVisibleTo("GraphViewModel")]
 [assembly: InternalsVisibleTo("GraphView")]
-#if SILVERLIGHT
-[assembly: InternalsVisibleTo("GraphTestsSL")]
-[assembly: InternalsVisibleTo("GraphViewModelSL")]
-[assembly: InternalsVisibleTo("GraphViewSL")]
-#endif

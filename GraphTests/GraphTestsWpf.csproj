@@ -83,7 +83,6 @@
     <Compile Include="GraphAddRemoveEdgesTests.cs" />
     <Compile Include="GraphAddRemoveVerticesTests.cs" />
     <Compile Include="GraphCreationTests.cs" />
-    <Compile Include="HelperClasses\ExtensionMethods.cs" />
     <Compile Include="HelperClasses\GraphStructureChangedEventAsserter.cs" />
     <Compile Include="HelperClasses\GraphStructureChangeDescriptor.cs" />
     <Compile Include="HelperClasses\TestHelper.cs" />

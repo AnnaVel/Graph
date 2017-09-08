@@ -1,5 +1,6 @@
 ﻿using GraphCore.Utilities;
 using GraphViewModel;
+using GraphViewModel.Layout;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,8 @@ namespace GraphView.UILayers
             Guard.ThrowExceptionIfNull(mainContainer, "mainContainer");
 
             this.layers = new List<UILayer>();
-            this.layers.Add(new VertexUILayer(mainContainer));
             this.layers.Add(new EdgeUILayer(mainContainer));
+            this.layers.Add(new VertexUILayer(mainContainer));
         }
         public void UpdateUI(LayoutUpdateContext updateContext)
         {

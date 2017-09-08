@@ -1,10 +1,7 @@
 ﻿using GraphCore;
 using GraphCore.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using GraphCore.Vertices;
+using GraphViewModel.Layout;
 
 namespace GraphViewModel
 {
@@ -50,13 +47,13 @@ namespace GraphViewModel
                 this.graph.GraphStructure.GraphStructureChanged += GraphStructure_GraphStructureChanged;
             }
 
-            LayoutUpdateContext updateContext = this.layoutCalculator.UpdateLayout(this.graph);
+            LayoutUpdateContext updateContext = this.layoutCalculator.CreateInitialLayoutUpdateContext(this.graph);
             this.OnGraphLayoutChanged(updateContext);
         }
 
         private void GraphStructure_GraphStructureChanged(GraphStructureChangedEventArgs args)
         {
-            LayoutUpdateContext updateContext = this.layoutCalculator.UpdateLayout(args);
+            LayoutUpdateContext updateContext = this.layoutCalculator.CreateLayoutUpdateContext(args);
             this.OnGraphLayoutChanged(updateContext);
         }
 

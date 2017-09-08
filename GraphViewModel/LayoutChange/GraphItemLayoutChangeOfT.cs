@@ -1,38 +1,30 @@
 ﻿using GraphCore;
+using GraphCore.Events;
 using GraphCore.Utilities;
+using GraphViewModel.ViewModels;
 using System.Windows;
 
 namespace GraphViewModel.LayoutChange
 {
     public abstract class GraphItemLayoutChange<T> : LayoutChange
-        where T : GraphStructureItem
+        where T : GraphItemViewModel
     {
-        private T changedObject;
-        private Point location;
+        private T changedObjectViewModel;
 
-        public T ChangedObject
+        public T ChangedObjectViewModel
         {
             get
             {
-                return this.changedObject;
+                return this.changedObjectViewModel;
             }
         }
 
-        public Point Location
-        {
-            get
-            {
-                return this.location;
-            }
-        }
-
-        public GraphItemLayoutChange(LayoutChangeAction layoutChangeAction, Point location, T changedObject)
+        public GraphItemLayoutChange(ChangeAction layoutChangeAction, T changedObject)
             :base(layoutChangeAction)
         {
             Guard.ThrowExceptionIfNull(changedObject, "changedObject");
 
-            this.location = location;
-            this.changedObject = changedObject;
+            this.changedObjectViewModel = changedObject;
         }
     }
 }

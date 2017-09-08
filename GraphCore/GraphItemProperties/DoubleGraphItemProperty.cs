@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GraphCore.GraphItemProperties
 {
-    public class DoubleGraphItemProperty : VertexPropertyBase<double>
+    public class DoubleGraphItemProperty : GraphItemPropertyBase<double>
     {
         public DoubleGraphItemProperty(string name, double value)
             :base(name, value)

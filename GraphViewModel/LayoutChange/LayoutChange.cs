@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GraphCore.Events;
 
 namespace GraphViewModel.LayoutChange
 {
     public abstract class LayoutChange
     {
-        private LayoutChangeAction layoutChangeAction;
+        private ChangeAction layoutChangeAction;
 
-        public LayoutChangeAction LayoutChangeAction
+        public ChangeAction LayoutChangeAction
         {
             get
             {
@@ -18,7 +14,7 @@ namespace GraphViewModel.LayoutChange
             }
         }
 
-        public LayoutChange(LayoutChangeAction layoutChangeAction)
+        public LayoutChange(ChangeAction layoutChangeAction)
         {
             this.layoutChangeAction = layoutChangeAction;
         }

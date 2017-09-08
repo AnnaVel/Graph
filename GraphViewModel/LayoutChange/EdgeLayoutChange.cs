@@ -1,24 +1,15 @@
 ﻿using GraphCore.Edges;
+using GraphCore.Events;
+using GraphViewModel.ViewModels;
 using System.Windows;
 
 namespace GraphViewModel.LayoutChange
 {
-    public class EdgeLayoutChange : GraphItemLayoutChange<Edge>
+    public class EdgeLayoutChange : GraphItemLayoutChange<EdgeViewModel>
     {
-        private Point endLocation;
-
-        public Point EndLocation
+        public EdgeLayoutChange(ChangeAction layoutChangeAction, EdgeViewModel changedEdgeViewModel)
+            : base(layoutChangeAction, changedEdgeViewModel)
         {
-            get
-            {
-                return this.endLocation;
-            }
-        }
-
-        public EdgeLayoutChange(LayoutChangeAction layoutChangeAction, Point location, Point endLocation, Edge changedEdge)
-            : base(layoutChangeAction, location, changedEdge)
-        {
-            this.endLocation = endLocation;
         }
     }
 }

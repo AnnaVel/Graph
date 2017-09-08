@@ -1,5 +1,6 @@
 ﻿using GraphCore;
 using GraphCore.Vertices;
+using GraphView.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,17 +37,25 @@ namespace WpfGraphTestApp
             this.graphView.Graph = graph;
 
             Vertex x = graph.GraphStructure.AddVertex("x");
+            x.SetProperty("order", "1");
             Vertex y = graph.GraphStructure.AddVertex("y");
+            y.SetProperty("order", "2");
             graph.GraphStructure.AddLine(x, y);
             Vertex z = graph.GraphStructure.AddVertex("z");
+            z.SetProperty("order", "3");
             graph.GraphStructure.AddLine(x, z);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ChangeColorToSecondVertex(object sender, RoutedEventArgs e)
         {
-            Vertex first = this.graphView.Graph.GraphStructure.Vertices.First();
             Vertex second = this.graphView.Graph.GraphStructure.Vertices.ElementAt(1);
-            this.graphView.Graph.GraphStructure.RemoveEdgesBetween(first, second);
+            second.SetProperty("color", "Green");
+        }
+
+        private void RemoveFirstVertex(object sender, RoutedEventArgs e)
+        {
+            Vertex first = this.graphView.Graph.GraphStructure.Vertices.ElementAt(0);
+            this.graphView.Graph.GraphStructure.RemoveVertex(first);
         }
     }
 }

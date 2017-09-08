@@ -10,19 +10,21 @@ using System.Windows.Media;
 using GraphViewModel.LayoutChange;
 using GraphCore.Vertices;
 using System.Windows;
+using GraphCore.Events;
+using GraphView.Views;
+using GraphViewModel.ViewModels;
+using GraphViewModel.Layout;
 
 namespace GraphView.UILayers
 {
     internal class VertexUILayer : UILayer
     {
-        public const int EllipseDiameter = 20;
-
-        private readonly Dictionary<Vertex, UIElement> vertexToElement;
+        private readonly Dictionary<VertexViewModel, UIElement> viewModelToElement;
 
         public VertexUILayer(Canvas mainContainer)
             :base(mainContainer)
         {
-            this.vertexToElement = new Dictionary<Vertex, UIElement>();
+            this.viewModelToElement = new Dictionary<VertexViewModel, UIElement>();
         }
 
         public override void UpdateUI(LayoutUpdateContext updateContext)
@@ -31,32 +33,38 @@ namespace GraphView.UILayers
             {
                 switch(vertexLayoutChange.LayoutChangeAction)
                 {
-                    case LayoutChangeAction.Add:
-                        UIElement correspondingElementToAdd = this.GetEllipse();
-                        this.AddElementToUI(correspondingElementToAdd, vertexLayoutChange.Location);
-                        this.vertexToElement.Add(vertexLayoutChange.ChangedObject, correspondingElementToAdd);
+                    case ChangeAction.Add:
+                        this.AddVertex(vertexLayoutChange.ChangedObjectViewModel);
                         break;
-                    case LayoutChangeAction.Remove:
-                        UIElement correspondingElementToRemove = this.vertexToElement[vertexLayoutChange.ChangedObject];
-                        this.RemoveElementFromUI(correspondingElementToRemove);
-                        this.vertexToElement.Remove(vertexLayoutChange.ChangedObject);
+                    case ChangeAction.Remove:
+                        this.RemoveVertex(vertexLayoutChange.ChangedObjectViewModel);
                         break;
-                    case LayoutChangeAction.Change:
-                        throw new NotImplementedException();
                     default:
                         throw new NotSupportedException();
                 }
             }
         }
 
-        private Ellipse GetEllipse()
+        private void AddVertex(VertexViewModel viewModel)
         {
-            Ellipse ellipse = new Ellipse();
-            ellipse.Width = EllipseDiameter;
-            ellipse.Height = EllipseDiameter;
-            ellipse.Fill = new SolidColorBrush(Colors.Red);
+            UIElement correspondingElementToAdd = this.GetNewVertexView(viewModel);
+            this.AddElementToUI(correspondingElementToAdd);
+            this.viewModelToElement.Add(viewModel, correspondingElementToAdd);
+        }
 
-            return ellipse;
+        private void RemoveVertex(VertexViewModel viewModel)
+        {
+            UIElement correspondingElementToRemove = this.viewModelToElement[viewModel];
+            this.RemoveElementFromUI(correspondingElementToRemove);
+            this.viewModelToElement.Remove(viewModel);
+        }
+
+        private VertexView GetNewVertexView(VertexViewModel viewModel)
+        {
+            VertexView vertexView = new VertexView();
+            vertexView.DataContext = viewModel;
+
+            return vertexView;
         }
     }
 }

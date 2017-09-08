@@ -1,5 +1,6 @@
 ﻿using GraphCore.Utilities;
 using GraphViewModel;
+using GraphViewModel.Layout;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +22,9 @@ namespace GraphView.UILayers
         }
         public abstract void UpdateUI(LayoutUpdateContext updateContext);
 
-        protected void AddElementToUI(UIElement element, Point location)
+        protected void AddElementToUI(UIElement element)
         {
             this.mainContainer.Children.Add(element);
-            Canvas.SetLeft(element, location.X);
-            Canvas.SetTop(element, location.Y);
         }
 
         protected void RemoveElementFromUI(UIElement element)

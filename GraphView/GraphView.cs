@@ -1,6 +1,7 @@
 ﻿using GVM = GraphViewModel;
 using System.Windows;
 using System.Windows.Controls;
+using GraphViewModel.Layout;
 using GraphCore;
 using GraphView.UILayers;
 
@@ -36,7 +37,7 @@ namespace GraphView
             this.graphViewModel.GraphLayoutChanged += GraphViewModel_GraphLayoutChanged;
         }
 
-        private void GraphViewModel_GraphLayoutChanged(GVM.LayoutUpdateContext updateContext)
+        private void GraphViewModel_GraphLayoutChanged(LayoutUpdateContext updateContext)
         {
             this.uiLayerContainer.UpdateUI(updateContext);
         }

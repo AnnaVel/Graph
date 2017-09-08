@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GraphCore.GraphItemProperties
 {
-    public abstract class VertexPropertyBase<T> : IGraphItemProperty
+    public abstract class GraphItemPropertyBase<T> : IGraphItemProperty
     {
         private string name;
         private T value;
@@ -44,7 +44,7 @@ namespace GraphCore.GraphItemProperties
             }
         }
 
-        public VertexPropertyBase(string name, T value)
+        public GraphItemPropertyBase(string name, T value)
         {
             Guard.ThrowExceptionIfNullOrEmpty(name, "name");
 

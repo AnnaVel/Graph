@@ -42,6 +42,11 @@ namespace GraphCore
             return this.PropertyList.RemoveProperty(name);
         }
 
+        public IEnumerable<string> EnumeratePropertyNames()
+        {
+            return this.PropertyList.EnumeratePropertyNames();
+        }
+
         internal void RegisterItemToAStructure(GraphStructure graphStructure)
         {
             Guard.ThrowExceptionIfNull(graphStructure, "graphStructure");

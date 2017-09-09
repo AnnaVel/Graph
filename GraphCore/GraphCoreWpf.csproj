@@ -59,6 +59,11 @@
   <ItemGroup>
     <Compile Include="AdjacencyItem.cs" />
     <Compile Include="AdjacencyList.cs" />
+    <Compile Include="Algorithms\AlgorithmBase.cs" />
+    <Compile Include="Algorithms\AlgorithmLibrary.cs" />
+    <Compile Include="Algorithms\AlgorithmNames.cs" />
+    <Compile Include="Algorithms\FindNextVertex.cs" />
+    <Compile Include="Algorithms\IAlgorithm.cs" />
     <Compile Include="Edges\DoubleValueEdge.cs" />
     <Compile Include="Edges\Edge.cs" />
     <Compile Include="Edges\EdgeBaseOfT.cs" />

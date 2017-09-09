@@ -1,7 +1,13 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ext="clr-namespace:GraphView.Utilities"
+    xmlns:converters="clr-namespace:GraphView.Converters"
+    xmlns:views="clr-namespace:GraphView.Views"
     xmlns:local="clr-namespace:GraphView">
+
+    <converters:StringToBrushConverter x:Key="StringToBrushConverter" />
+
     <Style TargetType="local:GraphView">
         <Setter Property="Template">
             <Setter.Value>
@@ -10,6 +16,36 @@
                             BorderThickness="1">
                         <Canvas x:Name="mainContainer"></Canvas>
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="views:VertexView" x:Shared="false">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="views:VertexView">
+                    <Ellipse DataContext="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}" 
+                             Width="{Binding Size.Width}" Height="{Binding Size.Height}"
+                             Fill="{ext:GraphProperty PropertyName=color, DefaultValue=Red, Converter={StaticResource ResourceKey=StringToBrushConverter}}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Canvas.Top" Value="{Binding Path=Location.Y}" />
+        <Setter Property="Canvas.Left" Value="{Binding Path=Location.X}" />
+    </Style>
+
+    <Style TargetType="views:EdgeView" x:Shared="false">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="views:EdgeView">
+                    <Line DataContext="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}"
+                          X1="{Binding StartLocation.X}"
+                          Y1="{Binding StartLocation.Y}"
+                          X2="{Binding EndLocation.X}"
+                          Y2="{Binding EndLocation.Y}"
+                          Stroke="{ext:GraphProperty PropertyName=color, DefaultValue=Green, Converter={StaticResource ResourceKey=StringToBrushConverter}}"
+                          StrokeThickness="1" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

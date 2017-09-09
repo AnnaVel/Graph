@@ -1,12 +1,13 @@
-﻿using GraphCore.Vertices;
+﻿using GraphCore.Events;
+using GraphViewModel.ViewModels;
 using System.Windows;
 
 namespace GraphViewModel.LayoutChange
 {
-    public class VertexLayoutChange : GraphItemLayoutChange<Vertex>
+    public class VertexLayoutChange : GraphItemLayoutChange<VertexViewModel>
     {
-        public VertexLayoutChange(LayoutChangeAction layoutChangeAction, Point location, Vertex changedVertex)
-            : base(layoutChangeAction, location, changedVertex)
+        public VertexLayoutChange(ChangeAction layoutChangeAction, VertexViewModel changedVertexViewModel)
+            : base(layoutChangeAction, changedVertexViewModel)
         {
 
         }

@@ -57,14 +57,15 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\StringToBrushConverter.cs" />
     <Compile Include="UILayers\EdgeUILayer.cs" />
     <Compile Include="UILayers\UILayer.cs" />
     <Compile Include="UILayers\UILayerContainer.cs" />
     <Compile Include="UILayers\VertexUILayer.cs" />
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
+    <Compile Include="Utilities\GraphPropertyExtension.cs" />
+    <Compile Include="Views\EdgeView.cs" />
+    <Compile Include="Views\GraphItemView.cs" />
+    <Compile Include="Views\VertexView.cs" />
     <Compile Include="GraphView.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -102,6 +103,13 @@
       <Project>{a43095e7-f259-4b54-a0ef-535b0c9f52d5}</Project>
       <Name>GraphViewModelWpf</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

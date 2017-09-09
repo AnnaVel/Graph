@@ -71,6 +71,7 @@
     <Compile Include="Edges\ObjectValueEdge.cs" />
     <Compile Include="Edges\UnweightedEdge.cs" />
     <Compile Include="Events\ChangeAction.cs" />
+    <Compile Include="Events\GraphItemPropertyChangedEventArgs.cs" />
     <Compile Include="Events\GraphStructureChangedEventArgs.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="GraphItemProperties\EdgePropertyList.cs" />

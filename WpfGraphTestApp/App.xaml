@@ -2,8 +2,30 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WpfGraphTestApp"
+             xmlns:views="clr-namespace:GraphView.Views;assembly=GraphView"
+             xmlns:ext="clr-namespace:GraphView.Utilities;assembly=GraphView"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/GraphView;component/Themes/Generic.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style BasedOn="{StaticResource {x:Type views:VertexView}}" TargetType="views:VertexView" x:Shared="false">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="views:VertexView">
+                            <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}">
+                                <Rectangle 
+                                    Width="{Binding Size.Width}" Height="{Binding Size.Height}"
+                                    Fill="{ext:GraphProperty PropertyName=color, DefaultValue=Red, Converter={StaticResource ResourceKey=StringToBrushConverter}}" />
+                                <TextBlock Text="{ext:GraphProperty PropertyName=order}" 
+                                   Foreground="{ext:GraphProperty PropertyName=color, DefaultValue=Black, Converter={StaticResource ResourceKey=StringToBrushConverter}}" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

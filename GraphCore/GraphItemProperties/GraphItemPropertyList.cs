@@ -1,4 +1,5 @@
-﻿using GraphCore.Utilities;
+﻿using GraphCore.Events;
+using GraphCore.Utilities;
 using GraphCore.Vertices;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace GraphCore.GraphItemProperties
 {
+    public delegate void GraphItemPropertyChangedEventHandler(GraphItemPropertyChangedEventArgs args);
+
     internal abstract class GraphItemPropertyList
     {
         private readonly GraphStructureItem owner;
@@ -38,6 +41,8 @@ namespace GraphCore.GraphItemProperties
             IGraphItemProperty newProperty = factory.CreateVertexProperty(name, value);
 
             this.innerList[name] = newProperty;
+
+            this.OnGraphItemPropertyChanged(name);
         }
 
         public IGraphItemProperty GetProperty(string name)
@@ -50,7 +55,32 @@ namespace GraphCore.GraphItemProperties
 
         public bool RemoveProperty(string name)
         {
-            return this.innerList.Remove(name);
+            bool result = this.innerList.Remove(name);
+
+            if(result)
+            {
+                this.OnGraphItemPropertyChanged(name);
+            }
+
+            return result;
+        }
+
+        public IEnumerable<string> EnumeratePropertyNames()
+        {
+            foreach(var pair in this.innerList)
+            {
+                yield return pair.Key;
+            }
+        }
+
+        public event GraphItemPropertyChangedEventHandler GraphItemPropertyChanged;
+
+        private void OnGraphItemPropertyChanged(string propertyName)
+        {
+            if(this.GraphItemPropertyChanged != null)
+            {
+                this.GraphItemPropertyChanged(new GraphItemPropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

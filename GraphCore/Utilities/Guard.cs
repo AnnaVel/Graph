@@ -25,5 +25,13 @@ namespace GraphCore.Utilities
 
             Guard.ThrowExceptionIfNull(parameter, parameterName);
         }
+
+        public static void ThrowExceptionIfNotOfType(object parameter, string parameterName, Type type)
+        {
+            if(parameter.GetType() != type)
+            {
+                throw new ArgumentException(parameterName, string.Format("{0} is not of type {1}.", parameterName, type));
+            }
+        }
     }
 }

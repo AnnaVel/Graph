@@ -23,7 +23,13 @@ namespace GraphCore.Algorithms
 
         public R ExecuteAlgorithm<R, P>(string name, P parameter)
         {
-            return (R)this.ExecuteAlgorithm(name, parameter);
+            IAlgorithm algorithm = this.algorithmList[name];
+
+            Guard.ThrowExceptionIfNotEqual(typeof(P), algorithm.ParameterType, "method parameter type", "parameter type of algorithm");
+            Guard.ThrowExceptionIfNotEqual(typeof(R), algorithm.ReturnType, "method return type", "return type of algorithm");
+
+            R result = (R)this.ExecuteAlgorithm(name, parameter);
+            return result;
         }
 
         public object ExecuteAlgorithm(string name, object parameter)
@@ -31,6 +37,13 @@ namespace GraphCore.Algorithms
             IAlgorithm algorithm = this.algorithmList[name];
 
             return algorithm.ExecuteBase(this.graphStructure, parameter);
+        }
+
+        public void ClearPropertiesSetByAlgorithm(string name)
+        {
+            IAlgorithm algorithm = this.algorithmList[name];
+
+            algorithm.ClearPropertiesSetByAlgorithm(this.graphStructure);
         }
 
         public void RegisterAlgorithm(string name, IAlgorithm algorithm)

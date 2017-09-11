@@ -4,6 +4,7 @@ using GraphCore.Utilities;
 using GraphViewModel.Events;
 using System;
 using System.Collections.Generic;
+using System.Windows.Media;
 using static GraphCore.GraphItemProperties.GraphItemPropertyList;
 
 namespace GraphViewModel.ViewModels
@@ -13,6 +14,7 @@ namespace GraphViewModel.ViewModels
     {
         private readonly object relatedItem;
         private readonly Dictionary<string, object> graphPropertyValues;
+        private readonly PropertyPriorityCalculator propertyPriority;
         private readonly GraphItemPropertyChangedEventHandler graphPropertyChangedEventHandler;
 
         protected object RelatedItemAsObject
@@ -42,6 +44,7 @@ namespace GraphViewModel.ViewModels
             this.CalculatePropertyValues();
 
             this.graphPropertyValues = new Dictionary<string, object>();
+            this.propertyPriority = new PropertyPriorityCalculator();
         }
 
         public void ReleaseRelatedItem()
@@ -53,8 +56,9 @@ namespace GraphViewModel.ViewModels
         {
             if(!this.graphPropertyValues.ContainsKey(propertyName))
             {
-                object propertyValue = this.RecalculatePropertyValue(propertyName);
-                this.graphPropertyValues[propertyName] = propertyValue;
+                //object propertyValue = this.RecalculatePropertyValue(propertyName);
+                //this.graphPropertyValues[propertyName] = propertyValue;
+                return null;
             }
 
             return this.graphPropertyValues[propertyName];
@@ -80,17 +84,19 @@ namespace GraphViewModel.ViewModels
 
         private void OnRelatedItemPropertyChanged(GraphItemPropertyChangedEventArgs args)
         {
-            string propertyName = args.PropertyName;
+            string propertyName;
+            string prefix;
+            this.propertyPriority.RecordPropertyChangeAndGetPropertyNameToVisualize(args, out prefix, out propertyName);
 
             bool propertyValueChanged = false;
             object recalculatedValue = this.RecalculatePropertyValue(propertyName);
 
-            if(!this.graphPropertyValues.ContainsKey(propertyName))
+            if(!this.graphPropertyValues.ContainsKey(prefix))
             {
-                this.graphPropertyValues[propertyName] = recalculatedValue;
+                this.graphPropertyValues[prefix] = recalculatedValue;
                 propertyValueChanged = true;
             }
-            else if(this.graphPropertyValues[propertyName] != recalculatedValue)
+            else if(this.graphPropertyValues[prefix] != recalculatedValue)
             {
                 this.graphPropertyValues[propertyName] = recalculatedValue;
                 propertyValueChanged = true;
@@ -98,9 +104,11 @@ namespace GraphViewModel.ViewModels
 
             if(propertyValueChanged)
             {
-                this.OnGraphPropertyValueChanged(propertyName);
+                this.OnGraphPropertyValueChanged(prefix);
             }
         }
+
+
 
         private void OnGraphPropertyValueChanged(string propertyName)
         {

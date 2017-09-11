@@ -10,6 +10,7 @@ namespace GraphCore.Events
     public class GraphItemPropertyChangedEventArgs
     {
         private string propertyName;
+        private PropertyChangeAction changeAction;
 
         public string PropertyName
         {
@@ -19,11 +20,20 @@ namespace GraphCore.Events
             }
         }
 
-        public GraphItemPropertyChangedEventArgs(string propertyName)
+        public PropertyChangeAction ChangeAction
+        {
+            get
+            {
+                return this.changeAction;
+            }
+        }
+
+        public GraphItemPropertyChangedEventArgs(string propertyName, PropertyChangeAction changeAction)
         {
             Guard.ThrowExceptionIfNullOrEmpty(propertyName, "propertyName");
 
             this.propertyName = propertyName;
+            this.changeAction = changeAction;
         }
     }
 }

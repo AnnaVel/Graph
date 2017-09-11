@@ -14,6 +14,10 @@ namespace GraphCore.Algorithms
 
         Type ReturnType { get; }
 
+        IEnumerable<string> ReservedPropertyNames { get; }
+
+        void ClearPropertiesSetByAlgorithm(GraphStructure graphStructure);
+
         object ExecuteBase(GraphStructure graphStructure, object parameter);
     }
 }

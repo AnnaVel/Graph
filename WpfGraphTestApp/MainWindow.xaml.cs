@@ -1,4 +1,5 @@
 ﻿using GraphCore;
+using GraphCore.Algorithms;
 using GraphCore.Vertices;
 using GraphView.Views;
 using System;
@@ -56,6 +57,20 @@ namespace WpfGraphTestApp
         {
             Vertex first = this.graphView.Graph.GraphStructure.Vertices.ElementAt(0);
             this.graphView.Graph.GraphStructure.RemoveVertex(first);
+        }
+
+        private void TestAlgorithm(object sender, RoutedEventArgs e)
+        {
+            Graph graph = this.graphView.Graph;
+            Vertex first = graph.GraphStructure.Vertices.First();
+
+            Vertex resultVertex = graph.AlgorithmLibrary.ExecuteAlgorithm<Vertex, Vertex>(AlgorithmNames.FindNextVertexName, first);
+        }
+
+        private void ClearAlgorithm(object sender, RoutedEventArgs e)
+        {
+            Graph graph = this.graphView.Graph;
+            graph.AlgorithmLibrary.ClearPropertiesSetByAlgorithm(AlgorithmNames.FindNextVertexName);
         }
     }
 }

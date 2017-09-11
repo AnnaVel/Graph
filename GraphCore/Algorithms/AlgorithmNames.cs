@@ -9,5 +9,7 @@ namespace GraphCore.Algorithms
     public static class AlgorithmNames
     {
         public const string FindNextVertexName = "Find next vertex";
+
+        public const string PathAlgorithmName = "Path algorithm";
     }
 }

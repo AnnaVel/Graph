@@ -73,6 +73,7 @@
     <Compile Include="Events\ChangeAction.cs" />
     <Compile Include="Events\GraphItemPropertyChangedEventArgs.cs" />
     <Compile Include="Events\GraphStructureChangedEventArgs.cs" />
+    <Compile Include="Events\PropertyChangeAction.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="GraphItemProperties\EdgePropertyList.cs" />
     <Compile Include="GraphItemProperties\VertexPropertyList.cs" />

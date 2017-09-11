@@ -42,7 +42,7 @@ namespace GraphCore.GraphItemProperties
 
             this.innerList[name] = newProperty;
 
-            this.OnGraphItemPropertyChanged(name);
+            this.OnGraphItemPropertyChanged(name, PropertyChangeAction.Set);
         }
 
         public IGraphItemProperty GetProperty(string name)
@@ -59,7 +59,7 @@ namespace GraphCore.GraphItemProperties
 
             if(result)
             {
-                this.OnGraphItemPropertyChanged(name);
+                this.OnGraphItemPropertyChanged(name, PropertyChangeAction.Remove);
             }
 
             return result;
@@ -75,11 +75,11 @@ namespace GraphCore.GraphItemProperties
 
         public event GraphItemPropertyChangedEventHandler GraphItemPropertyChanged;
 
-        private void OnGraphItemPropertyChanged(string propertyName)
+        private void OnGraphItemPropertyChanged(string propertyName, PropertyChangeAction changeAction)
         {
             if(this.GraphItemPropertyChanged != null)
             {
-                this.GraphItemPropertyChanged(new GraphItemPropertyChangedEventArgs(propertyName));
+                this.GraphItemPropertyChanged(new GraphItemPropertyChangedEventArgs(propertyName, changeAction));
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using GraphCore.Algorithms;
+using GraphCore.Utilities;
 using GraphCore.Vertices;
 using System;
 using System.Collections.Generic;
@@ -18,25 +19,25 @@ namespace GraphCore.Algorithms
             }
         }
 
-        //public Type ParameterType
-        //{
-        //    get
-        //    {
-        //        return typeof(Vertex);
-        //    }
-        //}
-
-        //public Type ReturnType
-        //{
-        //    get
-        //    {
-        //        return typeof(Vertex);
-        //    }
-        //}
+        public override IEnumerable<string> ReservedPropertyNames
+        {
+            get
+            {
+                yield return "color:FindNext";
+            }
+        }
 
         public override Vertex Execute(GraphStructure graphStructure, Vertex parameter)
         {
-            return parameter.GetSuccessors().FirstOrDefault();
+            Guard.ThrowExceptionIfNull(parameter, "parameter");
+
+            parameter.SetProperty("color:FindNext", "Purple");
+
+            Vertex next = parameter.GetSuccessors().FirstOrDefault();
+
+            next.SetProperty("color:FindNext", "Purple");
+
+            return next;
         }
     }
 }

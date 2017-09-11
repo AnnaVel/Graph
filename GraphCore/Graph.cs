@@ -34,7 +34,7 @@ namespace GraphCore
         public Graph()
         {
             this.graphStructure = new GraphStructure();
-            this.algorithmLibrary = new AlgorithmLibrary();
+            this.algorithmLibrary = new AlgorithmLibrary(this.graphStructure);
         }
     }
 }

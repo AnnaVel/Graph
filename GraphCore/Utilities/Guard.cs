@@ -28,9 +28,19 @@ namespace GraphCore.Utilities
 
         public static void ThrowExceptionIfNotOfType(object parameter, string parameterName, Type type)
         {
-            if(parameter.GetType() != type)
+            bool isOfType = parameter.GetType() == type || parameter.GetType().IsSubclassOf(type);
+
+            if (!isOfType)
             {
                 throw new ArgumentException(parameterName, string.Format("{0} is not of type {1}.", parameterName, type));
+            }
+        }
+
+        public static void ThrowExceptionIfNotEqual(object parameter1, object parameter2, string parameterName1, string parameterName2)
+        {
+            if(!parameter1.Equals(parameter2))
+            {
+                throw new ArgumentException(string.Format("{0} and {1} must be equal.", parameterName1, parameterName2));
             }
         }
     }

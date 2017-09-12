@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphCore.GraphItemProperties
+namespace GraphCore.DynamicAttributes
 {
     internal class EdgeDynamicAttributeList : DynamicAttributeList
     {

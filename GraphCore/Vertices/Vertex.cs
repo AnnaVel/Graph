@@ -1,5 +1,5 @@
 ﻿using GraphCore.Edges;
-using GraphCore.GraphItemProperties;
+using GraphCore.DynamicAttributes;
 using GraphCore.Utilities;
 using System;
 using System.Collections.Generic;

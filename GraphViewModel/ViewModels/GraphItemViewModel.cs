@@ -1,10 +1,10 @@
 ﻿using GraphCore.Events;
-using GraphCore.GraphItemProperties;
+using GraphCore.DynamicAttributes;
 using GraphCore.Utilities;
 using GraphViewModel.Events;
 using System;
 using System.Collections.Generic;
-using static GraphCore.GraphItemProperties.DynamicAttributeList;
+using static GraphCore.DynamicAttributes.DynamicAttributeList;
 
 namespace GraphViewModel.ViewModels
 {

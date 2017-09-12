@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphCore.GraphItemProperties
+namespace GraphCore.DynamicAttributes
 {
-    public class IntegerDynamicAttribute : DynamicAttributeBase<int>
+    public class DoubleDynamicAttribute : DynamicAttributeBase<double>
     {
-        public IntegerDynamicAttribute(string name, int value)
+        public DoubleDynamicAttribute(string name, double value)
             :base(name, value)
         {
 

@@ -1,4 +1,4 @@
-﻿using GraphCore.GraphItemProperties;
+﻿using GraphCore.DynamicAttributes;
 using GraphCore.Utilities;
 using GraphCore.Vertices;
 using System;

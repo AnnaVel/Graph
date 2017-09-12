@@ -1,6 +1,6 @@
 ﻿using GraphCore;
 using GraphCore.Edges;
-using GraphCore.GraphItemProperties;
+using GraphCore.DynamicAttributes;
 using GraphCore.Vertices;
 using NUnit.Framework;
 using System;

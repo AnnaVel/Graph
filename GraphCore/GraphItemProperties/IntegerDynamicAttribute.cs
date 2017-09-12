@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace GraphCore.GraphItemProperties
 {
-    public class IntegerGraphItemProperty : GraphItemPropertyBase<int>
+    public class IntegerDynamicAttribute : DynamicAttributeBase<int>
     {
-        public IntegerGraphItemProperty(string name, int value)
+        public IntegerDynamicAttribute(string name, int value)
             :base(name, value)
         {
 

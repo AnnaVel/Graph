@@ -15,50 +15,50 @@ namespace GraphViewModel.ViewModels
         {
         }
 
-        protected override IEnumerable<string> EnumeratePropertyValuesForRelatedItem()
+        protected override IEnumerable<string> EnumerateDynamicAttributeNamesForRelatedItem()
         {
-            HashSet<string> properties = new HashSet<string>();
+            HashSet<string> attributes = new HashSet<string>();
 
             foreach(Vertex vertex in this.RelatedVertexItem)
             {
-                foreach (string property in vertex.EnumeratePropertyNames())
+                foreach (string attributeName in vertex.EnumerateDynamicAttributeNames())
                 {
-                    if (!properties.Contains(property))
+                    if (!attributes.Contains(attributeName))
                     {
-                        yield return property;
-                        properties.Add(property);
+                        yield return attributeName;
+                        attributes.Add(attributeName);
                     }
                 }
             }
         }
 
-        protected override object RecalculatePropertyValue(string propertyName)
+        protected override object RecalculateDynamicAttributeValue(string attributeName)
         {
             foreach (Vertex vertex in this.RelatedVertexItem)
             {
-                IGraphItemProperty graphProperty = vertex.GetProperty(propertyName);
-                if (graphProperty != null)
+                IDynamicAttribute attribute = vertex.GetDynamicAttribute(attributeName);
+                if (attribute != null)
                 {
-                    return graphProperty.ValueAsObject;
+                    return attribute.ValueAsObject;
                 }
             }
 
             return null;               
         }
 
-        protected override void SubscribeToRelatedItemEvents(GraphItemPropertyChangedEventHandler handler)
+        protected override void SubscribeToRelatedItemEvents(DynamicAttributeChangedEventHandler handler)
         {
             foreach(Vertex vertex in this.RelatedVertexItem)
             {
-                vertex.PropertyList.GraphItemPropertyChanged += handler;
+                vertex.DynamicAttributeList.DynamicAttributeChanged += handler;
             }
         }
 
-        protected override void UnsubscribeFromRelatedItemEvents(GraphItemPropertyChangedEventHandler handler)
+        protected override void UnsubscribeFromRelatedItemEvents(DynamicAttributeChangedEventHandler handler)
         {
             foreach (Vertex vertex in this.RelatedVertexItem)
             {
-                vertex.PropertyList.GraphItemPropertyChanged -= handler;
+                vertex.DynamicAttributeList.DynamicAttributeChanged -= handler;
             }
         }
     }

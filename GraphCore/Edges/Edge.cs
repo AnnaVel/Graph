@@ -11,7 +11,7 @@ namespace GraphCore.Edges
 {
     public abstract class Edge : GraphStructureItem
     {
-        private readonly EdgePropertyList propertyList;
+        private readonly EdgeDynamicAttributeList dynamicAttributeList;
 
         private Vertex firstVertex;
         private Vertex secondVertex;
@@ -41,11 +41,11 @@ namespace GraphCore.Edges
             }
         }
 
-        internal override GraphItemPropertyList PropertyList
+        internal override DynamicAttributeList DynamicAttributeList
         {
             get
             {
-                return this.propertyList;
+                return this.dynamicAttributeList;
             }
         }
 
@@ -58,7 +58,7 @@ namespace GraphCore.Edges
             this.secondVertex = secondVertex;
             this.isDirected = isDirected;
 
-            this.propertyList = new EdgePropertyList(this);
+            this.dynamicAttributeList = new EdgeDynamicAttributeList(this);
         }
     }
 }

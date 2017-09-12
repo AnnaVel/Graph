@@ -12,7 +12,7 @@ using System.Windows.Markup;
 namespace GraphView.Utilities
 {
     /// <summary>
-    /// The extension tries to retrieve a value from the property dictionary of the view model.
+    /// The extension tries to retrieve a value from the attribute dictionary of the view model.
     /// If the value is not found, the default value is used. After that,
     /// if a converter has been specified, it is applied.
     /// 
@@ -21,14 +21,14 @@ namespace GraphView.Utilities
     /// Not setting x:Shared to false might lead to unexpected behavior.
     /// </summary>
     [MarkupExtensionReturnType()]
-    public class GraphPropertyExtension : MarkupExtension
+    public class DynamicAttributeExtension : MarkupExtension
     {
         private IValueConverter converter;
 
         private object targetObject;
         private object targetProperty;
 
-        public object PropertyName { get; set; }
+        public object AttributeName { get; set; }
 
         public IValueConverter Converter
         {
@@ -44,7 +44,7 @@ namespace GraphView.Utilities
 
         public object DefaultValue { get; set; }
 
-        public GraphPropertyExtension()
+        public DynamicAttributeExtension()
         {
         }
 
@@ -62,12 +62,12 @@ namespace GraphView.Utilities
             this.targetProperty = ipvt.TargetProperty;
 
             GraphItemViewModel graphItemViewModel = this.GetAssociatedGraphItemViewModel();
-            graphItemViewModel.GraphItemViewModelPropertyChanged += GraphItemViewModel_GraphItemViewModelPropertyChanged;
+            graphItemViewModel.ViewModelDynamicAttributeChanged += GraphItemViewModel_ViewModelDynamicAttributeChanged;
 
-            return this.GetGraphPropertyValue();
+            return this.GetDynamicAttributeValue();
         }
 
-        private object GetGraphPropertyValue()
+        private object GetDynamicAttributeValue()
         {
             GraphItemViewModel graphItemViewModel = this.GetAssociatedGraphItemViewModel();
 
@@ -76,7 +76,7 @@ namespace GraphView.Utilities
                 return null;
             }
 
-            object result = graphItemViewModel.GetValueForProperty(this.PropertyName as string);
+            object result = graphItemViewModel.GetValueForDynamicAttribute(this.AttributeName as string);
 
             if(result == null)
             {
@@ -121,7 +121,7 @@ namespace GraphView.Utilities
         {
             if (this.targetObject != null)
             {
-                object value = this.GetGraphPropertyValue();
+                object value = this.GetDynamicAttributeValue();
 
                 if (this.targetProperty is DependencyProperty)
                 {
@@ -151,9 +151,9 @@ namespace GraphView.Utilities
             }
         }
 
-        private void GraphItemViewModel_GraphItemViewModelPropertyChanged(GraphViewModelPropertyChangedEventArgs args)
+        private void GraphItemViewModel_ViewModelDynamicAttributeChanged(ViewModelDynamicAttributeChangedEventArgs args)
         {
-            if (this.PropertyName as string == args.PropertyName)
+            if (this.AttributeName as string == args.DynamicAttributeName)
             {
                 this.UpdateValue();
             }

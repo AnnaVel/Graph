@@ -4,16 +4,16 @@ using GraphCore.Utilities;
 using GraphViewModel.Events;
 using System;
 using System.Collections.Generic;
-using static GraphCore.GraphItemProperties.GraphItemPropertyList;
+using static GraphCore.GraphItemProperties.DynamicAttributeList;
 
 namespace GraphViewModel.ViewModels
 {
-    public delegate void GraphViewModelPropertyChangedEventHandler(GraphViewModelPropertyChangedEventArgs args);
+    public delegate void ViewModelDynamicAttributeChangedEventHandler(ViewModelDynamicAttributeChangedEventArgs args);
     public abstract class GraphItemViewModel : NotifyPropertyChangedViewModel
     {
         private readonly object relatedItem;
-        private readonly Dictionary<string, object> graphPropertyValues;
-        private readonly GraphItemPropertyChangedEventHandler graphPropertyChangedEventHandler;
+        private readonly Dictionary<string, object> dynamicAttributeValues;
+        private readonly DynamicAttributeChangedEventHandler dynamicAttributeChangedEventHandler;
 
         protected object RelatedItemAsObject
         {
@@ -23,11 +23,11 @@ namespace GraphViewModel.ViewModels
             }
         }
 
-        protected Dictionary<string, object> GraphPropertyValues
+        protected Dictionary<string, object> DynamicAttributeValues
         {
             get
             {
-                return this.graphPropertyValues;
+                return this.dynamicAttributeValues;
             }
         }
 
@@ -36,77 +36,77 @@ namespace GraphViewModel.ViewModels
             Guard.ThrowExceptionIfNull(relatedItem, "relatedItem");
 
             this.relatedItem = relatedItem;
-            this.graphPropertyChangedEventHandler = new GraphItemPropertyChangedEventHandler(this.OnRelatedItemPropertyChanged);
+            this.dynamicAttributeChangedEventHandler = new DynamicAttributeChangedEventHandler(this.OnRelatedItemDynamicAttributeChanged);
 
-            this.SubscribeToRelatedItemEvents(this.graphPropertyChangedEventHandler);
-            this.CalculatePropertyValues();
+            this.SubscribeToRelatedItemEvents(this.dynamicAttributeChangedEventHandler);
+            this.CalculateDynamicAttributeValues();
 
-            this.graphPropertyValues = new Dictionary<string, object>();
+            this.dynamicAttributeValues = new Dictionary<string, object>();
         }
 
         public void ReleaseRelatedItem()
         {
-            this.UnsubscribeFromRelatedItemEvents(this.graphPropertyChangedEventHandler);
+            this.UnsubscribeFromRelatedItemEvents(this.dynamicAttributeChangedEventHandler);
         }
 
-        public object GetValueForProperty(string propertyName)
+        public object GetValueForDynamicAttribute(string attributeName)
         {
-            if(!this.graphPropertyValues.ContainsKey(propertyName))
+            if(!this.dynamicAttributeValues.ContainsKey(attributeName))
             {
-                object propertyValue = this.RecalculatePropertyValue(propertyName);
-                this.graphPropertyValues[propertyName] = propertyValue;
+                object attributeValue = this.RecalculateDynamicAttributeValue(attributeName);
+                this.dynamicAttributeValues[attributeName] = attributeValue;
             }
 
-            return this.graphPropertyValues[propertyName];
+            return this.dynamicAttributeValues[attributeName];
         }
 
-        public event GraphViewModelPropertyChangedEventHandler GraphItemViewModelPropertyChanged;
+        public event ViewModelDynamicAttributeChangedEventHandler ViewModelDynamicAttributeChanged;
 
-        protected abstract void SubscribeToRelatedItemEvents(GraphItemPropertyChangedEventHandler handler);
+        protected abstract void SubscribeToRelatedItemEvents(DynamicAttributeChangedEventHandler handler);
 
-        protected abstract void UnsubscribeFromRelatedItemEvents(GraphItemPropertyChangedEventHandler handler);
+        protected abstract void UnsubscribeFromRelatedItemEvents(DynamicAttributeChangedEventHandler handler);
 
-        protected abstract IEnumerable<string> EnumeratePropertyValuesForRelatedItem();
+        protected abstract IEnumerable<string> EnumerateDynamicAttributeNamesForRelatedItem();
 
-        protected abstract object RecalculatePropertyValue(string propertyName);
+        protected abstract object RecalculateDynamicAttributeValue(string attributeName);
 
-        private void CalculatePropertyValues()
+        private void CalculateDynamicAttributeValues()
         {
-            foreach (string propertyName in EnumeratePropertyValuesForRelatedItem())
+            foreach (string attributeName in EnumerateDynamicAttributeNamesForRelatedItem())
             {
-                this.GraphPropertyValues[propertyName] = this.RecalculatePropertyValue(propertyName);
-            }
-        }
-
-        private void OnRelatedItemPropertyChanged(GraphItemPropertyChangedEventArgs args)
-        {
-            string propertyName = args.PropertyName;
-
-            bool propertyValueChanged = false;
-            object recalculatedValue = this.RecalculatePropertyValue(propertyName);
-
-            if(!this.graphPropertyValues.ContainsKey(propertyName))
-            {
-                this.graphPropertyValues[propertyName] = recalculatedValue;
-                propertyValueChanged = true;
-            }
-            else if(this.graphPropertyValues[propertyName] != recalculatedValue)
-            {
-                this.graphPropertyValues[propertyName] = recalculatedValue;
-                propertyValueChanged = true;
-            }
-
-            if(propertyValueChanged)
-            {
-                this.OnGraphPropertyValueChanged(propertyName);
+                this.DynamicAttributeValues[attributeName] = this.RecalculateDynamicAttributeValue(attributeName);
             }
         }
 
-        private void OnGraphPropertyValueChanged(string propertyName)
+        private void OnRelatedItemDynamicAttributeChanged(DynamicAttributeChangedEventArgs args)
         {
-            if(this.GraphItemViewModelPropertyChanged != null)
+            string attributeName = args.DynamicAttributeName;
+
+            bool viewModelAttributeValueChanged = false;
+            object recalculatedValue = this.RecalculateDynamicAttributeValue(attributeName);
+
+            if(!this.dynamicAttributeValues.ContainsKey(attributeName))
             {
-                this.GraphItemViewModelPropertyChanged(new GraphViewModelPropertyChangedEventArgs(propertyName));
+                this.dynamicAttributeValues[attributeName] = recalculatedValue;
+                viewModelAttributeValueChanged = true;
+            }
+            else if(this.dynamicAttributeValues[attributeName] != recalculatedValue)
+            {
+                this.dynamicAttributeValues[attributeName] = recalculatedValue;
+                viewModelAttributeValueChanged = true;
+            }
+
+            if(viewModelAttributeValueChanged)
+            {
+                this.OnViewModelDynamicAttributeValueChanged(attributeName);
+            }
+        }
+
+        private void OnViewModelDynamicAttributeValueChanged(string attributeName)
+        {
+            if(this.ViewModelDynamicAttributeChanged != null)
+            {
+                this.ViewModelDynamicAttributeChanged(new ViewModelDynamicAttributeChangedEventArgs(attributeName));
             }
         }
     }

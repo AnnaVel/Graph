@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace GraphTests
 {
-    public class CustomProperty : IGraphItemProperty
+    public class CustomDynamicAttribute : IDynamicAttribute
     {
         public string Name
         {
-            get { return "This is a custom property"; }
+            get { return "This is a custom dynamic attribute."; }
         }
 
         public Type ValueType
@@ -21,7 +21,7 @@ namespace GraphTests
 
         public object ValueAsObject
         {
-            get { return "This is a custom property"; }
+            get { return "This is a custom dynamic attribute."; }
         }
     }
 }

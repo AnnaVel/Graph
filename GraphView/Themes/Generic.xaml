@@ -27,7 +27,7 @@
                 <ControlTemplate TargetType="views:VertexView">
                     <Ellipse DataContext="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}" 
                              Width="{Binding Size.Width}" Height="{Binding Size.Height}"
-                             Fill="{ext:GraphProperty PropertyName=color, DefaultValue=Red, Converter={StaticResource ResourceKey=StringToBrushConverter}}" />
+                             Fill="{ext:DynamicAttribute AttributeName=color, DefaultValue=Red, Converter={StaticResource ResourceKey=StringToBrushConverter}}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -44,7 +44,7 @@
                           Y1="{Binding StartLocation.Y}"
                           X2="{Binding EndLocation.X}"
                           Y2="{Binding EndLocation.Y}"
-                          Stroke="{ext:GraphProperty PropertyName=color, DefaultValue=Green, Converter={StaticResource ResourceKey=StringToBrushConverter}}"
+                          Stroke="{ext:DynamicAttribute AttributeName=color, DefaultValue=Green, Converter={StaticResource ResourceKey=StringToBrushConverter}}"
                           StrokeThickness="1" />
                 </ControlTemplate>
             </Setter.Value>

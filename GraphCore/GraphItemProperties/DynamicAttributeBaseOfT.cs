@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GraphCore.GraphItemProperties
 {
-    public abstract class GraphItemPropertyBase<T> : IGraphItemProperty
+    public abstract class DynamicAttributeBase<T> : IDynamicAttribute
     {
         private string name;
         private T value;
@@ -44,7 +44,7 @@ namespace GraphCore.GraphItemProperties
             }
         }
 
-        public GraphItemPropertyBase(string name, T value)
+        public DynamicAttributeBase(string name, T value)
         {
             Guard.ThrowExceptionIfNullOrEmpty(name, "name");
 

@@ -6,28 +6,28 @@ using System.Threading.Tasks;
 
 namespace GraphCore.GraphItemProperties
 {
-    public class GraphItemPropertyFactory
+    public class DynamicAttributeFactory
     {
-        private readonly Dictionary<Predicate<object>, Func<string, object, IGraphItemProperty>> vertexPropertyConstructorFunctions;
+        private readonly Dictionary<Predicate<object>, Func<string, object, IDynamicAttribute>> dynamicAttributeConstructorFunctions;
 
-        protected Dictionary<Predicate<object>, Func<string, object, IGraphItemProperty>> VertexPropertyConstructorFunctions
+        protected Dictionary<Predicate<object>, Func<string, object, IDynamicAttribute>> DynamicAttributeConstructorFunctions
         {
             get
             {
-                return this.vertexPropertyConstructorFunctions;
+                return this.dynamicAttributeConstructorFunctions;
             }
         }
 
-        public GraphItemPropertyFactory()
+        public DynamicAttributeFactory()
         {
-            this.vertexPropertyConstructorFunctions = new Dictionary<Predicate<object>, Func<string, object, IGraphItemProperty>>();
+            this.dynamicAttributeConstructorFunctions = new Dictionary<Predicate<object>, Func<string, object, IDynamicAttribute>>();
 
             this.RegisterConstructorFunctions();
         }
 
-        public IGraphItemProperty CreateVertexProperty(string name, object value)
+        public IDynamicAttribute CreateDynamicAttribute(string name, object value)
         {
-            foreach (var pair in this.vertexPropertyConstructorFunctions)
+            foreach (var pair in this.dynamicAttributeConstructorFunctions)
             {
                 Predicate<object> predicate = pair.Key;
 
@@ -38,49 +38,49 @@ namespace GraphCore.GraphItemProperties
                 }
             }
 
-            return new ObjectGraphItemProperty(name, value);
+            return new ObjectDynamicAttribute(name, value);
         }
 
         protected virtual void RegisterConstructorFunctions()
         {
-            this.vertexPropertyConstructorFunctions.Add(
+            this.dynamicAttributeConstructorFunctions.Add(
                 (value) =>
                 {
                     return value is string;
                 },
                 (name, value) =>
                 {
-                    return new StringGraphItemProperty(name, (string)value);
+                    return new StringDynamicAttribute(name, (string)value);
                 });
 
-            this.vertexPropertyConstructorFunctions.Add(
+            this.dynamicAttributeConstructorFunctions.Add(
                 (value) =>
                 {
                     return value is bool;
                 },
                 (name, value) =>
                 {
-                    return new BooleanGraphItemProperty(name, (bool)value);
+                    return new BooleanDynamicAttribute(name, (bool)value);
                 });
 
-            this.vertexPropertyConstructorFunctions.Add(
+            this.dynamicAttributeConstructorFunctions.Add(
                 (value) =>
                 {
                     return value is int;
                 },
                 (name, value) =>
                 {
-                    return new IntegerGraphItemProperty(name, (int)value);
+                    return new IntegerDynamicAttribute(name, (int)value);
                 });
 
-            this.vertexPropertyConstructorFunctions.Add(
+            this.dynamicAttributeConstructorFunctions.Add(
                 (value) =>
                 {
                     return value is double;
                 },
                 (name, value) =>
                 {
-                    return new DoubleGraphItemProperty(name, (double)value);
+                    return new DoubleDynamicAttribute(name, (double)value);
                 });
         }
     }

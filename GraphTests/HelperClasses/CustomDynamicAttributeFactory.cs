@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace GraphTests
 {
-    public class CustomPropertyFactory : GraphItemPropertyFactory
+    public class CustomDynamicAttributeFactory : DynamicAttributeFactory
     {
         protected override void RegisterConstructorFunctions()
         {
-            this.VertexPropertyConstructorFunctions.Add(
+            this.DynamicAttributeConstructorFunctions.Add(
                 (value) =>
                 {
                     return true;
                 },
                 (name, value) =>
                 {
-                    return new CustomProperty();
+                    return new CustomDynamicAttribute();
                 });
         }
     }

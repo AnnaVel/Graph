@@ -37,19 +37,19 @@ namespace WpfGraphTestApp
             this.graphView.Graph = graph;
 
             Vertex x = graph.GraphStructure.AddVertex("x");
-            x.SetProperty("order", "1");
+            x.SetDynamicAttribute("order", "1");
             Vertex y = graph.GraphStructure.AddVertex("y");
-            y.SetProperty("order", "2");
+            y.SetDynamicAttribute("order", "2");
             graph.GraphStructure.AddLine(x, y);
             Vertex z = graph.GraphStructure.AddVertex("z");
-            z.SetProperty("order", "3");
+            z.SetDynamicAttribute("order", "3");
             graph.GraphStructure.AddLine(x, z);
         }
 
         private void ChangeColorToSecondVertex(object sender, RoutedEventArgs e)
         {
             Vertex second = this.graphView.Graph.GraphStructure.Vertices.ElementAt(1);
-            second.SetProperty("color", "Green");
+            second.SetDynamicAttribute("color", "Green");
         }
 
         private void RemoveFirstVertex(object sender, RoutedEventArgs e)

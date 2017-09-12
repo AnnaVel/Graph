@@ -62,7 +62,7 @@
     <Compile Include="UILayers\UILayer.cs" />
     <Compile Include="UILayers\UILayerContainer.cs" />
     <Compile Include="UILayers\VertexUILayer.cs" />
-    <Compile Include="Utilities\GraphPropertyExtension.cs" />
+    <Compile Include="Utilities\DynamicAttributeExtension.cs" />
     <Compile Include="Views\EdgeView.cs" />
     <Compile Include="Views\GraphItemView.cs" />
     <Compile Include="Views\VertexView.cs" />

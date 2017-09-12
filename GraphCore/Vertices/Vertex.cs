@@ -11,19 +11,19 @@ namespace GraphCore.Vertices
 {
     public abstract class Vertex : GraphStructureItem
     {
-        private readonly VertexPropertyList propertyList;
+        private readonly VertexDynamicAttributeList dynamicAttributeList;
 
-        internal override GraphItemPropertyList PropertyList
+        internal override DynamicAttributeList DynamicAttributeList
         {
             get
             {
-                return this.propertyList;
+                return this.dynamicAttributeList;
             }
         }
 
         public Vertex()
         {
-            this.propertyList = new VertexPropertyList(this);
+            this.dynamicAttributeList = new VertexDynamicAttributeList(this);
         }
 
         public IEnumerable<Vertex> GetSuccessors()

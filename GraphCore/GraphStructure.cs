@@ -20,8 +20,8 @@ namespace GraphCore
 
         private VertexFactory vertexFactory;
         private EdgeFactory edgeFactory;
-        private GraphItemPropertyFactory vertexPropertyFactory;
-        private GraphItemPropertyFactory edgePropertyFactory;
+        private DynamicAttributeFactory vertexDynamicAttributeFactory;
+        private DynamicAttributeFactory edgeDynamicAttributeFactory;
 
         public IEnumerable<Vertex> Vertices
         {
@@ -63,27 +63,27 @@ namespace GraphCore
             }
         }
 
-        public GraphItemPropertyFactory VertexPropertyFactory
+        public DynamicAttributeFactory VertexDynamicAttributeFactory
         {
             get
             {
-                return this.vertexPropertyFactory;
+                return this.vertexDynamicAttributeFactory;
             }
             set
             {
-                this.vertexPropertyFactory = value;
+                this.vertexDynamicAttributeFactory = value;
             }
         }
 
-        public GraphItemPropertyFactory EdgePropertyFactory
+        public DynamicAttributeFactory EdgeDynamicAttributeFactory
         {
             get
             {
-                return this.edgePropertyFactory;
+                return this.edgeDynamicAttributeFactory;
             }
             set
             {
-                this.edgePropertyFactory = value;
+                this.edgeDynamicAttributeFactory = value;
             }
         }
 
@@ -96,8 +96,8 @@ namespace GraphCore
 
             this.vertexFactory = new VertexFactory();
             this.edgeFactory = new EdgeFactory();
-            this.vertexPropertyFactory = new GraphItemPropertyFactory();
-            this.edgePropertyFactory = new GraphItemPropertyFactory();
+            this.vertexDynamicAttributeFactory = new DynamicAttributeFactory();
+            this.edgeDynamicAttributeFactory = new DynamicAttributeFactory();
         }
 
         public Vertex AddVertex(object value)

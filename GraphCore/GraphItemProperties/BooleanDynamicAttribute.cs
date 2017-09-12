@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace GraphCore.GraphItemProperties
 {
-    public class BooleanGraphItemProperty : GraphItemPropertyBase<bool>
+    public class BooleanDynamicAttribute : DynamicAttributeBase<bool>
     {
-        public BooleanGraphItemProperty(string name, bool value)
+        public BooleanDynamicAttribute(string name, bool value)
             :base(name, value)
         {
 

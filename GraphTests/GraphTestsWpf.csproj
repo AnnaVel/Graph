@@ -76,8 +76,8 @@
     <Compile Include="HelperClasses\CustomValueEdge.cs" />
     <Compile Include="HelperClasses\CustomValueVertex.cs" />
     <Compile Include="HelperClasses\CustomVertexFactory.cs" />
-    <Compile Include="HelperClasses\CustomProperty.cs" />
-    <Compile Include="HelperClasses\CustomPropertyFactory.cs" />
+    <Compile Include="HelperClasses\CustomDynamicAttribute.cs" />
+    <Compile Include="HelperClasses\CustomDynamicAttributeFactory.cs" />
     <Compile Include="HelperClasses\ExpectedEdgeDescriptor.cs" />
     <Compile Include="HelperClasses\ExpectedVertexDescriptor.cs" />
     <Compile Include="GraphAddRemoveEdgesTests.cs" />
@@ -90,8 +90,8 @@
     <Compile Include="VertexEdgeRelationshipsTests.cs" />
     <Compile Include="StressTests.cs" />
     <Compile Include="VertexFactoryTests.cs" />
-    <Compile Include="GraphItemPropertiesTests.cs" />
-    <Compile Include="GraphItemPropertyFactoryTests.cs" />
+    <Compile Include="DynamicAttributesTests.cs" />
+    <Compile Include="DynamicAttributeFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

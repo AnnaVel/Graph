@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GraphCore.GraphItemProperties
 {
-    public interface IGraphItemProperty
+    public interface IDynamicAttribute
     {
         string Name { get; }
         Type ValueType { get; }

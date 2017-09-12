@@ -20,31 +20,31 @@ namespace GraphCore
             }
         }
 
-        internal abstract GraphItemPropertyList PropertyList { get; }
+        internal abstract DynamicAttributeList DynamicAttributeList { get; }
 
         public abstract object ValueAsObject
         {
             get;
         }
 
-        public IGraphItemProperty GetProperty(string name)
+        public IDynamicAttribute GetDynamicAttribute(string name)
         {
-            return this.PropertyList.GetProperty(name);
+            return this.DynamicAttributeList.GetDynamicAttribute(name);
         }
 
-        public void SetProperty(string name, object value)
+        public void SetDynamicAttribute(string name, object value)
         {
-            this.PropertyList.SetProperty(name, value);
+            this.DynamicAttributeList.SetDynamicAttribute(name, value);
         }
 
-        public bool RemoveProperty(string name)
+        public bool RemoveDynamicAttribute(string name)
         {
-            return this.PropertyList.RemoveProperty(name);
+            return this.DynamicAttributeList.RemoveDynamicAttribute(name);
         }
 
-        public IEnumerable<string> EnumeratePropertyNames()
+        public IEnumerable<string> EnumerateDynamicAttributeNames()
         {
-            return this.PropertyList.EnumeratePropertyNames();
+            return this.DynamicAttributeList.EnumerateDynamicAttributeNames();
         }
 
         internal void RegisterItemToAStructure(GraphStructure graphStructure)

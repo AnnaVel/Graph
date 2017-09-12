@@ -18,9 +18,9 @@
                             <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=DataContext}">
                                 <Rectangle 
                                     Width="{Binding Size.Width}" Height="{Binding Size.Height}"
-                                    Fill="{ext:GraphProperty PropertyName=color, DefaultValue=Red, Converter={StaticResource ResourceKey=StringToBrushConverter}}" />
-                                <TextBlock Text="{ext:GraphProperty PropertyName=order}" 
-                                   Foreground="{ext:GraphProperty PropertyName=color, DefaultValue=Black, Converter={StaticResource ResourceKey=StringToBrushConverter}}" />
+                                    Fill="{ext:DynamicAttribute AttributeName=color, DefaultValue=Red, Converter={StaticResource ResourceKey=StringToBrushConverter}}" />
+                                <TextBlock Text="{ext:DynamicAttribute AttributeName=order}" 
+                                   Foreground="{ext:DynamicAttribute AttributeName=color, DefaultValue=Black, Converter={StaticResource ResourceKey=StringToBrushConverter}}" />
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>

@@ -51,31 +51,31 @@ namespace GraphViewModel.ViewModels
         {
         }
 
-        protected override IEnumerable<string> EnumeratePropertyValuesForRelatedItem()
+        protected override IEnumerable<string> EnumerateDynamicAttributeNamesForRelatedItem()
         {
-            return this.RelatedItem.EnumeratePropertyNames();
+            return this.RelatedItem.EnumerateDynamicAttributeNames();
         }
 
-        protected override object RecalculatePropertyValue(string propertyName)
+        protected override object RecalculateDynamicAttributeValue(string attributeName)
         {
-            IGraphItemProperty property = this.RelatedItem.GetProperty(propertyName);
+            IDynamicAttribute attribute = this.RelatedItem.GetDynamicAttribute(attributeName);
 
-            if (property != null)
+            if (attribute != null)
             {
-                return property.ValueAsObject;
+                return attribute.ValueAsObject;
             }
 
             return null;
         }
 
-        protected override void SubscribeToRelatedItemEvents(GraphItemPropertyChangedEventHandler graphPropertyChangedHandler)
+        protected override void SubscribeToRelatedItemEvents(DynamicAttributeChangedEventHandler attributeChangedHandler)
         {
-            this.RelatedItem.PropertyList.GraphItemPropertyChanged += graphPropertyChangedHandler;
+            this.RelatedItem.DynamicAttributeList.DynamicAttributeChanged += attributeChangedHandler;
         }
 
-        protected override void UnsubscribeFromRelatedItemEvents(GraphItemPropertyChangedEventHandler graphPropertyChangedHandler)
+        protected override void UnsubscribeFromRelatedItemEvents(DynamicAttributeChangedEventHandler attributeChangedHandler)
         {
-            this.RelatedItem.PropertyList.GraphItemPropertyChanged -= graphPropertyChangedHandler;
+            this.RelatedItem.DynamicAttributeList.DynamicAttributeChanged -= attributeChangedHandler;
         }
     }
 }

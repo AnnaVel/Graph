@@ -1,15 +1,10 @@
 ﻿using GraphCore.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraphCore.Vertices
 {
     public class VertexBase<T> : Vertex
     {
-        private T value;
+        private readonly T value;
 
         public T Value
         {

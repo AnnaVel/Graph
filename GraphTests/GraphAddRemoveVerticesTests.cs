@@ -4,7 +4,6 @@ using GraphCore.Events;
 using GraphCore.Vertices;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace GraphTests
@@ -24,6 +23,7 @@ namespace GraphTests
 
             Assert.AreEqual(1, graph.GraphStructure.Vertices.Count());
             Assert.AreEqual(xVertex, graph.GraphStructure.Vertices.First());
+            Assert.AreEqual(xVertex, graph.GraphStructure.GetVertexByValue(vertexValue));
             Assert.AreEqual(graph.GraphStructure, xVertex.Owner);
             eventFireAsserter.AssertFiredChanges();
         }
@@ -60,6 +60,7 @@ namespace GraphTests
             Assert.IsTrue(result);
             Assert.IsNull(xVertex.Owner);
             Assert.AreEqual(0, graph.GraphStructure.Vertices.Count());
+            Assert.Throws<ArgumentException>(() => { graph.GraphStructure.GetVertexByValue(vertexValue); });
             eventFireAsserter.AssertFiredChanges();
             Assert.DoesNotThrow(() => graph.GraphStructure.AddVertex(vertexValue));
         }

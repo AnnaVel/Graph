@@ -72,6 +72,7 @@
     <Compile Include="DynamicAttributes\EdgeDynamicAttributeList.cs" />
     <Compile Include="DynamicAttributes\VertexDynamicAttributeList.cs" />
     <Compile Include="GraphStructureItem.cs" />
+    <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\Guard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DynamicAttributes\BooleanDynamicAttribute.cs" />

@@ -10,7 +10,9 @@ namespace GraphCore.Edges
 {
     public class EdgeBase<T> : Edge
     {
-        private T value;
+        private readonly T value;
+        private readonly bool isWeighted;
+        private readonly double weight;
 
         public T Value
         {
@@ -28,10 +30,28 @@ namespace GraphCore.Edges
             }
         }
 
+        public override bool IsWeighted
+        {
+            get
+            {
+                return this.isWeighted;
+            }
+        }
+
+        public override double Weight
+        {
+            get
+            {
+                return this.weight;
+            }
+        }
+
         protected EdgeBase(Vertex firstVertex, Vertex secondVertex, bool isDirected, T value)
             :base(firstVertex, secondVertex, isDirected)
         {
             this.value = value;
+            this.isWeighted = value.IsNumber();
+            this.weight = value.GetEdgeWeightFromObject();
         }
     }
 }

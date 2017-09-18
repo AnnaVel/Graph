@@ -11,6 +11,8 @@ namespace GraphCore.Edges
 {
     public abstract class Edge : GraphStructureItem
     {
+        public const double UnweightedEdgeDefaultWeight = 1;
+
         private readonly EdgeDynamicAttributeList dynamicAttributeList;
 
         private Vertex firstVertex;
@@ -40,6 +42,10 @@ namespace GraphCore.Edges
                 return this.isDirected;
             }
         }
+
+        public abstract bool IsWeighted { get; }
+
+        public abstract double Weight { get; }
 
         internal override DynamicAttributeList DynamicAttributeList
         {

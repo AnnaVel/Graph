@@ -28,18 +28,18 @@ namespace GraphTests.AlgorithmTests
         {
             Graph graph = TestHelper.DefineSimpleGraph();
 
-            Vertex one = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(1));
-            Vertex five = graph.GraphStructure.Vertices.FirstOrDefault(v=> v.ValueAsObject.Equals(5));
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
+            Vertex five = graph.GraphStructure.GetVertexByValue(5);
             DijkstraRouteResult result = graph.AlgorithmLibrary.Execute<DijkstraRouteParameter, DijkstraRouteResult>(AlgorithmNames.DijkstraRouteAlgorithmName, new DijkstraRouteParameter(one, five));
 
             double expectedTotalDistance = 20;
             bool expectedResultIsValid = true;
             List<Vertex> expectedPath = new List<Vertex>()
             {
-                graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(1)),
-                graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(3)),
-                graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(6)),
-                graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(5)),
+                graph.GraphStructure.GetVertexByValue(1),
+                graph.GraphStructure.GetVertexByValue(3),
+                graph.GraphStructure.GetVertexByValue(6),
+                graph.GraphStructure.GetVertexByValue(5),
             };
 
             Assert.AreEqual(expectedTotalDistance, result.TotalDistance);
@@ -51,12 +51,12 @@ namespace GraphTests.AlgorithmTests
         public void NegativeEdge()
         {
             Graph graph = TestHelper.DefineSimpleGraph();
-            Vertex three = graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(3));
-            Vertex four = graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(4));
+            Vertex three = graph.GraphStructure.GetVertexByValue(3);
+            Vertex four = graph.GraphStructure.GetVertexByValue(4);
             graph.GraphStructure.AddLine(three, four, -11);
 
-            Vertex one = graph.GraphStructure.Vertices.FirstOrDefault((v) => { return v.ValueAsObject.Equals(1); });
-            Vertex five = graph.GraphStructure.Vertices.FirstOrDefault((v) => { return v.ValueAsObject.Equals(5); });
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
+            Vertex five = graph.GraphStructure.GetVertexByValue(5);
 
             DijkstraRouteResult result = graph.AlgorithmLibrary.Execute<DijkstraRouteParameter, DijkstraRouteResult>(AlgorithmNames.DijkstraRouteAlgorithmName, new DijkstraRouteParameter(one, five));
 
@@ -64,10 +64,10 @@ namespace GraphTests.AlgorithmTests
             bool expectedResultIsValid = false;
             List<Vertex> expectedPath = new List<Vertex>()
             {
-                graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(1)),
-                graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(3)),
-                graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(4)),
-                graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(5)),
+                graph.GraphStructure.GetVertexByValue(1),
+                graph.GraphStructure.GetVertexByValue(3),
+                graph.GraphStructure.GetVertexByValue(4),
+                graph.GraphStructure.GetVertexByValue(5),
             };
 
             Assert.AreEqual(expectedTotalDistance, result.TotalDistance);
@@ -126,7 +126,7 @@ namespace GraphTests.AlgorithmTests
         {
             Graph graph = TestHelper.DefineSimpleGraph();
             Vertex seven = graph.GraphStructure.AddVertex(7);
-            Vertex one = graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(1));
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
 
             DijkstraRouteResult result = graph.AlgorithmLibrary.Execute<DijkstraRouteParameter, DijkstraRouteResult>(AlgorithmNames.DijkstraRouteAlgorithmName, new DijkstraRouteParameter(one, seven));
 
@@ -145,14 +145,14 @@ namespace GraphTests.AlgorithmTests
             Graph graph = TestHelper.DefineSimpleGraph();
 
             graph.AlgorithmLibrary.GetAlgorithm(AlgorithmNames.DijkstraRouteAlgorithmName).SetDynamicAttributesInStructure = true;
-            Vertex one = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(1));
-            Vertex five = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(5));
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
+            Vertex five = graph.GraphStructure.GetVertexByValue(5);
             DijkstraRouteResult result = graph.AlgorithmLibrary.Execute<DijkstraRouteParameter, DijkstraRouteResult>(AlgorithmNames.DijkstraRouteAlgorithmName, new DijkstraRouteParameter(one, five));
 
-            Vertex two = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(2));
-            Vertex three = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(3));
-            Vertex four = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(4));
-            Vertex six = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(6));
+            Vertex two = graph.GraphStructure.GetVertexByValue(2);
+            Vertex three = graph.GraphStructure.GetVertexByValue(3);
+            Vertex four = graph.GraphStructure.GetVertexByValue(4);
+            Vertex six = graph.GraphStructure.GetVertexByValue(6);
 
             TestHelper.AssertDijkstraAttributeValuesForVertexAreSet(graph, one, true, null, 0);
             TestHelper.AssertDijkstraAttributeValuesForVertexAreSet(graph, two, true, null, 7);
@@ -167,14 +167,14 @@ namespace GraphTests.AlgorithmTests
         {
             Graph graph = TestHelper.DefineSimpleGraph();
 
-            Vertex one = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(1));
-            Vertex five = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(5));
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
+            Vertex five = graph.GraphStructure.GetVertexByValue(5);
             DijkstraRouteResult result = graph.AlgorithmLibrary.Execute<DijkstraRouteParameter, DijkstraRouteResult>(AlgorithmNames.DijkstraRouteAlgorithmName, new DijkstraRouteParameter(one, five));
 
-            Vertex two = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(2));
-            Vertex three = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(3));
-            Vertex four = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(4));
-            Vertex six = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(6));
+            Vertex two = graph.GraphStructure.GetVertexByValue(2);
+            Vertex three = graph.GraphStructure.GetVertexByValue(3);
+            Vertex four = graph.GraphStructure.GetVertexByValue(4);
+            Vertex six = graph.GraphStructure.GetVertexByValue(6);
 
             TestHelper.AssertDijkstraAttributesForVertexAreNotSet(graph, one);
             TestHelper.AssertDijkstraAttributesForVertexAreNotSet(graph, two);
@@ -189,17 +189,17 @@ namespace GraphTests.AlgorithmTests
         {
             Graph graph = TestHelper.DefineSimpleUnweightedGraph();
 
-            Vertex one = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(1));
-            Vertex four = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(4));
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
+            Vertex four = graph.GraphStructure.GetVertexByValue(4);
             DijkstraRouteResult result = graph.AlgorithmLibrary.Execute<DijkstraRouteParameter, DijkstraRouteResult>(AlgorithmNames.DijkstraRouteAlgorithmName, new DijkstraRouteParameter(one, four));
 
             double expectedTotalDistance = 2;
             bool expectedResultIsValid = true;
             List<Vertex> expectedPath = new List<Vertex>()
             {
-                graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(1)),
-                graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(2)),
-                graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(4)),
+                graph.GraphStructure.GetVertexByValue(1),
+                graph.GraphStructure.GetVertexByValue(2),
+                graph.GraphStructure.GetVertexByValue(4),
             };
 
             Assert.AreEqual(expectedTotalDistance, result.TotalDistance);
@@ -228,21 +228,21 @@ namespace GraphTests.AlgorithmTests
         public void GraphHasVertexWithSelfPointingCycle()
         {
             Graph graph = TestHelper.DefineSimpleGraph();
-            Vertex three = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(3));
+            Vertex three = graph.GraphStructure.GetVertexByValue(3);
             graph.GraphStructure.AddLine(three, three, 10);
 
-            Vertex one = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(1));
-            Vertex five = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(5));
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
+            Vertex five = graph.GraphStructure.GetVertexByValue(5);
             DijkstraRouteResult result = graph.AlgorithmLibrary.Execute<DijkstraRouteParameter, DijkstraRouteResult>(AlgorithmNames.DijkstraRouteAlgorithmName, new DijkstraRouteParameter(one, five));
 
             double expectedTotalDistance = 20;
             bool expectedResultIsValid = true;
             List<Vertex> expectedPath = new List<Vertex>()
             {
-                graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(1)),
-                graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(3)),
-                graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(6)),
-                graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(5)),
+                graph.GraphStructure.GetVertexByValue(1),
+                graph.GraphStructure.GetVertexByValue(3),
+                graph.GraphStructure.GetVertexByValue(6),
+                graph.GraphStructure.GetVertexByValue(5),
             };
 
             Assert.AreEqual(expectedTotalDistance, result.TotalDistance);
@@ -255,8 +255,8 @@ namespace GraphTests.AlgorithmTests
         {
             Graph graph = TestHelper.DefineSimpleGraph();
 
-            Vertex one = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(1));
-            Vertex five = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(5));
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
+            Vertex five = graph.GraphStructure.GetVertexByValue(5);
 
             Assert.Throws<ArgumentException>(() =>
            {

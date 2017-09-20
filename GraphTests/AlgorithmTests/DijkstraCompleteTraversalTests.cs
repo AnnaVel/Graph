@@ -29,15 +29,15 @@ namespace GraphTests.AlgorithmTests
         {
             Graph graph = TestHelper.DefineSimpleGraph();
 
-            Vertex one = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(1));
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
             DijkstraCompleteTraversalResult result = graph.AlgorithmLibrary.Execute<DijkstraParameter, DijkstraCompleteTraversalResult>(
                 AlgorithmNames.DijkstraCompleteTraversalAlgorithmName, new DijkstraParameter(one));
 
-            Vertex two = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(2));
-            Vertex three = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(3));
-            Vertex four = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(4));
-            Vertex five = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(5));
-            Vertex six = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(6));
+            Vertex two = graph.GraphStructure.GetVertexByValue(2);
+            Vertex three = graph.GraphStructure.GetVertexByValue(3);
+            Vertex four = graph.GraphStructure.GetVertexByValue(4);
+            Vertex five = graph.GraphStructure.GetVertexByValue(5);
+            Vertex six = graph.GraphStructure.GetVertexByValue(6);
 
             Dictionary<Vertex, double> expectedDistances = new Dictionary<Vertex, double>()
             {
@@ -58,18 +58,18 @@ namespace GraphTests.AlgorithmTests
         public void NegativeEdge()
         {
             Graph graph = TestHelper.DefineSimpleGraph();
-            Vertex three = graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(3));
-            Vertex four = graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(4));
+            Vertex three = graph.GraphStructure.GetVertexByValue(3);
+            Vertex four = graph.GraphStructure.GetVertexByValue(4);
             graph.GraphStructure.AddLine(three, four, -11);
 
-            Vertex one = graph.GraphStructure.Vertices.FirstOrDefault((v) => { return v.ValueAsObject.Equals(1); });
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
 
             DijkstraCompleteTraversalResult result = graph.AlgorithmLibrary.Execute<DijkstraParameter, DijkstraCompleteTraversalResult>(
                 AlgorithmNames.DijkstraCompleteTraversalAlgorithmName, new DijkstraParameter(one));
 
-            Vertex two = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(2));
-            Vertex five = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(5));
-            Vertex six = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(6));
+            Vertex two = graph.GraphStructure.GetVertexByValue(2);
+            Vertex five = graph.GraphStructure.GetVertexByValue(5);
+            Vertex six = graph.GraphStructure.GetVertexByValue(6);
 
             bool expectedResultIsValid = false;
             Dictionary<Vertex, double> expectedDistances = new Dictionary<Vertex, double>()
@@ -135,16 +135,16 @@ namespace GraphTests.AlgorithmTests
         {
             Graph graph = TestHelper.DefineSimpleGraph();
             Vertex seven = graph.GraphStructure.AddVertex(7);
-            Vertex one = graph.GraphStructure.Vertices.First(v => v.ValueAsObject.Equals(1));
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
 
             DijkstraCompleteTraversalResult result = graph.AlgorithmLibrary.Execute<DijkstraParameter, DijkstraCompleteTraversalResult>(
                 AlgorithmNames.DijkstraCompleteTraversalAlgorithmName, new DijkstraParameter(one));
 
-            Vertex two = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(2));
-            Vertex three = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(3));
-            Vertex four = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(4));
-            Vertex five = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(5));
-            Vertex six = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(6));
+            Vertex two = graph.GraphStructure.GetVertexByValue(2);
+            Vertex three = graph.GraphStructure.GetVertexByValue(3);
+            Vertex four = graph.GraphStructure.GetVertexByValue(4);
+            Vertex five = graph.GraphStructure.GetVertexByValue(5);
+            Vertex six = graph.GraphStructure.GetVertexByValue(6);
 
             // Vertex seven is not included in the result, as vertices that are not in the collection are assumed to be at infinity distance from the start.
             Dictionary<Vertex, double> expectedDistances = new Dictionary<Vertex, double>()
@@ -168,15 +168,15 @@ namespace GraphTests.AlgorithmTests
             Graph graph = TestHelper.DefineSimpleGraph();
 
             graph.AlgorithmLibrary.GetAlgorithm(AlgorithmNames.DijkstraCompleteTraversalAlgorithmName).SetDynamicAttributesInStructure = true;
-            Vertex one = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(1));
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
             DijkstraCompleteTraversalResult result = graph.AlgorithmLibrary.Execute<DijkstraParameter, DijkstraCompleteTraversalResult>(
                 AlgorithmNames.DijkstraCompleteTraversalAlgorithmName, new DijkstraParameter(one));
 
-            Vertex two = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(2));
-            Vertex three = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(3));
-            Vertex four = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(4));
-            Vertex five = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(5));
-            Vertex six = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(6));
+            Vertex two = graph.GraphStructure.GetVertexByValue(2);
+            Vertex three = graph.GraphStructure.GetVertexByValue(3);
+            Vertex four = graph.GraphStructure.GetVertexByValue(4);
+            Vertex five = graph.GraphStructure.GetVertexByValue(5);
+            Vertex six = graph.GraphStructure.GetVertexByValue(6);
 
             TestHelper.AssertDijkstraAttributeValuesForVertexAreSet(graph, one, true, null, 0);
             TestHelper.AssertDijkstraAttributeValuesForVertexAreSet(graph, two, true, null, 7);
@@ -191,16 +191,16 @@ namespace GraphTests.AlgorithmTests
         {
             Graph graph = TestHelper.DefineSimpleGraph();
 
-            Vertex one = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(1));
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
             DijkstraCompleteTraversalResult result = graph.AlgorithmLibrary.Execute<DijkstraParameter, DijkstraCompleteTraversalResult>(
                 AlgorithmNames.DijkstraCompleteTraversalAlgorithmName, new DijkstraParameter(one));
 
-            Vertex two = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(2));
-            Vertex three = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(3));
-            Vertex four = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(4));
+            Vertex two = graph.GraphStructure.GetVertexByValue(2);
+            Vertex three = graph.GraphStructure.GetVertexByValue(3);
+            Vertex four = graph.GraphStructure.GetVertexByValue(4);
 
-            Vertex five = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(5));
-            Vertex six = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(6));
+            Vertex five = graph.GraphStructure.GetVertexByValue(5);
+            Vertex six = graph.GraphStructure.GetVertexByValue(6);
 
             TestHelper.AssertDijkstraAttributesForVertexAreNotSet(graph, one);
             TestHelper.AssertDijkstraAttributesForVertexAreNotSet(graph, two);
@@ -215,15 +215,15 @@ namespace GraphTests.AlgorithmTests
         {
             Graph graph = TestHelper.DefineSimpleUnweightedGraph();
 
-            Vertex one = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(1));
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
             DijkstraCompleteTraversalResult result = graph.AlgorithmLibrary.Execute<DijkstraParameter, DijkstraCompleteTraversalResult>(
                 AlgorithmNames.DijkstraCompleteTraversalAlgorithmName, new DijkstraParameter(one));
 
-            Vertex two = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(2));
-            Vertex three = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(3));
-            Vertex four = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(4));
-            Vertex five = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(5));
-            Vertex six = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(6));
+            Vertex two = graph.GraphStructure.GetVertexByValue(2);
+            Vertex three = graph.GraphStructure.GetVertexByValue(3);
+            Vertex four = graph.GraphStructure.GetVertexByValue(4);
+            Vertex five = graph.GraphStructure.GetVertexByValue(5);
+            Vertex six = graph.GraphStructure.GetVertexByValue(6);
 
             Dictionary<Vertex, double> expectedDistances = new Dictionary<Vertex, double>()
             {
@@ -244,17 +244,17 @@ namespace GraphTests.AlgorithmTests
         public void GraphHasVertexWithSelfPointingCycle()
         {
             Graph graph = TestHelper.DefineSimpleGraph();
-            Vertex three = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(3));
+            Vertex three = graph.GraphStructure.GetVertexByValue(3);
             graph.GraphStructure.AddLine(three, three, 10);
 
-            Vertex one = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(1));
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
             DijkstraCompleteTraversalResult result = graph.AlgorithmLibrary.Execute<DijkstraParameter, DijkstraCompleteTraversalResult>(
                 AlgorithmNames.DijkstraCompleteTraversalAlgorithmName, new DijkstraParameter(one));
 
-            Vertex two = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(2));
-            Vertex four = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(4));
-            Vertex five = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(5));
-            Vertex six = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(6));
+            Vertex two = graph.GraphStructure.GetVertexByValue(2);
+            Vertex four = graph.GraphStructure.GetVertexByValue(4);
+            Vertex five = graph.GraphStructure.GetVertexByValue(5);
+            Vertex six = graph.GraphStructure.GetVertexByValue(6);
 
             Dictionary<Vertex, double> expectedDistances = new Dictionary<Vertex, double>()
             {
@@ -276,8 +276,8 @@ namespace GraphTests.AlgorithmTests
         {
             Graph graph = TestHelper.DefineSimpleGraph();
 
-            Vertex one = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(1));
-            Vertex five = graph.GraphStructure.Vertices.FirstOrDefault(v => v.ValueAsObject.Equals(5));
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
+            Vertex five = graph.GraphStructure.GetVertexByValue(5);
 
             // The DijkstraRouteParameter is a subclass of the DijkstraParameter, so it will do, although providing more information than is necessary.
             Assert.DoesNotThrow(() =>

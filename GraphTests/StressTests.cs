@@ -17,7 +17,7 @@ namespace GraphTests
    //[TestFixture]
     class StressTests
     {
-        // [Test]
+        // [Test, Category("StressTest")]
         public void AddAMillionVertices()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(1.5);
@@ -37,7 +37,7 @@ namespace GraphTests
                 expectedTime, expectedMemory);
         }
 
-       // [Test]
+        // [Test, Category("StressTest")]
         public void AddAMillionVerticesWithEdgesBetweenThem()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(8);
@@ -60,7 +60,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-        // [Test]
+        // [Test, Category("StressTest")]
         public void AddVertexWithAMillionEdgesLeadingFromItToOthers()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(8);
@@ -82,7 +82,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-        //  [Test]
+        //  [Test, Category("StressTest")]
         public void AddTwoVerticesWithAMillionEdgesBetweenThem()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(1.5);
@@ -105,7 +105,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-        // [Test]
+        // [Test, Category("StressTest")]
         public void RemoveAMillionVertices()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(0.5);
@@ -131,7 +131,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-        // [Test]
+        // [Test, Category("StressTest")]
         public void RemoveAMillionVerticesWithEdgesBetweenThem()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
@@ -164,7 +164,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-        // [Test]
+        // [Test, Category("StressTest")]
         public void RemoveAMillionVerticesWithEdgesBetweenThemReverseOrder()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
@@ -198,7 +198,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-        // [Test]
+        // [Test, Category("StressTest")]
         public void RemoveVertexWithAMillionEdgesLeadingFromItToOthers()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(0.6);
@@ -222,7 +222,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-        // [Test]
+        // [Test, Category("StressTest")]
         public void RemoveTwoVerticesWithAMillionEdgesBetweenThem()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(0.5);
@@ -247,7 +247,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-        // [Test]
+        // [Test, Category("StressTest")]
         public void RemoveAMillionEdgesBetweenTwoVertices()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(0.001);
@@ -271,7 +271,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-        // [Test]
+        // [Test, Category("StressTest")]
         public void GetSuccessorsOfVertexWithAMillionEdgesLeadingFromItToOthers()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(0.001);
@@ -295,7 +295,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-        // [Test]
+        // [Test, Category("StressTest")]
         public void TraverseAMillionVerticesWithEdgesBetweenThem()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(3);
@@ -325,7 +325,7 @@ namespace GraphTests
             expectedTime, expectedMemory);
         }
 
-        // [Test]
+        // [Test, Category("StressTest")]
         public void GetIncomingEdgesSpeedTest()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(1);
@@ -356,7 +356,7 @@ namespace GraphTests
             Assert.IsTrue(sw.Elapsed < expectedTime, String.Format("Elapsed time for GetEdgesComingIntoVertex(Vertex vertex) was: {0}", sw.Elapsed.ToString()));
         }
 
-        //[Test]
+        //[Test, Category("StressTest")]
         public void GetOutgoingEdgesSpeedTest()
         {
             TimeSpan expectedTime = TimeSpan.FromSeconds(0.8);

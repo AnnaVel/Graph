@@ -76,6 +76,7 @@ namespace GraphTests.AlgorithmTests
         }
 
 #if !TRAVISENVIRONMENT
+#if !APPVEYORENVIRONMENT
         [Test]
         public void OneMillionVerticesInPathStressTest()
         {
@@ -117,6 +118,7 @@ namespace GraphTests.AlgorithmTests
             },
             TimeSpan.FromSeconds(expectedSeconds), expectedMemory);
         }
+#endif
 #endif
 
         [Test]

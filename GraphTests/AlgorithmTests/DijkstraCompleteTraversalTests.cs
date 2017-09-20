@@ -87,7 +87,8 @@ namespace GraphTests.AlgorithmTests
         }
 
 #if !TRAVISENVIRONMENT
-        [Test, Category("StressTest")]
+#if !APPVEYORENVIRONMENT
+        [Test]
         public void OneMillionVerticesInPathStressTest()
         {
             Graph graph = TestHelper.DefinePathShapedBigGraph();
@@ -105,7 +106,7 @@ namespace GraphTests.AlgorithmTests
             TimeSpan.FromSeconds(expectedSeconds), expectedMemory);
         }
 
-        [Test, Category("StressTest")]
+        [Test]
         public void OneMillionVerticesStarShapedStressTest()
         {
             // For this test the graph has one central vertex with a hundred neighbours
@@ -126,6 +127,7 @@ namespace GraphTests.AlgorithmTests
             },
             TimeSpan.FromSeconds(expectedSeconds), expectedMemory);
         }
+#endif
 #endif
 
         [Test]

@@ -1,6 +1,2 @@
 build_script:
-  - msbuild WpfGraph.sln /p:Configuration=Release
-test:
- categories:
-  except:
-   - StressTest
+  - msbuild WpfGraph.sln /p:Configuration=AppveyorEnvironment

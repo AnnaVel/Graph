@@ -2,9 +2,7 @@
 using GraphCore.DynamicAttributes;
 using GraphCore.Utilities;
 using GraphViewModel.Events;
-using System;
 using System.Collections.Generic;
-using static GraphCore.DynamicAttributes.DynamicAttributeList;
 
 namespace GraphViewModel.ViewModels
 {
@@ -51,13 +49,12 @@ namespace GraphViewModel.ViewModels
 
         public object GetValueForDynamicAttribute(string attributeName)
         {
-            if(!this.dynamicAttributeValues.ContainsKey(attributeName))
+            if (this.dynamicAttributeValues.ContainsKey(attributeName))
             {
-                object attributeValue = this.RecalculateDynamicAttributeValue(attributeName);
-                this.dynamicAttributeValues[attributeName] = attributeValue;
+                return this.dynamicAttributeValues[attributeName];
             }
 
-            return this.dynamicAttributeValues[attributeName];
+            return null;
         }
 
         public event ViewModelDynamicAttributeChangedEventHandler ViewModelDynamicAttributeChanged;
@@ -82,21 +79,33 @@ namespace GraphViewModel.ViewModels
         {
             string attributeName = args.DynamicAttributeName;
 
+            this.RecalculateAndSetDynamicAttributeValueInCollection(attributeName);
+
+            string simpleAttributeName = attributeName.GetPrefixFromAttributeName();
+
+            if (simpleAttributeName != attributeName)
+            {
+                this.RecalculateAndSetDynamicAttributeValueInCollection(simpleAttributeName);
+            }
+        }
+
+        private void RecalculateAndSetDynamicAttributeValueInCollection(string attributeName)
+        {
             bool viewModelAttributeValueChanged = false;
             object recalculatedValue = this.RecalculateDynamicAttributeValue(attributeName);
 
-            if(!this.dynamicAttributeValues.ContainsKey(attributeName))
+            if (!this.dynamicAttributeValues.ContainsKey(attributeName))
             {
                 this.dynamicAttributeValues[attributeName] = recalculatedValue;
                 viewModelAttributeValueChanged = true;
             }
-            else if(this.dynamicAttributeValues[attributeName] != recalculatedValue)
+            else if (this.dynamicAttributeValues[attributeName] != recalculatedValue)
             {
                 this.dynamicAttributeValues[attributeName] = recalculatedValue;
                 viewModelAttributeValueChanged = true;
             }
 
-            if(viewModelAttributeValueChanged)
+            if (viewModelAttributeValueChanged)
             {
                 this.OnViewModelDynamicAttributeValueChanged(attributeName);
             }

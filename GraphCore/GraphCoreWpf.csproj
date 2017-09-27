@@ -85,6 +85,7 @@
     <Compile Include="Algorithms\Dijkstra\DijkstraRouteParameter.cs" />
     <Compile Include="Algorithms\Dijkstra\DijkstraRouteResult.cs" />
     <Compile Include="Algorithms\IAlgorithm.cs" />
+    <Compile Include="DynamicAttributes\DynamicAttributeWithTimeStamp.cs" />
     <Compile Include="Edges\DoubleValueEdge.cs" />
     <Compile Include="Edges\Edge.cs" />
     <Compile Include="Edges\EdgeBaseOfT.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="DynamicAttributes\EdgeDynamicAttributeList.cs" />
     <Compile Include="DynamicAttributes\VertexDynamicAttributeList.cs" />
     <Compile Include="GraphStructureItem.cs" />
+    <Compile Include="Utilities\Constants.cs" />
     <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\Guard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

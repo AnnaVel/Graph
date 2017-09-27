@@ -58,7 +58,7 @@ namespace GraphViewModel.ViewModels
 
         protected override object RecalculateDynamicAttributeValue(string attributeName)
         {
-            IDynamicAttribute attribute = this.RelatedItem.GetDynamicAttribute(attributeName);
+            IDynamicAttribute attribute = this.RelatedItem.GetDynamicAttributeThatWasLastSetInGroup(attributeName);
 
             if (attribute != null)
             {

@@ -1,15 +1,19 @@
-﻿using GraphCore.Edges;
-using GraphCore.Vertices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GraphCore.Utilities
+﻿namespace GraphCore.Utilities
 {
     public static class ExtensionMethods
     {
+        public static string GetPrefixFromAttributeName(this string attributeName)
+        {
+            if (attributeName.Contains(GraphConstants.DynamicAttributePrefixSeparator.ToString()))
+            {
+                return attributeName.Substring(0, attributeName.IndexOf(':'));
+            }
+            else
+            {
+                return attributeName;
+            }
+        }
+
         public static bool IsNumber(this object value)
         {
             return value is double
@@ -73,7 +77,7 @@ namespace GraphCore.Utilities
             }
             else
             {
-                return Edge.UnweightedEdgeDefaultWeight;
+                return GraphConstants.UnweightedEdgeDefaultWeight;
             }
         }
     }

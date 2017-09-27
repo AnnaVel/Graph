@@ -2,9 +2,6 @@
 using GraphCore.DynamicAttributes;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraphCore
 {
@@ -30,6 +27,11 @@ namespace GraphCore
         public IDynamicAttribute GetDynamicAttribute(string name)
         {
             return this.DynamicAttributeList.GetDynamicAttribute(name);
+        }
+
+        public IDynamicAttribute GetDynamicAttributeThatWasLastSetInGroup(string name)
+        {
+            return this.DynamicAttributeList.GetDynamicAttributeThatWasLastSetInGroup(name);
         }
 
         public void SetDynamicAttribute(string name, object value)

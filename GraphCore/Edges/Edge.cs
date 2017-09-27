@@ -1,18 +1,11 @@
 ﻿using GraphCore.DynamicAttributes;
 using GraphCore.Utilities;
 using GraphCore.Vertices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraphCore.Edges
 {
     public abstract class Edge : GraphStructureItem
     {
-        public const double UnweightedEdgeDefaultWeight = 1;
-
         private readonly EdgeDynamicAttributeList dynamicAttributeList;
 
         private Vertex firstVertex;

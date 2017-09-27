@@ -36,7 +36,7 @@ namespace GraphViewModel.ViewModels
         {
             foreach (Vertex vertex in this.RelatedVertexItem)
             {
-                IDynamicAttribute attribute = vertex.GetDynamicAttribute(attributeName);
+                IDynamicAttribute attribute = vertex.GetDynamicAttributeThatWasLastSetInGroup(attributeName); ;
                 if (attribute != null)
                 {
                     return attribute.ValueAsObject;

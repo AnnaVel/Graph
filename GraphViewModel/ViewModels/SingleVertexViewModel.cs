@@ -1,12 +1,6 @@
-﻿using GraphCore.Events;
-using GraphCore.DynamicAttributes;
-using GraphCore.Utilities;
+﻿using GraphCore.DynamicAttributes;
 using GraphCore.Vertices;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraphViewModel.ViewModels
 {
@@ -23,7 +17,7 @@ namespace GraphViewModel.ViewModels
 
         protected override object RecalculateDynamicAttributeValue(string attributeName)
         {
-            IDynamicAttribute attribute = this.RelatedVertexItem.GetDynamicAttribute(attributeName);
+            IDynamicAttribute attribute = this.RelatedVertexItem.GetDynamicAttributeThatWasLastSetInGroup(attributeName);
 
             if(attribute != null)
             {

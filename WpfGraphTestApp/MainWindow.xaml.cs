@@ -1,20 +1,8 @@
 ﻿using GraphCore;
+using GraphCore.Algorithms;
 using GraphCore.Vertices;
-using GraphView.Views;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WpfGraphTestApp
 {
@@ -31,6 +19,46 @@ namespace WpfGraphTestApp
         }
 
         private void GraphView_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void RunDijkstra(object sender, RoutedEventArgs e)
+        {
+            Graph graph = this.graphView.Graph;
+            IAlgorithm dijkstra = graph.AlgorithmLibrary.GetAlgorithm(AlgorithmNames.DijkstraRouteAlgorithmName);
+            dijkstra.SetDynamicAttributesInStructure = true;
+
+            Vertex one = graph.GraphStructure.GetVertexByValue(1);
+            Vertex six = graph.GraphStructure.GetVertexByValue(6);
+
+            graph.AlgorithmLibrary.Execute<DijkstraRouteParameter, DijkstraResult>(AlgorithmNames.DijkstraRouteAlgorithmName, new DijkstraRouteParameter(one, six));
+        }
+
+        private void ConstructDijkstraGraph(object sender, RoutedEventArgs e)
+        {
+            Graph graph = new Graph();
+            this.graphView.Graph = graph;
+
+            Vertex one = graph.GraphStructure.AddVertex(1);
+            Vertex two = graph.GraphStructure.AddVertex(2);
+            Vertex three = graph.GraphStructure.AddVertex(3);
+            Vertex four = graph.GraphStructure.AddVertex(4);
+            Vertex five = graph.GraphStructure.AddVertex(5);
+            Vertex six = graph.GraphStructure.AddVertex(6);
+
+            graph.GraphStructure.AddLine(one, two, 7);
+            graph.GraphStructure.AddLine(one, six, 14);
+            graph.GraphStructure.AddLine(one, three, 9);
+            graph.GraphStructure.AddLine(two, three, 10);
+            graph.GraphStructure.AddLine(two, four, 15);
+            graph.GraphStructure.AddLine(three, six, 14);
+            graph.GraphStructure.AddLine(three, four, 11);
+            graph.GraphStructure.AddLine(six, five, 9);
+            graph.GraphStructure.AddLine(four, five, 4);
+        }
+
+        private void ConstructSimpleGraph(object sender, RoutedEventArgs e)
         {
             Graph graph = new Graph();
 
@@ -56,6 +84,18 @@ namespace WpfGraphTestApp
         {
             Vertex first = this.graphView.Graph.GraphStructure.Vertices.ElementAt(0);
             this.graphView.Graph.GraphStructure.RemoveVertex(first);
+        }
+
+        private void SetComplexAttribute(object sender, RoutedEventArgs e)
+        {
+            Vertex second = this.graphView.Graph.GraphStructure.Vertices.ElementAt(1);
+            second.SetDynamicAttribute("color:test", "Purple");
+        }
+
+        private void RemoveComplexAttribute(object sender, RoutedEventArgs e)
+        {
+            Vertex second = this.graphView.Graph.GraphStructure.Vertices.ElementAt(1);
+            second.RemoveDynamicAttribute("color:test");
         }
     }
 }

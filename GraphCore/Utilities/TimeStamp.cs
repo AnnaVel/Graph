@@ -1,28 +1,32 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 
 namespace GraphCore.Utilities
 {
     internal static class TimeStamp
     {
-        private static DateTime beginning;
-        private static Stopwatch elapsedTimeSinceBegining;
+        private static int index;
 
         static TimeStamp()
         {
-            beginning = DateTime.Now;
-            elapsedTimeSinceBegining = new Stopwatch();
-            elapsedTimeSinceBegining.Start();
+            index = 0;
         }
 
         public static double GetCurrentTimeStamp()
         {
-            TimeSpan elapsed = elapsedTimeSinceBegining.Elapsed;
-            DateTime currentTime = beginning + elapsed;
-            string currentTimeString = currentTime.ToString("yyMMddHHmmssfffff");
-            double stamp = double.Parse(currentTimeString);
+            DateTime currentTime = DateTime.Now;
+            string currentTimeString = currentTime.ToString("yyMMddHHmmssfff");
+            string stampString = currentTimeString + GetIndexTimeStampPart();
+            double stamp = double.Parse(stampString);
 
             return stamp;
+        }
+
+        private static string GetIndexTimeStampPart()
+        {
+            index++;
+            return index.ToString();
         }
     }
 }

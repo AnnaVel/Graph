@@ -113,6 +113,7 @@
     <Compile Include="DynamicAttributes\DynamicAttributeFactory.cs" />
     <Compile Include="DynamicAttributes\DynamicAttributeList.cs" />
     <Compile Include="Utilities\HashHelper.cs" />
+    <Compile Include="Utilities\TimeStamp.cs" />
     <Compile Include="Vertices\DoubleValueVertex.cs" />
     <Compile Include="Vertices\ObjectValueVertex.cs" />
     <Compile Include="Vertices\TextValueVertex.cs" />

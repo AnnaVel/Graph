@@ -25,16 +25,7 @@ namespace GraphCore.DynamicAttributes
             Guard.ThrowExceptionIfNull(attribute, "attribute");
 
             this.attribute = attribute;
-            this.stamp = this.GetCurrentTimeStamp();
-        }
-
-        private double GetCurrentTimeStamp()
-        {
-            DateTime currentTime = DateTime.Now;
-            string currentTimeString = currentTime.ToString("yyMMddHHmmssfff");
-            double stamp = double.Parse(currentTimeString);
-
-            return stamp;
+            this.stamp = TimeStamp.GetCurrentTimeStamp();
         }
     }
 }

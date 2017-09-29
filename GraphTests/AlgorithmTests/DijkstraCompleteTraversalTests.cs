@@ -95,7 +95,7 @@ namespace GraphTests.AlgorithmTests
 
             Vertex startVertex = graph.GraphStructure.Vertices.First();
 
-            int expectedSeconds = 5;
+            double expectedSeconds = 5.5;
             long expectedMemory = 200000;
 
             TestHelper.AssertPerformanceAndMemory(() =>

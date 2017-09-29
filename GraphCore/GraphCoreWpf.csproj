@@ -86,6 +86,7 @@
     <Compile Include="Algorithms\Dijkstra\DijkstraRouteResult.cs" />
     <Compile Include="Algorithms\IAlgorithm.cs" />
     <Compile Include="DynamicAttributes\DynamicAttributeWithTimeStamp.cs" />
+    <Compile Include="DynamicAttributes\TimeStamp.cs" />
     <Compile Include="Edges\DoubleValueEdge.cs" />
     <Compile Include="Edges\Edge.cs" />
     <Compile Include="Edges\EdgeBaseOfT.cs" />
@@ -113,7 +114,7 @@
     <Compile Include="DynamicAttributes\DynamicAttributeFactory.cs" />
     <Compile Include="DynamicAttributes\DynamicAttributeList.cs" />
     <Compile Include="Utilities\HashHelper.cs" />
-    <Compile Include="Utilities\TimeStamp.cs" />
+    <Compile Include="DynamicAttributes\TimeStampCreator.cs" />
     <Compile Include="Vertices\DoubleValueVertex.cs" />
     <Compile Include="Vertices\ObjectValueVertex.cs" />
     <Compile Include="Vertices\TextValueVertex.cs" />

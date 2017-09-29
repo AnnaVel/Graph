@@ -6,7 +6,7 @@ namespace GraphCore.DynamicAttributes
     internal class DynamicAttributeWithTimeStamp
     {
         private IDynamicAttribute attribute;
-        private double stamp;
+        private TimeStamp stamp;
 
         public IDynamicAttribute Attribute
         {
@@ -14,7 +14,7 @@ namespace GraphCore.DynamicAttributes
             set { attribute = value; }
         }
 
-        public double Stamp
+        public TimeStamp Stamp
         {
             get { return stamp; }
             set { stamp = value; }
@@ -25,7 +25,7 @@ namespace GraphCore.DynamicAttributes
             Guard.ThrowExceptionIfNull(attribute, "attribute");
 
             this.attribute = attribute;
-            this.stamp = TimeStamp.GetCurrentTimeStamp();
+            this.stamp = TimeStampCreator.GetCurrentTimeStamp();
         }
     }
 }

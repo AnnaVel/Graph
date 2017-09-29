@@ -4,11 +4,11 @@ using System.Threading;
 
 namespace GraphCore.Utilities
 {
-    internal static class TimeStamp
+    internal static class TimeStampCreator
     {
         private static int index;
 
-        static TimeStamp()
+        static TimeStampCreator()
         {
             index = 0;
         }

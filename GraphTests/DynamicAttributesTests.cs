@@ -1,5 +1,7 @@
 ﻿using GraphCore;
+using GraphCore.DynamicAttributes;
 using GraphCore.Edges;
+using GraphCore.Utilities;
 using GraphCore.Vertices;
 using NUnit.Framework;
 using System;
@@ -122,6 +124,15 @@ namespace GraphTests
         }
 
         [Test]
+        public void Test()
+        {
+            for(int i = 0; i < 100; i++)
+            {
+                this.GetDynamicAttributeThatWasLastSetInGroupThreeAttributesTest();
+            }
+        }
+
+        [Test]
         public void GetDynamicAttributeThatWasLastSetInGroupThreeAttributesTest()
         {
             string attributeName1 = "name";
@@ -136,7 +147,13 @@ namespace GraphTests
             vertex.SetDynamicAttribute(attributeName2, attributeValue2);
             vertex.SetDynamicAttribute(attributeName3, attributeValue3);
 
-            Assert.AreEqual(attributeValue3, vertex.GetDynamicAttributeThatWasLastSetInGroup(attributeName1).ValueAsObject);
+            TimeStamp timeStamp1 = vertex.GetTimeStamp(attributeName1);
+            TimeStamp timeStamp2 = vertex.GetTimeStamp(attributeName2);
+            TimeStamp timeStamp3 = vertex.GetTimeStamp(attributeName3);
+
+            Assert.AreEqual(attributeValue3, vertex.GetDynamicAttributeThatWasLastSetInGroup(attributeName1).ValueAsObject,
+                "attribute1 timeStamp: {0}; attribute2 timeStamp: {1}; attribute3 timeStamp: {2}, currentTimestamp index: {3}",
+                timeStamp1, timeStamp2, timeStamp3, TimeStampCreator.GetIndexTimeStampPart());
         }
 
         [Test]

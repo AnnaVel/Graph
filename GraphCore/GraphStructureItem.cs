@@ -34,6 +34,11 @@ namespace GraphCore
             return this.DynamicAttributeList.GetDynamicAttributeThatWasLastSetInGroup(name);
         }
 
+        public TimeStamp GetTimeStamp(string name)
+        {
+            return this.DynamicAttributeList.GetTimeStampt(name);
+        }
+
         public void SetDynamicAttribute(string name, object value)
         {
             this.DynamicAttributeList.SetDynamicAttribute(name, value);

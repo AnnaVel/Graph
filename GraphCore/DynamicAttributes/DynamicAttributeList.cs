@@ -68,6 +68,11 @@ namespace GraphCore.DynamicAttributes
             return stampedResult != null ? stampedResult.Attribute : null;
         }
 
+        public TimeStamp GetTimeStampt(string name)
+        {
+            return this.innerList[name].Stamp;
+        }
+
         public bool RemoveDynamicAttribute(string name)
         {
             bool result = this.innerList.Remove(name);

@@ -1,4 +1,5 @@
 ﻿#if !TRAVISENVIRONMENT
+#if !APPVEYOERENVIRONMENT
 
 using GraphCore;
 using GraphCore.Edges;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace GraphTests
 {
-    //[TestFixture]
+   //[TestFixture]
     class StressTests
     {
         // [Test]
@@ -23,7 +24,7 @@ namespace GraphTests
             TimeSpan expectedTime = TimeSpan.FromSeconds(1.5);
             int expectedMemory = 141000;
 
-            this.AssertPerformanceAndMemory(() =>
+            TestHelper.AssertPerformanceAndMemory(() =>
             {
                 int numberOfVertices = 1000000;
 
@@ -43,7 +44,7 @@ namespace GraphTests
             TimeSpan expectedTime = TimeSpan.FromSeconds(8);
             int expectedMemory = 864000;
 
-            this.AssertPerformanceAndMemory(() =>
+            TestHelper.AssertPerformanceAndMemory(() =>
             {
                 int numberOfVertices = 1000000;
 
@@ -66,7 +67,7 @@ namespace GraphTests
             TimeSpan expectedTime = TimeSpan.FromSeconds(8);
             int expectedMemory = 945000;
 
-            this.AssertPerformanceAndMemory(() =>
+            TestHelper.AssertPerformanceAndMemory(() =>
             {
                 int numberOfVertices = 1000000;
 
@@ -89,7 +90,7 @@ namespace GraphTests
             int expectedMemory = 132000;
             //This fluctuates between 74000 and 132000
 
-            this.AssertPerformanceAndMemory(() =>
+            TestHelper.AssertPerformanceAndMemory(() =>
             {
                 int numberOfEdges = 1000000;
 
@@ -121,7 +122,7 @@ namespace GraphTests
                 vertices.Add(graph.GraphStructure.AddVertex(i));
             }
 
-            this.AssertPerformanceAndMemory(() =>
+            TestHelper.AssertPerformanceAndMemory(() =>
             {
                 foreach (Vertex vertex in vertices)
                 {
@@ -154,7 +155,7 @@ namespace GraphTests
                 vertices.Add(previousVertex);
             }
 
-            this.AssertPerformanceAndMemory(() =>
+            TestHelper.AssertPerformanceAndMemory(() =>
             {
                 foreach (Vertex vertex in vertices)
                 {
@@ -188,7 +189,7 @@ namespace GraphTests
 
             vertices.Reverse();
 
-            this.AssertPerformanceAndMemory(() =>
+            TestHelper.AssertPerformanceAndMemory(() =>
             {
                 foreach (Vertex vertex in vertices)
                 {
@@ -215,7 +216,7 @@ namespace GraphTests
                 graph.GraphStructure.AddLine(mainVertex, currentVertex);
             }
 
-            this.AssertPerformanceAndMemory(() =>
+            TestHelper.AssertPerformanceAndMemory(() =>
             {
                 graph.GraphStructure.RemoveVertex(mainVertex);
             },
@@ -239,7 +240,7 @@ namespace GraphTests
                 graph.GraphStructure.AddLine(firstVertex, secondVertex);
             }
 
-            this.AssertPerformanceAndMemory(() =>
+            TestHelper.AssertPerformanceAndMemory(() =>
             {
                 graph.GraphStructure.RemoveVertex(firstVertex);
                 graph.GraphStructure.RemoveVertex(secondVertex);
@@ -264,7 +265,7 @@ namespace GraphTests
                 graph.GraphStructure.AddLine(firstVertex, secondVertex);
             }
 
-            this.AssertPerformanceAndMemory(() =>
+            TestHelper.AssertPerformanceAndMemory(() =>
             {
                 graph.GraphStructure.RemoveEdgesBetween(firstVertex, secondVertex);
             },
@@ -288,7 +289,7 @@ namespace GraphTests
                 graph.GraphStructure.AddLine(mainVertex, currentVertex);
             }
 
-            this.AssertPerformanceAndMemory(() =>
+            TestHelper.AssertPerformanceAndMemory(() =>
             {
                 mainVertex.GetSuccessors();
             },
@@ -314,7 +315,7 @@ namespace GraphTests
                 previousVertex = currentVertex;
             }
 
-            this.AssertPerformanceAndMemory(() =>
+            TestHelper.AssertPerformanceAndMemory(() =>
             {
                 Vertex currentVertex = firstVertex;
                 while (currentVertex != null)
@@ -323,33 +324,6 @@ namespace GraphTests
                 }
             },
             expectedTime, expectedMemory);
-        }
-
-        private void AssertPerformanceAndMemory(Action action, TimeSpan expectedDuration, long expectedMemoryInKbs)
-        {
-            int bytesToKb = 1024;
-
-            long memoryBefore = GC.GetTotalMemory(true);
-
-            Stopwatch sw = new Stopwatch();
-
-            sw.Start();
-
-            action();
-
-            sw.Stop();
-
-            long memoryAfter = GC.GetTotalMemory(false);
-
-            long memoryUsageInKb = (memoryAfter - memoryBefore) / bytesToKb;
-
-            Assert.IsTrue(sw.Elapsed < expectedDuration, string.Format("Elapsed time was: {0} expected time was: {1}", sw.Elapsed, expectedDuration));
-            Assert.IsTrue(memoryUsageInKb < expectedMemoryInKbs, string.Format("Used memory was: {0}kb, expected memory was: {1}kb", memoryUsageInKb, expectedMemoryInKbs));
-            Assert.Pass(string.Format(@"Elapsed time was: {0},
-expected time was: {1};
-Used memory was: {2}kb,
-expected memory was: {3}kb",
-                         sw.Elapsed, expectedDuration, memoryUsageInKb, expectedMemoryInKbs));
         }
 
         // [Test]
@@ -415,4 +389,5 @@ expected memory was: {3}kb",
         }
     }
 }
+#endif
 #endif

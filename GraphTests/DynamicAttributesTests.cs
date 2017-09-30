@@ -108,5 +108,99 @@ namespace GraphTests
 
             Assert.IsFalse(result);
         }
+
+        [Test]
+        public void GetDynamicAttributeThatWasLastSetInGroupBasicTest()
+        {
+            string attributeName = "name";
+            object attributeValue = "test";
+            Vertex vertex = this.GetTestVertex();
+
+            vertex.SetDynamicAttribute(attributeName, attributeValue);
+
+            Assert.AreEqual(attributeValue, vertex.GetDynamicAttributeThatWasLastSetInGroup(attributeName).ValueAsObject);
+        }
+
+        [Test]
+        public void GetDynamicAttributeThatWasLastSetInGroupThreeAttributesTest()
+        {
+            string attributeName1 = "name";
+            object attributeValue1 = "test1";
+            string attributeName2 = "name:two";
+            object attributeValue2 = "test2";
+            string attributeName3 = "name:three";
+            object attributeValue3 = "test3";
+            Vertex vertex = this.GetTestVertex();
+
+            vertex.SetDynamicAttribute(attributeName1, attributeValue1);
+            vertex.SetDynamicAttribute(attributeName2, attributeValue2);
+            vertex.SetDynamicAttribute(attributeName3, attributeValue3);
+
+            Assert.AreEqual(attributeValue3, vertex.GetDynamicAttributeThatWasLastSetInGroup(attributeName1).ValueAsObject);
+        }
+
+        [Test]
+        public void GetDynamicAttributeThatWasLastSetInGroupThreeAttributesRemoveLastFirstTest()
+        {
+            string attributeName1 = "name";
+            object attributeValue1 = "test1";
+            string attributeName2 = "name:two";
+            object attributeValue2 = "test2";
+            string attributeName3 = "name:three";
+            object attributeValue3 = "test3";
+            Vertex vertex = this.GetTestVertex();
+
+            vertex.SetDynamicAttribute(attributeName1, attributeValue1);
+            vertex.SetDynamicAttribute(attributeName2, attributeValue2);
+            vertex.SetDynamicAttribute(attributeName3, attributeValue3);
+
+            vertex.RemoveDynamicAttribute(attributeName3);
+
+            Assert.AreEqual(attributeValue2, vertex.GetDynamicAttributeThatWasLastSetInGroup(attributeName1).ValueAsObject);
+        }
+
+        [Test]
+        public void GetDynamicAttributeThatWasLastSetInGroupTwoAttributesOverwriteFirstTest()
+        {
+            string attributeName1 = "name";
+            object attributeValue1 = "test1";
+            string attributeName2 = "name:two";
+            object attributeValue2 = "test2";
+            object overwrittenAttributeValue1 = "test3";
+            Vertex vertex = this.GetTestVertex();
+
+            vertex.SetDynamicAttribute(attributeName1, attributeValue1);
+            vertex.SetDynamicAttribute(attributeName2, attributeValue2);
+            vertex.SetDynamicAttribute(attributeName1, overwrittenAttributeValue1);
+
+            Assert.AreEqual(overwrittenAttributeValue1, vertex.GetDynamicAttributeThatWasLastSetInGroup(attributeName1).ValueAsObject);
+        }
+
+        [Test]
+        public void SetTenMillionDynamicAttributesInGroup()
+        {
+            string attributeName1 = "name";
+            object attributeValue1 = "test1";
+            string attributeName2 = "name:two";
+            object attributeValue2 = "test2";
+            string attributeName3 = "name:three";
+            object attributeValue3 = "test3";
+            string attributeName4 = "name:four";
+            object attributeValue4 = "test4";
+            Vertex vertex = this.GetTestVertex();
+
+            int timesToSet = 10000000;
+            int count = timesToSet / 4;
+
+            for (int i = 0; i < count; i++)
+            {
+                vertex.SetDynamicAttribute(attributeName1, attributeValue1);
+                vertex.SetDynamicAttribute(attributeName2, attributeValue2);
+                vertex.SetDynamicAttribute(attributeName3, attributeValue3);
+                vertex.SetDynamicAttribute(attributeName4, attributeValue4);
+
+                Assert.AreEqual(attributeValue4, vertex.GetDynamicAttributeThatWasLastSetInGroup(attributeName1).ValueAsObject);
+            }
+        }
     }
 }

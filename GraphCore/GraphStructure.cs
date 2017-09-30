@@ -1,6 +1,6 @@
 ﻿using GraphCore.Edges;
 using GraphCore.Utilities;
-using GraphCore.GraphItemProperties;
+using GraphCore.DynamicAttributes;
 using GraphCore.Vertices;
 using System;
 using System.Collections.Generic;
@@ -232,6 +232,16 @@ namespace GraphCore
             }
 
             return result;
+        }
+
+        public Vertex GetVertexByValue(object value)
+        {
+            if(!this.valueToVertexIndex.ContainsKey(value))
+            {
+                throw new ArgumentException("There is no vertex with this value.");
+            }
+
+            return this.valueToVertexIndex[value];
         }
 
         public IEnumerable<Vertex> GetVertexSuccessors(Vertex vertex)

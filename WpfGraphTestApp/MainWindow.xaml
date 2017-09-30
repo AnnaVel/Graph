@@ -6,15 +6,25 @@
         xmlns:local="clr-namespace:WpfGraphTestApp"
         xmlns:graphView="clr-namespace:GraphView;assembly=GraphView"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="520" Width="525">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="20" />
             <RowDefinition Height="20" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="20" />
         </Grid.RowDefinitions>
         <graphView:GraphView x:Name="graphView" />
-        <Button Grid.Row="1" Click="ChangeColorToSecondVertex">Change color of second vertex</Button>
-        <Button Grid.Row="2" Click="RemoveFirstVertex">Remove first vertex</Button>
+        <Button Grid.Row="1" Click="ConstructSimpleGraph">Construct simple graph</Button>
+        <Button Grid.Row="2" Click="ChangeColorToSecondVertex">Change color of second vertex</Button>
+        <Button Grid.Row="3" Click="RemoveFirstVertex">Remove first vertex</Button>
+        <Button Grid.Row="4" Click="SetComplexAttribute">Set complex color attribute on second vertex</Button>
+        <Button Grid.Row="5" Click="RemoveComplexAttribute">Remove complex color attribute from second vertex</Button>
+        <Button Grid.Row="6" Click="ConstructDijkstraGraph">Construct Dijkstra graph</Button>
+        <Button Grid.Row="7" Click="RunDijkstra">Run Dijkstra</Button>
     </Grid>
 </Window>

@@ -1,11 +1,6 @@
-﻿using GraphCore.GraphItemProperties;
+﻿using GraphCore.DynamicAttributes;
 using GraphCore.Utilities;
 using GraphCore.Vertices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraphCore.Edges
 {
@@ -40,6 +35,10 @@ namespace GraphCore.Edges
                 return this.isDirected;
             }
         }
+
+        public abstract bool IsWeighted { get; }
+
+        public abstract double Weight { get; }
 
         internal override DynamicAttributeList DynamicAttributeList
         {

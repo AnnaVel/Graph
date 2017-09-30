@@ -1,13 +1,12 @@
 ﻿using GraphCore;
 using GraphCore.Edges;
 using GraphCore.Events;
+using GraphCore.Utilities;
 using GraphCore.Vertices;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraphTests
 {
@@ -25,7 +24,7 @@ namespace GraphTests
             Edge edge = graph.GraphStructure.AddArrow(x, y);
             eventAsserter.AddExpectedChange(ChangeAction.Add, edge);
 
-            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, null, typeof(UnweightedEdge), edge);
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, null, typeof(UnweightedEdge), edge, false, GraphConstants.UnweightedEdgeDefaultWeight);
             this.AssertRelationship(graph, x, y, new List<Edge>() { edge }, new List<Edge>());
             eventAsserter.AssertFiredChanges();
         }
@@ -42,7 +41,7 @@ namespace GraphTests
             Edge edge = graph.GraphStructure.AddArrow(x, y, weight);
             eventAsserter.AddExpectedChange(ChangeAction.Add, edge);
 
-            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, weight, typeof(DoubleValueEdge), edge);
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, weight, typeof(DoubleValueEdge), edge, true, weight);
             this.AssertRelationship(graph, x, y, new List<Edge>() { edge }, new List<Edge>());
             eventAsserter.AssertFiredChanges();
         }
@@ -66,10 +65,10 @@ namespace GraphTests
             eventAsserter.AddExpectedChange(ChangeAction.Add, thirdArrow);
             eventAsserter.AddExpectedChange(ChangeAction.Add, fourthArrow);
 
-            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, weight, typeof(DoubleValueEdge), firstArrow);
-            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, null, typeof(UnweightedEdge), secondArrow);
-            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, weight, typeof(DoubleValueEdge), thirdArrow);
-            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, null, typeof(UnweightedEdge), fourthArrow);
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, weight, typeof(DoubleValueEdge), firstArrow, true, weight);
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, null, typeof(UnweightedEdge), secondArrow, false, GraphConstants.UnweightedEdgeDefaultWeight);
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, weight, typeof(DoubleValueEdge), thirdArrow, true, weight);
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, true, null, typeof(UnweightedEdge), fourthArrow, false, GraphConstants.UnweightedEdgeDefaultWeight);
             this.AssertRelationship(graph, x, y, new List<Edge>() { firstArrow, secondArrow, thirdArrow, fourthArrow }, new List<Edge>());
             eventAsserter.AssertFiredChanges();
         }
@@ -97,7 +96,7 @@ namespace GraphTests
             Edge arrow = graph.GraphStructure.AddArrow(x, x);
             eventAsserter.AddExpectedChange(ChangeAction.Add, arrow);
 
-            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, x, true, null, typeof(UnweightedEdge), arrow);
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, x, true, null, typeof(UnweightedEdge), arrow, false, GraphConstants.UnweightedEdgeDefaultWeight);
             this.AssertRelationship(graph, x, x, new List<Edge>() { arrow }, new List<Edge>() { arrow });
             eventAsserter.AssertFiredChanges();
         }
@@ -113,7 +112,7 @@ namespace GraphTests
             Edge lineEdge = graph.GraphStructure.AddLine(x, y);
             eventAsserter.AddExpectedChange(ChangeAction.Add, lineEdge);
 
-            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, false, null, typeof(UnweightedEdge), lineEdge);
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, false, null, typeof(UnweightedEdge), lineEdge, false, GraphConstants.UnweightedEdgeDefaultWeight);
             this.AssertRelationship(graph, x, y, new List<Edge>() { lineEdge }, new List<Edge>() { lineEdge });
             eventAsserter.AssertFiredChanges();
         }
@@ -130,7 +129,7 @@ namespace GraphTests
             Edge lineEdge = graph.GraphStructure.AddLine(x, y, weight);
             eventAsserter.AddExpectedChange(ChangeAction.Add, lineEdge);
 
-            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, false, weight, typeof(DoubleValueEdge), lineEdge);
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, false, weight, typeof(DoubleValueEdge), lineEdge, true, weight);
             this.AssertRelationship(graph, x, y, new List<Edge>() { lineEdge }, new List<Edge>() { lineEdge });
             eventAsserter.AssertFiredChanges();
         }
@@ -152,9 +151,9 @@ namespace GraphTests
             eventAsserter.AddExpectedChange(ChangeAction.Add, xZ);
             eventAsserter.AddExpectedChange(ChangeAction.Add, xU);
 
-            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, false, null, typeof(UnweightedEdge), xY);
-            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, z, false, null, typeof(UnweightedEdge), xZ);
-            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, u, false, null, typeof(UnweightedEdge), xU);
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, y, false, null, typeof(UnweightedEdge), xY, false, GraphConstants.UnweightedEdgeDefaultWeight);
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, z, false, null, typeof(UnweightedEdge), xZ, false, GraphConstants.UnweightedEdgeDefaultWeight);
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, u, false, null, typeof(UnweightedEdge), xU, false, GraphConstants.UnweightedEdgeDefaultWeight);
 
             this.AssertRelationship(graph, x, y, new List<Edge>() { xY }, new List<Edge>() { xY });
             this.AssertRelationship(graph, x, z, new List<Edge>() { xZ }, new List<Edge>() { xZ });
@@ -187,7 +186,7 @@ namespace GraphTests
             Edge line = graph.GraphStructure.AddLine(x, x);
             eventAsserter.AddExpectedChange(ChangeAction.Add, line);
 
-            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, x, false, null, typeof(UnweightedEdge), line);
+            this.AssertEdgeCreatedAndAddedCorrectly(graph, x, x, false, null, typeof(UnweightedEdge), line, false, GraphConstants.UnweightedEdgeDefaultWeight);
             this.AssertRelationship(graph, x, x, new List<Edge>() { line }, new List<Edge>() { line });
             eventAsserter.AssertFiredChanges();
         }
@@ -537,7 +536,7 @@ namespace GraphTests
             TestHelper.AssertEnumerablesAreEqual<Edge>(expectedEdges, actualEdges);
         }
 
-        private void AssertEdgeCreatedAndAddedCorrectly(Graph graph, Vertex firstVertex, Vertex secondVertex, bool isDirected, object value, Type edgeType, Edge actualEdge)
+        private void AssertEdgeCreatedAndAddedCorrectly(Graph graph, Vertex firstVertex, Vertex secondVertex, bool isDirected, object value, Type edgeType, Edge actualEdge, bool isWeighted, double weight)
         {
             Assert.AreEqual(firstVertex, actualEdge.FirstVertex);
             Assert.AreEqual(secondVertex, actualEdge.SecondVertex);
@@ -546,6 +545,8 @@ namespace GraphTests
             Assert.AreEqual(graph.GraphStructure, actualEdge.Owner);
             Assert.IsInstanceOf(edgeType, actualEdge);
             Assert.AreEqual(graph.GraphStructure, actualEdge.Owner);
+            Assert.AreEqual(isWeighted, actualEdge.IsWeighted);
+            Assert.AreEqual(weight, actualEdge.Weight);
         }
 
         private void AssertEdgesHaveBeenUnregistered(params Edge[] edges)

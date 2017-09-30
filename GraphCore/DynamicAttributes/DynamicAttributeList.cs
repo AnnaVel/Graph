@@ -1,20 +1,16 @@
 ﻿using GraphCore.Events;
 using GraphCore.Utilities;
-using GraphCore.Vertices;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GraphCore.GraphItemProperties
+namespace GraphCore.DynamicAttributes
 {
     public delegate void DynamicAttributeChangedEventHandler(DynamicAttributeChangedEventArgs args);
 
     internal abstract class DynamicAttributeList
     {
         private readonly GraphStructureItem owner;
-        private readonly Dictionary<string, IDynamicAttribute> innerList;
+        private readonly Dictionary<string, DynamicAttributeWithTimeStamp> innerList;
 
         protected GraphStructureItem Owner
         {
@@ -30,7 +26,7 @@ namespace GraphCore.GraphItemProperties
 
             this.owner = owner;
 
-            this.innerList = new Dictionary<string, IDynamicAttribute>();
+            this.innerList = new Dictionary<string, DynamicAttributeWithTimeStamp>();
         }
 
         protected abstract DynamicAttributeFactory GetDynamicAttributeFactoryFromOwner();
@@ -39,18 +35,37 @@ namespace GraphCore.GraphItemProperties
         {
             DynamicAttributeFactory factory = this.GetDynamicAttributeFactoryFromOwner();
             IDynamicAttribute newDynamicAttribute = factory.CreateDynamicAttribute(name, value);
+            DynamicAttributeWithTimeStamp stampedAttribute = new DynamicAttributeWithTimeStamp(newDynamicAttribute);
 
-            this.innerList[name] = newDynamicAttribute;
+            this.innerList[name] = stampedAttribute;
 
             this.OnDynamicAttributeChanged(name);
         }
 
         public IDynamicAttribute GetDynamicAttribute(string name)
         {
-            IDynamicAttribute result = null;
+            DynamicAttributeWithTimeStamp result = null;
             this.innerList.TryGetValue(name, out result);
 
-            return result;
+            return result != null ? result.Attribute : null;
+        }
+
+        /// <summary>
+        /// Gets the dynamic attribute that was set last according to its time stamp among a group of attributes sharing the same prefix. E.g.
+        /// passing "isVisisted" will look among the "isVisisted", "isVisisted:Dijkstra", "isVisisted:custom", etc. and will return the one which
+        /// was set last.
+        /// </summary>
+        /// <param name="name">The name of the prefix.</param>
+        /// <returns>The dynamic attribute whose name starts with the specified prefix and was set the latest.</returns>
+        public IDynamicAttribute GetDynamicAttributeThatWasLastSetInGroup(string name)
+        {
+            DynamicAttributeWithTimeStamp stampedResult = this.innerList
+                .Where(pair => pair.Key.StartsWith(name))
+                .Select(pair => pair.Value)
+                .OrderByDescending(stampedAttribute => stampedAttribute.Stamp)
+                .FirstOrDefault();
+
+            return stampedResult != null ? stampedResult.Attribute : null;
         }
 
         public bool RemoveDynamicAttribute(string name)

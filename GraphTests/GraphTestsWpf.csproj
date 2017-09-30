@@ -52,6 +52,15 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AppveyorEnvironment|AnyCPU'">
+    <OutputPath>bin\AppveyorEnvironment\</OutputPath>
+    <DefineConstants>TRACE;APPVEYORENVIRONMENT</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
@@ -71,7 +80,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AlgorithmTests\AlgorithmLibraryTests.cs" />
+    <Compile Include="AlgorithmTests\DijkstraCompleteTraversalTests.cs" />
+    <Compile Include="AlgorithmTests\DijkstraRouteTests.cs" />
+    <Compile Include="AlgorithmTests\TestAlgorithm.cs" />
     <Compile Include="EdgeFactoryTests.cs" />
+    <Compile Include="EdgeWeightTests.cs" />
     <Compile Include="HelperClasses\CustomEdgeFactory.cs" />
     <Compile Include="HelperClasses\CustomValueEdge.cs" />
     <Compile Include="HelperClasses\CustomValueVertex.cs" />
@@ -94,7 +108,9 @@
     <Compile Include="DynamicAttributeFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GraphCore\GraphCoreWpf.csproj">

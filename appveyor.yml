@@ -1,2 +1,2 @@
 build_script:
-  - msbuild WpfGraph.sln /p:Configuration=Release
+  - msbuild WpfGraph.sln /p:Configuration=AppveyorEnvironment

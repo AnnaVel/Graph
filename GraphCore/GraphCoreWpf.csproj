@@ -40,7 +40,16 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TravisEnvironment|AnyCPU'">
     <OutputPath>bin\TravisEnvironment\Wpf\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;TRAVISENVIRONMENT</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AppveyorEnvironment|AnyCPU'">
+    <OutputPath>bin\AppveyorEnvironment\</OutputPath>
+    <DefineConstants>TRACE;APPVEYORENVIRONMENT</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -48,6 +57,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\XAct.Wintellect.PowerCollections.0.0.1\lib\net20\PowerCollections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -59,6 +72,21 @@
   <ItemGroup>
     <Compile Include="AdjacencyItem.cs" />
     <Compile Include="AdjacencyList.cs" />
+    <Compile Include="Algorithms\AlgorithmBaseOfT.cs" />
+    <Compile Include="Algorithms\AlgorithmLibrary.cs" />
+    <Compile Include="Algorithms\AlgorithmNames.cs" />
+    <Compile Include="Algorithms\Dijkstra\DijkstraAlgorithmBase.cs" />
+    <Compile Include="Algorithms\Dijkstra\DijkstraCompleteTraversalAlgorithm.cs" />
+    <Compile Include="Algorithms\Dijkstra\DijkstraCompleteTraversalResult.cs" />
+    <Compile Include="Algorithms\Dijkstra\DijkstraInformation.cs" />
+    <Compile Include="Algorithms\Dijkstra\DijkstraParameter.cs" />
+    <Compile Include="Algorithms\Dijkstra\DijkstraResult.cs" />
+    <Compile Include="Algorithms\Dijkstra\DijkstraRouteAlgorithm.cs" />
+    <Compile Include="Algorithms\Dijkstra\DijkstraRouteParameter.cs" />
+    <Compile Include="Algorithms\Dijkstra\DijkstraRouteResult.cs" />
+    <Compile Include="Algorithms\IAlgorithm.cs" />
+    <Compile Include="DynamicAttributes\DynamicAttributeWithTimeStamp.cs" />
+    <Compile Include="DynamicAttributes\TimeStamp.cs" />
     <Compile Include="Edges\DoubleValueEdge.cs" />
     <Compile Include="Edges\Edge.cs" />
     <Compile Include="Edges\EdgeBaseOfT.cs" />
@@ -69,21 +97,24 @@
     <Compile Include="Events\DynamicAttributeChangedEventArgs.cs" />
     <Compile Include="Events\GraphStructureChangedEventArgs.cs" />
     <Compile Include="Graph.cs" />
-    <Compile Include="GraphItemProperties\EdgeDynamicAttributeList.cs" />
-    <Compile Include="GraphItemProperties\VertexDynamicAttributeList.cs" />
+    <Compile Include="DynamicAttributes\EdgeDynamicAttributeList.cs" />
+    <Compile Include="DynamicAttributes\VertexDynamicAttributeList.cs" />
     <Compile Include="GraphStructureItem.cs" />
+    <Compile Include="Utilities\Constants.cs" />
+    <Compile Include="Utilities\ExtensionMethods.cs" />
     <Compile Include="Utilities\Guard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GraphItemProperties\BooleanDynamicAttribute.cs" />
-    <Compile Include="GraphItemProperties\DoubleDynamicAttribute.cs" />
-    <Compile Include="GraphItemProperties\IntegerDynamicAttribute.cs" />
-    <Compile Include="GraphItemProperties\IDynamicAttribute.cs" />
-    <Compile Include="GraphItemProperties\ObjectDynamicAttribute.cs" />
-    <Compile Include="GraphItemProperties\StringDynamicAttribute.cs" />
-    <Compile Include="GraphItemProperties\DynamicAttributeBaseOfT.cs" />
-    <Compile Include="GraphItemProperties\DynamicAttributeFactory.cs" />
-    <Compile Include="GraphItemProperties\DynamicAttributeList.cs" />
+    <Compile Include="DynamicAttributes\BooleanDynamicAttribute.cs" />
+    <Compile Include="DynamicAttributes\DoubleDynamicAttribute.cs" />
+    <Compile Include="DynamicAttributes\IntegerDynamicAttribute.cs" />
+    <Compile Include="DynamicAttributes\IDynamicAttribute.cs" />
+    <Compile Include="DynamicAttributes\ObjectDynamicAttribute.cs" />
+    <Compile Include="DynamicAttributes\StringDynamicAttribute.cs" />
+    <Compile Include="DynamicAttributes\DynamicAttributeBaseOfT.cs" />
+    <Compile Include="DynamicAttributes\DynamicAttributeFactory.cs" />
+    <Compile Include="DynamicAttributes\DynamicAttributeList.cs" />
     <Compile Include="Utilities\HashHelper.cs" />
+    <Compile Include="DynamicAttributes\TimeStampCreator.cs" />
     <Compile Include="Vertices\DoubleValueVertex.cs" />
     <Compile Include="Vertices\ObjectValueVertex.cs" />
     <Compile Include="Vertices\TextValueVertex.cs" />
@@ -92,7 +123,9 @@
     <Compile Include="Vertices\VertexFactory.cs" />
     <Compile Include="GraphStructure.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

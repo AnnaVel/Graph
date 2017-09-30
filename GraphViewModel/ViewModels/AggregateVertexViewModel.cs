@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GraphCore.GraphItemProperties;
+using GraphCore.DynamicAttributes;
 
 namespace GraphViewModel.ViewModels
 {
@@ -36,7 +36,7 @@ namespace GraphViewModel.ViewModels
         {
             foreach (Vertex vertex in this.RelatedVertexItem)
             {
-                IDynamicAttribute attribute = vertex.GetDynamicAttribute(attributeName);
+                IDynamicAttribute attribute = vertex.GetDynamicAttributeThatWasLastSetInGroup(attributeName); ;
                 if (attribute != null)
                 {
                     return attribute.ValueAsObject;
